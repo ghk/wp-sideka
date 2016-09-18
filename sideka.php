@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
 include_once( dirname(__FILE__) . '/admin/sideka-admin-menu.php' );
 include_once(dirname(__FILE__) . '/admin/sideka-admin-nav-menu-meta-box.php');
+include_once( dirname(__FILE__) . '/page/sideka-page.php' );
 
 add_action( 'init', 'sideka_rewrites_init' );
 function sideka_rewrites_init(){
@@ -29,15 +30,6 @@ add_filter( 'query_vars', 'sideka_query_vars' );
 function sideka_query_vars( $query_vars ){
     $query_vars[] = 'statistics_id';
     return $query_vars;
-}
-
-add_filter( 'template_include', 'sideka_page_template' );
-function sideka_page_template( $page_template )
-{
-    //if ( is_page( 'stats' )  ) {
-    	//$page_template = dirname( __FILE__ ) . '/page-stats.php';
-    //}
-    return $page_template;
 }
 
 ?>
