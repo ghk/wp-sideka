@@ -1,0 +1,310 @@
+id	name	value	type
+0	root	0	-
+1	PENDAPATAN DESA	1452121934	-
+1.1	Pendapatan Asli Desa	84000000	PAD
+1.1.1	Hasil Usaha Desa	0	-
+1.1.1.1	Hasil Pengelolaan Aset Desa yang Dipisahkan	0	-
+1.1.1.1.1	Bagian Laba atas Penyertaan Modal pada Perusahaan Milik Desa (BUMDes)	0	-
+1.1.1.1.2	Bagian Laba atas Penyertaan Modal pada Perusahaan Milik Daerah (BUMD)	0	-
+1.1.1.1.3	Bagian Laba atas Penyertaan Modal pada Perusahaan Milik Pemerintah (BUMN)	0	-
+1.1.1.1.4	Bagian Laba atas Penyertaan Modal pada Perusahaan Milik Swasta atau Kelompok Usaha Masyarakat	0	-
+1.1.1.2	Hasil eks-Bengkok Desa	0	-
+1.1.1.2.1	eks-Bengkok Kepala Desa	0	-
+1.1.1.2.2	eks-Bengkok Perangkat desa	0	-
+1.1.1.3	Iuran Dharma Tirta/Perkumpulan Petani Pemakai Air	0	-
+1.1.1.4	Lain-lain Hasil Usaha Desa yang Sah	0	-
+1.1.2	Hasil Aset	3500000	-
+1.1.2.1	Hasil Tanah Kas Desa	3500000	-
+1.1.2.1.1	Hasil Sewa Tanah Kas Desa	3500000	PAD
+1.1.2.2	Hasil Pasar Desa	0	-
+1.1.2.3	Hasil Pasar Hewan Desa	0	-
+1.1.2.4	Hasil Sewa Aula (Bangunan) Desa	0	-
+1.1.2.5	Obyek Rekreasi Desa	0	-
+1.1.2.6	Hasil Pemandian Umum Desa	0	-
+1.1.2.7	Lain-lain Hasil Kekayaan Desa	0	-
+1.1.2.7.1	Hasil Sewa Kios Desa	0	-
+1.1.2.8	Hasil Penjualan Aset Desa yang Tidak Dipisahkan	0	-
+1.1.2.8.1	Pelepasan Hak Atas Tanah	0	-
+1.1.2.8.2	Penjualan Peralatan/Perlengkapan Kantor Tdk Terpakai	0	-
+1.1.2.8.3	Penjualan Drum Bekas	0	-
+1.1.2.8.4	Penjualan Hasil Penebangan Pohon	0	-
+1.1.2.8.5	Penjualan Bahan-bahan Bekas Bangunan	0	-
+1.1.2.8.6	Penjualan Hasil Pertanian	0	-
+1.1.2.8.7	Penjualan Hasil Perkebunan	0	-
+1.1.2.8.8	Penjualan Hasil Peternakan	0	-
+1.1.2.8.9	Penjualan Hasil Perikanan	0	-
+1.1.3	Hasil Swadaya, Partisipasi dan Gotong Royong Masyarakat	0	-
+1.1.3.1	Berupa Uang Tunai	0	-
+1.1.3.2	Berupa Barang yang Dinilai Uang	0	-
+1.1.3.3	Berupa Tenaga yang Dinilai Uang	0	-
+1.1.4	Lain-lain Pendapatan Asli Desa yang Sah	80500000	-
+1.1.4.1	Pungutan Desa	78000000	-
+1.1.4.1.1	Pungutan Janggolan	78000000	PAD
+1.1.4.2	Jasa Giro	0	-
+1.1.4.2.1	Jasa Giro Kas Desa	0	-
+1.1.4.2.2	Jasa Giro Pemegang Kas	0	-
+1.1.4.2.3	Jasa Giro Dana Cadangan	0	-
+1.1.4.3	Pendapatan Bunga Deposito	0	-
+1.1.4.4	Penerimaan atas Tuntutan Ganti Kerugian Desa	0	-
+1.1.4.4.1	Kerugian Uang Desa	0	-
+1.1.4.4.2	Kerugian Barang Desa	0	-
+1.1.4.5	Penerimaan Komisi, Potongan ataupun Bentuk Lain sebagai Akibat dari Penjualan dan/atau Jasa oleh Desa	0	-
+1.1.4.6	Pendapatan Denda Atas Keterlambatan Pelaksaan Pekerjaan	0	-
+1.1.4.6.1	Kegiatan Pembuatan Jalan	0	-
+1.1.4.6.2	Kegiatan Pengaspalan Jalan	0	-
+1.1.4.6.3	Kegiatan Pembuatan Jaringan Irigasi	0	-
+1.1.4.6.4	Kegiatan Rehabilitasi Irigasi	0	-
+1.1.4.6.5	Kegiatan Pembuatan Jembatan	0	-
+1.1.4.6.6	Kegiatan Rehabilitasi Jembatan	0	-
+1.1.4.6.7	Kegiatan Pembuatan Bangunan Desa	0	-
+1.1.4.6.8	Kegiatan Rehabilitasi Bangunan Desa	0	-
+1.1.4.7	Pendapatan dan Pengembalian	0	-
+1.1.4.7.1	Pendapatan dari Pengembalian Kelebihan Pembayaran Asuransi Kesehatan	0	-
+1.1.4.7.2	Pendapatan dari Pengembalian Kelebihan Perjalanan Dinas	0	-
+1.1.4.7.3	Pendapatan dari Pengembalian Kelebihan Uang Muka	0	-
+1.1.4.8	Pendapatan dari Angsuran/Cicilan Penjualan	0	-
+1.1.4.9	Pendapatan dari Bagian Sisa Hasil Usaha BUMDes	1000000	PAD
+1.1.4.10	Pendapatan dari Bagian Bagi Hasil yang Diterima LMDH	1500000	PAD
+1.2	Pendapatan Transfer	1368121934	-
+1.2.1	Dana Desa	680034552	DD
+1.2.2	Bagian dari Hasil Pajak Daerah dan/atau Retribusi Daerah Kabupaten	26815673	BHP
+1.2.3	Alokasi Dana Desa	661271709	ADD
+1.2.4	Bantuan Keuangan dari Pemerintah Provinsi	0	-
+1.2.4.1	Bantuan Keuangan dari Pemerintah Provinsi Bersifat Umum	0	-
+1.2.4.2	Bantuan Keuangan dari Pemerintah Provinsi Bersifat Khusus	0	-
+1.2.5	Bantuan Keuangan dari Pemerintah Kabupaten	0	-
+1.2.5.1	Bantuan Keuangan dari Pemerintah Kabupaten Bersifat Umum	0	-
+1.2.5.2	Bantuan Keuangan dari Pemerintah Kabupaten Bersifat Khusus	0	-
+1.3	Pendapatan Lain-lain	0	-
+1.3.1	Hibah	0	-
+1.3.1.1	Hibah dari Lembaga/Organisasi Non Pemerintah yang Berkedudukan di Dalam Desa	0	-
+1.3.1.1.1	Hibah dari Lembaga/Organisasi Negara Non Pemerintah	0	-
+1.3.1.1.2	Hibah dari Lembaga/Organisasi Swasta	0	-
+1.3.1.2	Hibah dari Lembaga/Organisasi Non Pemerintah yang Berkedudukan di Luar Desa	0	-
+1.3.1.2.1	Hibah dari Lembaga/Organisasi Negara Non Pemerintah	0	-
+1.3.1.2.2	Hibah dari Lembaga/Organisasi Swasta	0	-
+1.3.2	Dana Darurat dari Pemerintah dan/atau Pemerintah Daerah dalam rangka Penanggulangan Korban/Kerusakan Akibat Bencana Alam	0	-
+1.3.2.1	Dana Darurat dari Pemerintah	0	-
+1.3.2.2	Dana Darurat dari Pemerintah Provinsi	0	-
+1.3.2.3	Dana Darurat dari Pemerintah Kabupaten	0	-
+1.3.2.4	Dana Darurat dari Lembaga/Organisasi Non Pemerintah	0	-
+1.3.3	Sumbangan Lainnya yang Tidak Mengikat	0	-
+1.3.3.1	Hadiah	0	-
+1.3.3.1.1	Hadiah Lomba Desa	0	-
+1.3.3.1.2	Hadiah Lomba PKK	0	-
+1.3.3.1.3	Hadiah Lomba PBB	0	-
+1.3.3.2	Donasi	0	-
+1.3.3.3	Lain-lain Sumbangan	0	-
+2	BELANJA DESA	1534943978	-
+2.1	Bidang Penyelenggaraan Pemerintahan Desa	615318796	-
+2.1.1	Penghasilan Tetap dan Tunjangan	394080000	-
+2.1.1.1	Belanja Pegawai	385080000	-
+2.1.1.1.1	Penghasilan Tetap Aparatur Pemerintah Desa	279600000	ADD
+2.1.1.1.2	Tunjangan-tunjangan Aparatur Pemerintah Desa	87600000	ADD
+2.1.1.1.3	Tambahan Penghasilan Aparatur Pemerintah Desa	0	-
+2.1.1.1.4	Tunjangan Badan Permusyawaratan Desa (BPD)	8280000	ADD
+2.1.1.1.5	Penghargaan Pensiun Kepala Desa dan Perangkat Desa	9600000	PAD
+2.1.2	Operasional Pemerintahan Desa	74291709	-
+2.1.2.1	Operasional Perkantoran	69351709	-
+2.1.2.1.1	Belanja Barang dan Jasa	52501709	-
+2.1.2.1.1.1	Belanja Alat Tulis Kantor	4211709	ADD
+2.1.2.1.1.2	Belanja Cetak dan Penggandaan	2250000	ADD
+2.1.2.1.1.3	Belanja Benda Pos	1000000	ADD
+2.1.2.1.1.4	Belanja Pakaian Dinas dan Atribut	0	-
+2.1.2.1.1.5	Belanja Alat dan Bahan Kebersihan	0	-
+2.1.2.1.1.6	Belanja Perjalanan Dinas	12000000	ADD
+2.1.2.1.1.7	Belanja Pemeliharaan	0	-
+2.1.2.1.1.8	Belanja Air	600000	ADD
+2.1.2.1.1.9	Belanja Listrik	1000000	ADD
+2.1.2.1.1.10	Belanja Telepon	0	-
+2.1.2.1.1.11	Belanja Internet	3500000	ADD
+2.1.2.1.1.12	Belanja Makanan dan Minuman Harian Pegawai serta Jamuan Tamu	8300000	PAD
+2.1.2.1.1.13	Honor Pengelolaan Keuangan Desa	9840000	ADD
+2.1.2.1.1.14	Honor Kayim	1200000	PAD
+2.1.2.1.1.15	Honor Juru Kunci Desa	1500000	PAD
+2.1.2.1.1.16	Belanja Surat Kabar/Majalah	1000000	ADD
+2.1.2.1.1.17	Belanja Perawatan Kendaraan Dinas	2500000	ADD
+2.1.2.1.1.18	Belanja Service Peralatan/Perlengkapan Kantor	0	-
+2.1.2.1.1.19	Belanja Tenaga Kebersihan Kantor	3600000	PAD
+2.1.2.1.2	Belanja Modal	16850000	-
+2.1.2.1.2.1	Belanja Laptop	8000000	ADD
+2.1.2.1.2.1	Belanja Komputer/PC Lengkap	8850000	ADD
+2.1.2.2	Operasional BPD	2610000	-
+2.1.2.2.1	Belanja Barang dan Jasa	2610000	ADD
+2.1.2.3	Operasional RT	2050000	-
+2.1.2.3.1	Belanja Barang dan Jasa	2050000	ADD
+2.1.2.4	Operasional RW	280000	-
+2.1.2.4.1	Belanja Barang dan Jasa	280000	ADD
+2.1.3	Penyelengaraan Musyawarah Desa	22000000	-
+2.1.3.1	Belanja Barang dan Jasa	22000000	ADD
+2.1.4	Perencanaan Pembangunan Desa	3500000	-
+2.1.4.1	Penyusunan RKP Desa 2017	3500000	-
+2.1.4.1.1	Belanja Barang dan Jasa	3500000	ADD
+2.1.5	Pembangunan Sarana dan Prasarana Kantor Desa	72500000	-
+2.1.5.1	Pembangunan Kantor Desa (Ruang BPD)	72500000	-
+2.1.5.1.1	Belanja Barang dan Jasa	11584800	ADD
+2.1.5.1.2	Belanja Modal	60915200	ADD
+2.1.6	Kegiatan Lelang Sewa TKD	500000	-
+2.1.6.1	Belanja Barang dan Jasa	500000	PAD
+2.1.7	Operasional Organisasi Pengadaan Barang dan Jasa	20780000	-
+2.1.7.1	Belanja Barang dan Jasa	20780000	ADD
+2.1.8	Kegiatan Penjaringan dan Penyaringan Perangkat Desa	14167087	-
+2.1.8.1	Belanja Barang dan Jasa	13167087	SILPA
+2.1.8.2	Belanja Modal	1000000	SILPA
+2.1.9	Operasional Pemungutan Janggolan	4500000	-
+2.1.9.1	Belanja Barang dan Jasa	4500000	-
+2.1.9.1.1	Insentif Pemungut Janggolan	4500000	PAD
+2.1.10	Operasional Pemungutan PBB	9000000	-
+2.1.10.1	Belanja Barang dan Jasa	9000000	BHP
+2.2	Belanja Pembangunan	635369509	-
+2.2.1	Pembangunan Infrastruktur dan Lingkungan Desa	212090754	-
+2.2.1.1	Pembangunan Jalan Dermaji	204455797	-
+2.2.1.1.1	Belanja Barang dan Jasa	29360000	DD
+2.2.1.1.2	Belanja Modal	175095797	DD
+2.2.1.2	Pembangunan Jaringan Internet	7634957	-
+2.2.1.2.1	Belanja Barang dan Jasa	1400000	SILPA
+2.2.1.2.2	Belanja Modal	6234957	SILPA
+2.2.2	Pembangunan Sarana Prasarana Kesehatan dan Sanitasi	340781553	-
+2.2.2.1	Pembangunan Posyandu Mekar Sari	163985103	-
+2.2.2.1.1	Belanja Barang dan Jasa	31090000	DD
+2.2.2.1.2	Belanja Modal	132895103	DD
+2.2.2.2	Pembangunan Jaringan Pipa Air Minum Dusun I	138870850	-
+2.2.2.2.1	Belanja Barang dan Jasa	40700000	DD
+2.2.2.2.2	Belanja Modal	98170850	DD
+2.2.2.3	Pembangunan Bak Penyaringan (Filterisasi) Cireang	37925600	-
+2.2.2.3.1	Belanja Barang dan Jasa	2830000	DD
+2.2.2.3.2	Belanja Modal	35095600	DD
+2.2.3	Pembangunan Sarana Prasarana Pendidikan	73997202	-
+2.2.3.1	Pembangunan Pagar Keliling TK Pertiwi Dermaji	57497202	-
+2.2.3.1.1	Belanja Barang dan Jasa	14848800	DD
+2.2.3.1.2	Belanja Modal	42648402	DD
+2.2.3.2	Pengembangan Perpustakaan Desa	16500000	-
+2.2.3.2.1	Belanja Barang dan Jasa	0	-
+2.2.3.2.2	Belanja Modal	16500000	DD
+2.2.4	Pembangunan Sarana Prasarana Ekonomi	8500000	-
+2.2.4.1	Pengembangan Sarana dan Prasarana BUMDes	8500000	-
+2.2.4.1.1	Belanja Barang dan Jasa	0	-
+2.2.4.1.2	Belanja Modal	8500000	DD
+2.3	Bidang Pembinaan Kemasyarakatan	231955673	-
+2.3.1	Pembinaan Lembaga Kemasyarakatan Desa	131840000	-
+2.3.1.1	Pembinaan Pengurus Lembaga Kemasyarakatan Desa	7100000	-
+2.3.1.1.1	Belanja Barang dan Jasa	3500000	BHP
+2.3.1.2	Penguatan Tim Penggerak PKK	17100000	-
+2.3.1.2.1	Belanja Barang dan Jasa	12000000	ADD
+2.3.1.3	Penguatan Lembaga Pembinaan dan Pengamalan Agama	49320000	-
+2.3.1.3.1	Belanja Barang dan Jasa	5000000	ADD
+2.3.1.4	Penguatan Lembaga Linmas	2500000	-
+2.3.1.4.1	Belanja Barang dan Jasa	2500000	ADD
+2.3.1.5	Penguatan Karang Taruna Citunggul	500000	-
+2.3.1.5.1	Belanja Barang dan Jasa	500000	ADD
+2.3.1.6	Penguatan Karang Taruna Sirongge	500000	-
+2.3.1.6.1	Belanja Barang dan Jasa	500000	ADD
+2.3.1.7	Penguatan Lembaga Posyandu Balita Rahayu	600000	-
+2.3.1.7.1	Belanja Barang dan Jasa	600000	ADD
+2.3.1.8	Penguatan Lembaga Posyandu Balita Sri Rejeki	600000	-
+2.3.1.8.1	Belanja Barang dan Jasa	600000	ADD
+2.3.1.9	Penguatan Lembaga Posyandu Balita Larasati	600000	-
+2.3.1.9.1	Belanja Barang dan Jasa	600000	ADD
+2.3.1.10	Penguatan Lembaga Posyandu Balita Sari Asih	600000	-
+2.3.1.10.1	Belanja Barang dan Jasa	600000	ADD
+2.3.1.11	Penguatan Lembaga Posyandu Balita Mulyo Utomo	600000	-
+2.3.1.11.1	Belanja Barang dan Jasa	600000	ADD
+2.3.1.12	Penguatan Lembaga Posyandu Balita Melati	600000	-
+2.3.1.12.1	Belanja Barang dan Jasa	600000	ADD
+2.3.1.13	Penguatan Lembaga Posyandu Balita Mekar Sari	600000	-
+2.3.1.13.1	Belanja Barang dan Jasa	600000	ADD
+2.3.1.14	Penguatan Lembaga Posyandu Lansia Rahayu	200000	-
+2.3.1.14.1	Belanja Barang dan Jasa	200000	ADD
+2.3.1.15	Penguatan Lembaga Posyandu Lansia Sri Rejeki	200000	-
+2.3.1.15.1	Belanja Barang dan Jasa	200000	ADD
+2.3.1.16	Penguatan Lembaga Posyandu Lansia Larasati	200000	-
+2.3.1.16.1	Belanja Barang dan Jasa	200000	ADD
+2.3.1.17	Penguatan Lembaga Posyandu Lansia Sari Asih	200000	-
+2.3.1.17.1	Belanja Barang dan Jasa	200000	ADD
+2.3.1.18	Penguatan Lembaga Posyandu Lansia Mulyo Utomo	200000	-
+2.3.1.18.1	Belanja Barang dan Jasa	200000	ADD
+2.3.1.19	Penguatan Lembaga Posyandu Lansia Melati	200000	-
+2.3.1.19.1	Belanja Barang dan Jasa	200000	ADD
+2.3.1.20	Penguatan Lembaga Posyandu Lansia Mekar Sari	200000	-
+2.3.1.20.1	Belanja Barang dan Jasa	200000	ADD
+2.3.1.21	Penguatan Lembaga Pos PAUD Rahayu	500000	-
+2.3.1.21.1	Belanja Barang dan Jasa	500000	ADD
+2.3.1.22	Penguatan Lembaga Pos PAUD Sri Rejeki	500000	-
+2.3.1.22.1	Belanja Barang dan Jasa	500000	ADD
+2.3.1.23	Penguatan Lembaga Pos PAUD Larasati	500000	-
+2.3.1.23.1	Belanja Barang dan Jasa	500000	ADD
+2.3.1.24	Penguatan Lembaga Pos PAUD Sari Asih	500000	-
+2.3.1.24.1	Belanja Barang dan Jasa	500000	ADD
+2.3.1.25	Penguatan Lembaga Pos PAUD Tunas Harapan	500000	-
+2.3.1.25.1	Belanja Barang dan Jasa	500000	ADD
+2.3.1.26	Penguatan Lembaga Pos PAUD Melati	500000	-
+2.3.1.26.1	Belanja Barang dan Jasa	500000	ADD
+2.3.1.27	Penguatan Lembaga Pos PAUD Mekar Sari	500000	-
+2.3.1.27.1	Belanja Barang dan Jasa	500000	ADD
+2.3.1.28	Penguatan Lembaga TK Pertiwi Dermaji 1	700000	-
+2.3.1.28.1	Belanja Barang dan Jasa	700000	ADD
+2.3.1.29	Penguatan Lembaga TK Pertiwi Dermaji 2	700000	-
+2.3.1.29.1	Belanja Barang dan Jasa	700000	ADD
+2.3.1.30	Penguatan Lembaga TK Pertiwi Dermaji 3	700000	-
+2.3.1.30.1	Belanja Barang dan Jasa	700000	ADD
+2.3.1.31	Penguatan Lembaga RT dan RW	43620000	-
+2.3.1.31.1	Belanja Barang dan Jasa	43620000	-
+2.3.1.31.1.1	Insentif Ketua RT	36900000	ADD
+2.3.1.31.1.2	Insentif Ketua RW	6720000	ADD
+2.3.2	Penyelenggaraan Keamanan dan Ketertiban	10800000	-
+2.3.2.1	Pembinaan Anggota Linmas	10800000	-
+2.3.2.1.1	Belanja Barang dan Jasa	10800000	-
+2.3.2.1.1.1	Insentif Anggota Linmas	10800000	PAD
+2.3.3	Pembinaan Kepemudaan dan Keolahragaan	2000000	-
+2.3.3.1	Pembinaan Kepemudaan	2000000	-
+2.3.3.1.1	Belanja Barang dan Jasa	2000000	BHP
+2.3.4	Pembinaan Pendidikan, Seni dan Budaya	48315673	-
+2.3.4.1	Pengadaan Alat Musik Gamelan	30000000	-
+2.3.4.1.1	Belanja Barang dan Jasa	0	-
+2.3.4.1.2	Belanja Modal	30000000	-
+2.3.4.1.2.1	Belanja Alat Musik Gamelan	30000000	SILPA
+2.3.4.2	Festival Budaya dan Pameran Produk Desa	12315673	-
+2.3.4.2.1	Belanja Barang dan Jasa	12315673	BHP
+2.3.4.3	Festival Anak Kreatif	6000000	-
+2.3.4.3.1	Belanja Barang dan Jasa	6000000	PAD
+2.3.5	Pembinaan Kehidupan Berbangsa dan Bernegara	32000000	-
+2.3.5.1	Peringatan HUT Proklamasi Kemerdekaan RI ke-71	32000000	-
+2.3.5.1.1	Belanja Barang dan Jasa	32000000	PAD
+2.3.6	Pembinaan Kesehatan, Sanitasi dan Keluarga Berencana	7000000	-
+2.3.6.1	Pembinaan dan Pemberdayaan Keluarga Berencana	7000000	-
+2.3.6.1.1	Belanja Barang dan Jasa	7000000	ADD
+2.4	Bidang Pemberdayaan Masyarakat	52300000	-
+2.4.1	Pelatihan Usaha Ekonomi	10000000	-
+2.4.1.1	Pelatihan Pengolahan Makanan dari Potensi Lokal	10000000	-
+2.4.1.1.1	Belanja Barang dan Jasa	10000000	DD
+2.4.2	Pelatihan bagi Aparatur Pemdes dan BPD	13000000	-
+2.4.2.1	Pelatihan Komputer Dasar untuk Peningkatan Kinerja Perangkat Desa	6000000	-
+2.4.2.1.1	Belanja Barang dan Jasa	6000000	DD
+2.4.2.2	Pelatihan Penyusunan Peraturan Desa	7000000	-
+2.4.2.2.1	Belanja Barang dan Jasa	7000000	DD
+2.4.3	Pelatihan Peningkatan Kapasitas Masyarakat	29300000	-
+2.4.3.1	Pelatihan Pengelolaan BUMDesa	6650000	-
+2.4.3.1.1	Belanja Barang dan Jasa	6650000	DD
+2.4.3.2	Pelatihan Peningkatan Kapasitas Anggota Linmas	10000000	-
+2.4.3.2.1	Belanja Barang dan Jasa	10000000	DD
+2.4.3.3	Pelatihan Desain Grafis bagi Kelompok Pemuda	6650000	-
+2.4.3.3.1	Belanja Barang dan Jasa	6650000	DD
+2.4.3.4	Pelatihan Teknik Pemeliharaan Sarana Prasarana Air Bersih	6000000	-
+2.4.3.4.1	Belanja Barang dan Jasa	6000000	DD
+2.5	Bidang Tak Terduga	0	-
+2.5.1	Kegiatan Kejadian Luar Biasa	0	-
+3	PEMBIAYAAN DESA	82802044	-
+3.1	Penerimaan Pembiayaan	51802044	-
+3.1.1	Sisa Lebih Perhitungan Anggaran Tahun Sebelumnya	51802044	SILPA
+3.1.2	Pencairan Dana Cadangan	0	-
+3.1.2.1	Pencairan Dana Cadangan Pemilihan Kepala Desa	0	-
+3.1.2.2	Pencairan Dana Cadangan Purna Tugas Aparatur Pemerintah Desa	0	-
+3.1.3	Hasil Kekayaan Desa yang Dipisahkan	0	-
+3.1.4	Penerimaan Pinjaman	0	-
+3.2	Pengeluaran Pembiayaan	31000000	-
+3.2.1	Pembentukan Dana Cadangan	31000000	-
+3.2.1.1	Pembentukan Dana Cadangan Pemilihan Kepala Desa	25000000	ADD
+3.2.1.2	Pembentukan Dana Cadangan Purna Tugas Aparatur Pemerintah Desa	6000000	PAD
+3.2.2	Penyertaan Modal (Investasi) Pemerintah Desa	0	-
+3.2.2.1	Penyertaan Modal pada BUMDes	0	-
+3.3	Pembayaran Hutang	0	-

@@ -9,10 +9,10 @@
 </style>
 <ul class="entry-tabs">
     <li class="active">
-        <a href="#">Rencana Jangka Menengah (RPJMDes 2016-2020)</a>
+        <a href="#">Anggaran Tahunan (APBDes 2016)</a>
     </li>
     <li>
-        <a href="#">Anggaran Tahunan (APBDes 2016)</a>
+        <a href="#">Rencana Jangka Menengah (RPJMDes 2016-2020)</a>
     </li>
 </ul>
 
@@ -27,7 +27,6 @@
     .node-label {
         padding: 4px;
         line-height: 1em;
-        white-space: pre;
     }
 
     .node-value {
@@ -37,8 +36,11 @@
     }
 
 </style>
-<svg width="1030" height="500"></svg>
-<div id="treemap" style="height: 500px; width: 1030px; position: relative;">
+<h3>Pendapatan Desa</h3>
+<div id="treemapi" style="height: 200px; width: 1030px; position: relative;">
+</div>
+<h3>Belanja Desa</h3>
+<div id="treemaps" style="height: 700px; width: 1030px; position: relative;">
 </div>
 <script src="//d3js.org/d3.v4.min.js"></script>
 <script>
@@ -50,28 +52,35 @@
             .map(function(c) { c = d3.rgb(c); c.opacity = 0.6; return c; }));
 
     var stratify = d3.stratify()
-        .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
+        .parentId(function(d) {
+            return d.id.substring(0, d.id.lastIndexOf("."));
+        });
 
-    var treemap = d3.treemap()
-        .size([1030, 500])
+    var treemaps = d3.treemap()
+        .size([1030, 700])
+        .padding(1)
+        .round(true);
+    var treemapi = d3.treemap()
+        .size([1030, 200])
         .padding(1)
         .round(true);
 
-    d3.csv("/wp-content/plugins/sideka/page/flare.csv", typeTreemap, function(error, data) {
+    d3.tsv("/wp-content/plugins/sideka/page/apbdes.tsv", typeTreemap, function(error, data) {
         if (error) throw error;
 
-        var root = stratify(data)
-            .sum(function(d) { return d.value; })
+        var income = data.filter(i => i.id.split("\.").length < 4 && i.id.startsWith('1'))
+        var iroot = stratify(income)
+            .each(function(d) { d.value = d.data.value; })
             .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
 
-        treemap(root);
+        treemapi(iroot);
 
-        d3.select("#treemap")
+        d3.select("#treemapi")
             .selectAll(".node")
-            .data(root.leaves())
+            .data(iroot.leaves())
             .enter().append("div")
             .attr("class", "node")
-            .attr("title", function(d) { return d.id + "\n" + format(d.value); })
+            .attr("title", function(d) { return d.id + " " + d.data.name + "\n" + format(d.value); })
             .style("left", function(d) { return d.x0 + "px"; })
             .style("top", function(d) { return d.y0 + "px"; })
             .style("width", function(d) { return d.x1 - d.x0 + "px"; })
@@ -79,7 +88,32 @@
             .style("background", function(d) { while (d.depth > 1) d = d.parent; return color(d.id); })
             .append("div")
             .attr("class", "node-label")
-            .text(function(d) { return d.id.substring(d.id.lastIndexOf(".") + 1).split(/(?=[A-Z][^A-Z])/g).join("\n"); })
+            .text(function(d) { return d.data.name; })
+            .append("div")
+            .attr("class", "node-value")
+            .text(function(d) { return format(d.value); });
+
+        var spending = data.filter(i => i.id.split("\.").length < 5 && i.id.startsWith('2') && i.name != 'Belanja Barang dan Jasa' && i.name != 'Belanja Modal');
+        var sroot = stratify(spending)
+            .each(function(d) { d.value = d.data.value; })
+            .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
+
+        treemaps(sroot);
+
+        d3.select("#treemaps")
+            .selectAll(".node")
+            .data(sroot.leaves())
+            .enter().append("div")
+            .attr("class", "node")
+            .attr("title", function(d) { return d.id + " " + d.data.name + "\n" + format(d.value); })
+            .style("left", function(d) { return d.x0 + "px"; })
+            .style("top", function(d) { return d.y0 + "px"; })
+            .style("width", function(d) { return d.x1 - d.x0 + "px"; })
+            .style("height", function(d) { return d.y1 - d.y0 + "px"; })
+            .style("background", function(d) { while (d.depth > 1) d = d.parent; return color(d.id); })
+            .append("div")
+            .attr("class", "node-label")
+            .text(function(d) { return d.data.name; })
             .append("div")
             .attr("class", "node-value")
             .text(function(d) { return format(d.value); });
@@ -90,70 +124,6 @@
         return d;
     }
 
-    var svg = d3.select("svg"),
-        margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width = svg.attr("width") - margin.left - margin.right,
-        height = svg.attr("height") - margin.top - margin.bottom;
-
-    var parseDate = d3.timeParse("%Y %b %d");
-
-    var x = d3.scaleTime().range([0, width]),
-        y = d3.scaleLinear().range([height, 0]),
-        z = d3.scaleOrdinal(d3.schemeCategory10);
-
-    var stack = d3.stack();
-
-    var area = d3.area()
-        .x(function(d, i) { return x(d.data.date); })
-        .y0(function(d) { return y(d[0]); })
-        .y1(function(d) { return y(d[1]); });
-
-    var g = svg.append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    d3.tsv("/wp-content/plugins/sideka/page/data.tsv", type, function(error, data) {
-        if (error) throw error;
-
-        var keys = data.columns.slice(1);
-
-        x.domain(d3.extent(data, function(d) { return d.date; }));
-        z.domain(keys);
-        stack.keys(keys);
-
-        var layer = g.selectAll(".layer")
-            .data(stack(data))
-            .enter().append("g")
-            .attr("class", "layer");
-
-        layer.append("path")
-            .attr("class", "area")
-            .style("fill", function(d) { return z(d.key); })
-            .attr("d", area);
-
-        layer.filter(function(d) { return d[d.length - 1][1] - d[d.length - 1][0] > 0.01; })
-            .append("text")
-            .attr("x", width - 6)
-            .attr("y", function(d) { return y((d[d.length - 1][0] + d[d.length - 1][1]) / 2); })
-            .attr("dy", ".35em")
-            .style("font", "10px sans-serif")
-            .style("text-anchor", "end")
-            .text(function(d) { return d.key; });
-
-        g.append("g")
-            .attr("class", "axis axis--x")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
-
-        g.append("g")
-            .attr("class", "axis axis--y")
-            .call(d3.axisLeft(y).ticks(10, "%"));
-    });
-
-    function type(d, i, columns) {
-        d.date = parseDate(d.date);
-        for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = d[columns[i]] / 100;
-        return d;
-    }
 
 </script>
 
