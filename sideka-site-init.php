@@ -136,6 +136,10 @@ function sideka_site_init_menu($pages, $categories) {
         'menu-item-object-id' => $pages["budget"],
         'menu-item-type' => 'post_type',
         'menu-item-status' => 'publish'));
+
+    $locations = array();
+    $locations["main_nav"] = $menu_id; //main MajalahDesa nav
+    set_theme_mod('nav_menu_locations', $locations);
 }
 
 function sideka_site_init($blog_id, $user_id){
