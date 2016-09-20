@@ -145,6 +145,67 @@ function sideka_site_init_menu($pages, $categories) {
     set_theme_mod('nav_menu_locations', $locations);
 }
 
+function sideka_site_init_widgets($pages, $categories)
+{
+    update_option('widget_search', array(
+        1 => array(
+            'title' => '',
+        ),
+        '_multiwidget' => 1
+    ));
+    update_option('widget_recent-comments', array(
+        1 => array(
+            'title' => '',
+            'number' => 5,
+        ),
+        '_multiwidget' => 1
+    ));
+    update_option('widget_mh_magazine_lite_posts_large', array(
+        1 => array(
+            'category' => $categories["news"],
+            'postcount' => 2,
+        ),
+        '_multiwidget' => 1
+    ));
+    update_option('widget_mh_magazine_lite_posts_stacked', array(
+        1 => array(
+            'title' => "Produk Desa",
+            'category' => $categories["product"],
+        ),
+        2 => array(
+            'title' => "Potensi Desa",
+            'category' => $categories["potential"],
+        ),
+        '_multiwidget' => 1
+    ));
+    $widgets = array(
+        'sidebar' => array(
+            'search-1',
+            'recent-comments-1'
+        ),
+        'home-2' => array(
+            'mh_magazine_lite_posts_large-1'
+        ),
+        'home-3' => array(
+            'mh_magazine_lite_posts_stacked-1'
+        ),
+        'home-4' => array(
+            'mh_magazine_lite_posts_stacked-2'
+        ),
+    );
+    update_option('sidebars_widgets', $widgets);
+
+    //Update halo dunia! post categories
+    $args = array(
+        'name'        => 'halo-dunia',
+        'post_type'   => 'post',
+        'post_status' => 'publish',
+        'numberposts' => 1
+    );
+    $posts = get_posts($args);
+    wp_set_post_categories( $posts[0]->ID, array( $categories["news"], $categories["product"], $categories["potential"] ) );
+}
+
 function sideka_site_init_theme($pages) {
     $upload = wp_upload_bits( "default_bg.jpg", null, file_get_contents(dirname(__FILE__)."/default_bg.jpg") );
     set_theme_mod('background_image', $upload["url"]);
@@ -163,6 +224,7 @@ function sideka_site_init($blog_id, $user_id){
     $categories = sideka_site_init_categories();
     sideka_site_init_menu($pages, $categories);
     sideka_site_init_theme($pages);
+    sideka_site_init_widgets($pages, $categories);
 
     restore_current_blog();
 }
