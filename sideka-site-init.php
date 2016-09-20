@@ -13,6 +13,7 @@ function sideka_site_init_pages($user_id){
         'post_author'    => $user_id,
         'post_type'      => 'page',
     ));
+    update_post_meta( $pages["home"], '_wp_page_template', 'homepage.php' );
 
     $pages["profile"] = wp_insert_post(array(
         'post_title'     => 'Profil Desa',
@@ -43,6 +44,7 @@ function sideka_site_init_pages($user_id){
         'post_author'    => $user_id,
         'post_type'      => 'page',
     ));
+    update_post_meta( $pages["budget"], '_wp_page_template', 'template-full.php' );
 
     $pages["map"] = wp_insert_post(array(
         'post_title'     => 'Peta Desa',
@@ -50,6 +52,7 @@ function sideka_site_init_pages($user_id){
         'post_author'    => $user_id,
         'post_type'      => 'page',
     ));
+    update_post_meta( $pages["map"], '_wp_page_template', 'template-full.php' );
 
     $defaultPage = get_page_by_title( 'Laman Contoh' );
     wp_delete_post( $defaultPage->ID );
@@ -142,12 +145,15 @@ function sideka_site_init_menu($pages, $categories) {
     set_theme_mod('nav_menu_locations', $locations);
 }
 
-function sideka_site_init_theme() {
+function sideka_site_init_theme($pages) {
     $upload = wp_upload_bits( "default_bg.jpg", null, file_get_contents(dirname(__FILE__)."/default_bg.jpg") );
     set_theme_mod('background_image', $upload["url"]);
     set_theme_mod('background_repeat', 'no-repeat');
     set_theme_mod('background_position_x', 'center');
     set_theme_mod('background_attachment', 'fixed');
+
+    update_option( 'show_on_front', 'page' );
+    update_option( 'page_on_front', $pages['home'] );
 }
 
 function sideka_site_init($blog_id, $user_id){
@@ -156,7 +162,7 @@ function sideka_site_init($blog_id, $user_id){
     $pages = sideka_site_init_pages($user_id);
     $categories = sideka_site_init_categories();
     sideka_site_init_menu($pages, $categories);
-    sideka_site_init_theme();
+    sideka_site_init_theme($pages);
 
     restore_current_blog();
 }
