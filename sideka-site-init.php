@@ -142,12 +142,21 @@ function sideka_site_init_menu($pages, $categories) {
     set_theme_mod('nav_menu_locations', $locations);
 }
 
+function sideka_site_init_theme() {
+    $upload = wp_upload_bits( "default_bg.jpg", null, file_get_contents(dirname(__FILE__)."/default_bg.jpg") );
+    set_theme_mod('background_image', $upload["url"]);
+    set_theme_mod('background_repeat', 'no-repeat');
+    set_theme_mod('background_position_x', 'center');
+    set_theme_mod('background_attachment', 'fixed');
+}
+
 function sideka_site_init($blog_id, $user_id){
     switch_to_blog($blog_id);
 
     $pages = sideka_site_init_pages($user_id);
     $categories = sideka_site_init_categories();
     sideka_site_init_menu($pages, $categories);
+    sideka_site_init_theme();
 
     restore_current_blog();
 }
