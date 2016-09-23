@@ -10,8 +10,6 @@ $ckan_host = "http://data.prakarsadesa.id";
 $desa_id = "fulur";
 $package_id = $desa_id."-kependudukan";
 $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $package_id);
-$response = json_decode($json);
-$resources = $response->result->resources;
 ?>
 <style>
     #count-summary {
@@ -137,7 +135,7 @@ $resources = $response->result->resources;
             .tooltips(true)             //Show tooltips on hover.
             .transitionDuration(350)
             .stacked(true)
-            .showControls(false);        //Allow user to switch between "Grouped" and "Stacked" mode.
+            .showControls(false);
 
         chart.yAxis
             .tickFormat(d3.format('d'));
@@ -159,7 +157,7 @@ $resources = $response->result->resources;
             .tooltips(true)             //Show tooltips on hover.
             .transitionDuration(350)
             .stacked(true)
-            .showControls(false);        //Allow user to switch between "Grouped" and "Stacked" mode.
+            .showControls(false);
 
         chart.yAxis
             .tickFormat(d3.format('d'));
@@ -181,7 +179,7 @@ $resources = $response->result->resources;
             .tooltips(true)             //Show tooltips on hover.
             .transitionDuration(350)
             .stacked(true)
-            .showControls(false);        //Allow user to switch between "Grouped" and "Stacked" mode.
+            .showControls(false);
 
         chart.yAxis
             .tickFormat(d3.format('d'));
