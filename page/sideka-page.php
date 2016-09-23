@@ -11,9 +11,16 @@ function sideka_the_content( $content )
 {
     if ( is_page("keuangan-desa") ) {
         ob_start();
-        include dirname(__FILE__) . '/sideka-page-template.php';
+        include dirname(__FILE__) . '/template-keuangan.php';
         $string = ob_get_clean();
         $content .= $string;
     }
+    if ( is_page("data") ) {
+        ob_start();
+        include dirname(__FILE__) . '/template-data.php';
+        $string = ob_get_clean();
+        $content .= $string;
+    }
+
     return $content;
 }
