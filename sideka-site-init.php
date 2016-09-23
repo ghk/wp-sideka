@@ -16,6 +16,7 @@ function sideka_site_init_pages($user_id){
     update_post_meta( $pages["home"], '_wp_page_template', 'homepage.php' );
 
     $pages["profile"] = wp_insert_post(array(
+        'post_name'     => 'profil',
         'post_title'     => 'Profil Desa',
         'post_status'    => 'publish',
         'post_author'    => $user_id,
@@ -23,6 +24,7 @@ function sideka_site_init_pages($user_id){
     ));
 
     $pages["history"] = wp_insert_post(array(
+        'post_name'     => 'sejarah',
         'post_title'     => 'Sejarah Desa',
         'post_status'    => 'publish',
         'post_parent'    => $pages["profile"],
@@ -31,6 +33,7 @@ function sideka_site_init_pages($user_id){
     ));
 
     $pages["lembaga"] = wp_insert_post(array(
+        'post_name'     => 'lembaga',
         'post_title'     => 'Lembaga Desa',
         'post_status'    => 'publish',
         'post_parent'    => $pages["profile"],
@@ -38,17 +41,39 @@ function sideka_site_init_pages($user_id){
         'post_type'      => 'page',
     ));
 
-    $pages["budget"] = wp_insert_post(array(
-        'post_title'     => 'Keuangan Desa',
+    $pages["data"] = wp_insert_post(array(
+        'post_name'     => 'data',
+        'post_title'     => 'Data Desa',
         'post_status'    => 'publish',
+        'post_author'    => $user_id,
+        'post_type'      => 'page',
+    ));
+
+    $pages["society"] = wp_insert_post(array(
+        'post_name'     => 'kependudukan',
+        'post_title'     => 'Data Kependudukan',
+        'post_status'    => 'publish',
+        'post_parent'    => $pages["data"],
+        'post_author'    => $user_id,
+        'post_type'      => 'page',
+    ));
+    update_post_meta( $pages["society"], '_wp_page_template', 'template-full.php' );
+
+    $pages["budget"] = wp_insert_post(array(
+        'post_name'     => 'anggaran',
+        'post_title'     => 'Anggaran Desa',
+        'post_status'    => 'publish',
+        'post_parent'    => $pages["data"],
         'post_author'    => $user_id,
         'post_type'      => 'page',
     ));
     update_post_meta( $pages["budget"], '_wp_page_template', 'template-full.php' );
 
     $pages["map"] = wp_insert_post(array(
+        'post_name'     => 'wilayah',
         'post_title'     => 'Peta Desa',
         'post_status'    => 'publish',
+        'post_parent'    => $pages["data"],
         'post_author'    => $user_id,
         'post_type'      => 'page',
     ));
@@ -111,7 +136,7 @@ function sideka_site_init_menu($pages, $categories) {
             'menu-item-status' => 'publish',));
 
     wp_update_nav_menu_item($menu_id, 0, array(
-        'menu-item-title' => 'Produk Desa',
+        'menu-item-title' => 'Produk',
         'menu-item-object-id' => $categories['product'],
         'menu-item-object' => 'category',
         'menu-item-type' => 'taxonomy',
@@ -119,7 +144,7 @@ function sideka_site_init_menu($pages, $categories) {
         'menu-item-status' => 'publish',));
 
     wp_update_nav_menu_item($menu_id, 0, array(
-        'menu-item-title' => 'Potensi Desa',
+        'menu-item-title' => 'Potensi',
         'menu-item-object-id' => $categories['potential'],
         'menu-item-object' => 'category',
         'menu-item-type' => 'taxonomy',
@@ -127,14 +152,21 @@ function sideka_site_init_menu($pages, $categories) {
         'menu-item-status' => 'publish',));
 
     wp_update_nav_menu_item($menu_id, 0, array(
-        'menu-item-title' => 'Peta Desa',
+        'menu-item-title' => 'Kependudukan',
+        'menu-item-object' => 'page',
+        'menu-item-object-id' => $pages["society"],
+        'menu-item-type' => 'post_type',
+        'menu-item-status' => 'publish'));
+
+    wp_update_nav_menu_item($menu_id, 0, array(
+        'menu-item-title' => 'Peta',
         'menu-item-object' => 'page',
         'menu-item-object-id' => $pages["map"],
         'menu-item-type' => 'post_type',
         'menu-item-status' => 'publish'));
 
     wp_update_nav_menu_item($menu_id, 0, array(
-        'menu-item-title' => 'Keuangan Desa',
+        'menu-item-title' => 'Anggaran',
         'menu-item-object' => 'page',
         'menu-item-object-id' => $pages["budget"],
         'menu-item-type' => 'post_type',
