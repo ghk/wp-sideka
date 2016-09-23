@@ -64,7 +64,7 @@ $resources = $response->result->resources;
             <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Kelompok Umur</a></span>
         </h4>
         <div id="umur">
-            <svg style="height: 250px;"></svg>
+            <svg style="height: 350px;"></svg>
         </div>
     </div>
     <div class="mh-widget-col-1 mh-sidebar">
@@ -72,13 +72,13 @@ $resources = $response->result->resources;
             <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Agama</a></span>
         </h4>
         <div id="agama">
-            <svg style="height: 250px;"></svg>
+            <svg style="height: 300px;"></svg>
         </div>
         <h4 class="mh-widget-title">
             <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Status Kawin</a></span>
         </h4>
         <div id="statusKawin">
-            <svg style="height: 250px;"></svg>
+            <svg style="height: 300px;"></svg>
         </div>
     </div>
 </div>
@@ -147,6 +147,28 @@ $resources = $response->result->resources;
 
         var transformed = transformDataStacked(data, "pendidikan");
         d3.select('#pendidikan svg')
+            .datum(transformed)
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+    });
+
+    var umur = package.result.resources.filter(function(r) {return r.name === "Kelompok Umur Berdasarkan Jenis Kelamin"})[0];
+    d3.csv(umur.url, function(error, data) {
+        var chart = nv.models.multiBarHorizontalChart()
+            .x(function(d) { return d.label })
+            .y(function(d) { return d.value })
+            .margin({top: 30, right: 20, bottom: 50, left: 100})
+            .tooltips(true)             //Show tooltips on hover.
+            .transitionDuration(350)
+            .stacked(true)
+            .showControls(false);        //Allow user to switch between "Grouped" and "Stacked" mode.
+
+        chart.yAxis
+            .tickFormat(d3.format('d'));
+
+        var transformed = transformDataPyramid(data);
+        d3.select('#umur svg')
             .datum(transformed)
             .call(chart);
 
@@ -250,6 +272,50 @@ $resources = $response->result->resources;
                 values: sortedPekerjaan
                     .map(function(p){
                         var val = allPerSex[p][sex];
+                        if(!val)
+                            val == 0;
+                        return {"label": p, "value": val}
+                    })
+            }
+        });
+    }
+
+    function transformDataPyramid(raw){
+        //create aggregate dict
+        var all = {};
+        var allPerSex = {}
+        var age = {}
+        var total = 0;
+        for(var i = 0; i < raw.length; i++){
+            var r = raw[i];
+            var val = parseInt(r.jumlah);
+            var p = r.min_age + " - " + r.max_age;
+            age[p] = r.min_age;
+            if(!all[p])
+            {
+                all[p] = 0;
+            }
+            all[p] += val;
+            if(!allPerSex[p])
+            {
+                allPerSex[p] ={};
+            }
+            allPerSex[p][r.jenis_kelamin] = val;
+            total += val;
+        }
+
+        var sorted = Object.keys(all).sort(function(a, b){
+            return age[b] - age[a];
+        });
+
+        return ["Perempuan", "Laki - laki", "Tidak Diketahui"].map(function(sex){
+            return {
+                key: sex,
+                values: sorted
+                    .map(function(p){
+                        var val = allPerSex[p][sex];
+                        if(sex == "Perempuan")
+                            val = -val;
                         if(!val)
                             val == 0;
                         return {"label": p, "value": val}
