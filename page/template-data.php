@@ -6,8 +6,8 @@
  * Time: 3:51 AM
  */
 
-$ckan_host = "http://ckan.neon.microvac:5000";
-$desa_id = "dermaji";
+$ckan_host = "http://data.prakarsadesa.id";
+$desa_id = "fulur";
 $package_id = $desa_id."-kependudukan";
 $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $package_id);
 $response = json_decode($json);
@@ -17,17 +17,19 @@ $resources = $response->result->resources;
     #count-summary {
         width: 100%;
         text-align: center;
-        margin: 40px 0 0 0;
+        margin: -15px 0 0 0;
     }
     #count-summary dt {
         text-transform: uppercase;
         margin-top: 15px;
         list-style-type: none;
         margin-left: 0;
+        font-weight: normal;
+        font-size: 16px;
     }
     #count-summary dd {
         list-style-type: none;
-        font-size: 20px;
+        font-size: 22px;
         margin-left: 0;
     }
 </style>
@@ -35,7 +37,7 @@ $resources = $response->result->resources;
 <div class="clearfix">
     <div class="mh-content" style="float: left; margin-right: 2.5%">
         <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Pekerjaan Penduduk</a></span>
+            <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Pekerjaan</a></span>
         </h4>
         <div id="pekerjaan">
             <svg style="height: 250px;"></svg>
@@ -43,6 +45,8 @@ $resources = $response->result->resources;
     </div>
     <div class="mh-widget-col-1 mh-sidebar">
         <dl id="count-summary">
+            <dt class="required">Jumlah Keluarga</dt>
+            <dd id="count-family"></dd>
             <dt class="required">Penduduk Perempuan</dt>
             <dd id="count-female"></dd>
             <dt class="required">Penduduk Laki-laki</dt>
@@ -55,7 +59,7 @@ $resources = $response->result->resources;
 <div class="clearfix">
     <div class="mh-content" style="float: left; margin-right: 2.5%">
         <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Tingkat Pendidikan Penduduk</a></span>
+            <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Tingkat Pendidikan</a></span>
         </h4>
         <div id="pendidikan">
             <svg style="height: 250px;"></svg>
@@ -82,6 +86,14 @@ $resources = $response->result->resources;
         </div>
     </div>
 </div>
+<div class="clearfix">
+    <h4 class="mh-widget-title">
+        <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Kelas dan Bantuan Sosial</a></span>
+    </h4>
+    <div id="kelas">
+        <svg style="height: 250px;"></svg>
+    </div>
+</div>
 
 
 <link href="http://nvd3.org/assets/css/nv.d3.css" rel="stylesheet">
@@ -106,6 +118,13 @@ $resources = $response->result->resources;
         document.getElementById("count-male").innerHTML = total["Laki - laki"];
         document.getElementById("count-female").innerHTML = total["Perempuan"];
         document.getElementById("count-unknown").innerHTML = total["Tidak Diketahui"];
+    }
+    function familyCount(data){
+        var total = 0;
+        for(var i = 0; i < data.length; i++){
+            total += parseInt(data[i].jumlah);
+        }
+        document.getElementById("count-family").innerHTML = total;
     }
 
     d3.csv(pekerjaan.url, function(error, data) {
@@ -205,6 +224,31 @@ $resources = $response->result->resources;
         return chart;
     });
 
+    var kelas = package.result.resources.filter(function(r) {return r.name === "Kelas dan Bantuan Sosial"})[0];
+    d3.csv(kelas.url, function(error, data) {
+        familyCount(data);
+        var chart = nv.models.multiBarChart()
+                .x(function(d) { return d.label })
+                .y(function(d) { return d.value })
+                .transitionDuration(350)
+                .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
+                .rotateLabels(0)      //Angle to rotate x-axis labels.
+                .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+                .groupSpacing(0.1)    //Distance between each group of bars.
+            ;
+
+        //chart.bars.forceY([0]);
+        chart.yAxis
+            .tickFormat(d3.format('d'));
+
+        var transformed = transformDataKelas(data);
+        d3.select('#kelas svg')
+            .datum(transformed)
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+    });
+
     function transformDataStacked(raw, label){
         //create aggregate dict
         var all = {};
@@ -249,7 +293,6 @@ $resources = $response->result->resources;
                 filteredKeys.push(key);
             }
         }
-        console.log(etc);
         if(etc > 0) {
             var etcN = "LAIN - LAIN";
             all[etcN] = etc;
@@ -262,9 +305,6 @@ $resources = $response->result->resources;
                 var vb = all[b];
                 return vb - va;
         });
-
-        console.log(allPerSex);
-        console.log(sortedPekerjaan);
 
         return ["Perempuan", "Laki - laki", "Tidak Diketahui"].map(function(sex){
             return {
@@ -349,6 +389,25 @@ $resources = $response->result->resources;
                 val == 0;
             return {"label": p, "value": val}
         });
+    }
+    function transformDataKelas(raw){
+        var results = [];
+        function getSeries(name, select){
+            var r = [];
+            for(var i = 0; i < raw.length; i++){
+                r.push({"label": raw[i].kelas_sosial, "value": parseInt(select(raw[i]))});
+            }
+            return {
+                key: name,
+                values: r
+            }
+        }
+        results.push(getSeries("Total Keluarga", function(r){return r.jumlah}))
+        results.push(getSeries("Keluarga Penerima Raskin", function(r){return r.jumlah_raskin}))
+        results.push(getSeries("Keluarga Penerima Jamkesmas", function(r){return r.jumlah_jamkesmas}))
+        results.push(getSeries("Program Keluarga Harapan", function(r){return r.jumlah_keluarga_harapan}))
+        console.log(results);
+        return results;
     }
 </script>
 
