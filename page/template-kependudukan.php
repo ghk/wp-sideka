@@ -6,8 +6,15 @@
  * Time: 3:51 AM
  */
 
-$ckan_host = "http://data.prakarsadesa.id";
 $desa_id = "fulur";
+$server_name = $_SERVER["SERVER_NAME"];
+$server_splits = explode(".", $server_name);
+if($server_splits[0].".desa.id" == $server_name){
+    $desa_id = $server_splits[0];
+}
+
+$ckan_host = "http://data.prakarsadesa.id";
+#$ckan_host = "http://ckan.neon.microvac:5000";
 $package_id = $desa_id."-kependudukan";
 $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $package_id);
 ?>
@@ -31,6 +38,8 @@ $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $packa
         margin-left: 0;
     }
 </style>
+
+<h1><?php echo $_SERVER["SERVER_NAME"] ?></h1>
 
 <div class="clearfix">
     <div class="mh-content" style="float: left; margin-right: 2.5%">
