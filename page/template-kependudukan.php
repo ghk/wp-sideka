@@ -39,8 +39,6 @@ $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $packa
     }
 </style>
 
-<h1><?php echo $_SERVER["SERVER_NAME"] ?></h1>
-
 <div class="clearfix">
     <div class="mh-content" style="float: left; margin-right: 2.5%">
         <h4 class="mh-widget-title">
