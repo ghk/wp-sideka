@@ -49,7 +49,7 @@ function sideka_site_init_pages($user_id){
         'post_type'      => 'page',
     ));
 
-    $pages["society"] = wp_insert_post(array(
+    $pages["kependudukan"] = wp_insert_post(array(
         'post_name'     => 'kependudukan',
         'post_title'     => 'Data Kependudukan',
         'post_status'    => 'publish',
@@ -57,9 +57,9 @@ function sideka_site_init_pages($user_id){
         'post_author'    => $user_id,
         'post_type'      => 'page',
     ));
-    update_post_meta( $pages["society"], '_wp_page_template', 'template-full.php' );
+    update_post_meta( $pages["kependudukan"], '_wp_page_template', 'template-full.php' );
 
-    $pages["budget"] = wp_insert_post(array(
+    $pages["anggaran"] = wp_insert_post(array(
         'post_name'     => 'anggaran',
         'post_title'     => 'Anggaran Desa',
         'post_status'    => 'publish',
@@ -67,21 +67,26 @@ function sideka_site_init_pages($user_id){
         'post_author'    => $user_id,
         'post_type'      => 'page',
     ));
-    update_post_meta( $pages["budget"], '_wp_page_template', 'template-full.php' );
+    update_post_meta( $pages["anggaran"], '_wp_page_template', 'template-full.php' );
 
-    $pages["map"] = wp_insert_post(array(
-        'post_name'     => 'wilayah',
+    $pages["geospasial"] = wp_insert_post(array(
+        'post_name'     => 'geospasial',
         'post_title'     => 'Peta Desa',
         'post_status'    => 'publish',
         'post_parent'    => $pages["data"],
         'post_author'    => $user_id,
         'post_type'      => 'page',
     ));
-    update_post_meta( $pages["map"], '_wp_page_template', 'template-full.php' );
+    update_post_meta( $pages["geospasial"], '_wp_page_template', 'template-full.php' );
 
     $defaultPage = get_page_by_title( 'Laman Contoh' );
     wp_delete_post( $defaultPage->ID );
 
+    update_option('sideka_page_ids', array(
+        'kependudukan' => $pages['kependudukan'],
+        'anggaran' => $pages['anggaran'],
+        'geospasial' => $pages['geospasial'],
+    ));
     return $pages;
 }
 
@@ -154,23 +159,25 @@ function sideka_site_init_menu($pages, $categories) {
     wp_update_nav_menu_item($menu_id, 0, array(
         'menu-item-title' => 'Kependudukan',
         'menu-item-object' => 'page',
-        'menu-item-object-id' => $pages["society"],
+        'menu-item-object-id' => $pages["kependudukan"],
         'menu-item-type' => 'post_type',
         'menu-item-status' => 'publish'));
 
+    /*
     wp_update_nav_menu_item($menu_id, 0, array(
         'menu-item-title' => 'Peta',
         'menu-item-object' => 'page',
-        'menu-item-object-id' => $pages["map"],
+        'menu-item-object-id' => $pages["geospasial"],
         'menu-item-type' => 'post_type',
         'menu-item-status' => 'publish'));
 
     wp_update_nav_menu_item($menu_id, 0, array(
         'menu-item-title' => 'Anggaran',
         'menu-item-object' => 'page',
-        'menu-item-object-id' => $pages["budget"],
+        'menu-item-object-id' => $pages["anggaran"],
         'menu-item-type' => 'post_type',
         'menu-item-status' => 'publish'));
+    */
 
     $locations = array();
     $locations["main_nav"] = $menu_id; //main MajalahDesa nav
