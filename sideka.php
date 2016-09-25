@@ -14,8 +14,10 @@ Author URI: http://www.bp2dk.id
 
 defined( 'ABSPATH' ) || exit;
 
-include_once( dirname(__FILE__) . '/admin/sideka-admin-menu.php' );
-include_once( dirname(__FILE__) . '/admin/sideka-admin-nav-menu-meta-box.php');
+if(is_admin()) {
+    include_once(dirname(__FILE__) . '/admin/sideka-admin-menu.php');
+}
+//include_once( dirname(__FILE__) . '/admin/sideka-admin-nav-menu-meta-box.php');
 include_once( dirname(__FILE__) . '/page/sideka-page.php' );
 include_once( dirname(__FILE__) . '/sideka-site-init.php' );
 
