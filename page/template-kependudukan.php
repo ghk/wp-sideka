@@ -6,15 +6,15 @@
  * Time: 3:51 AM
  */
 
-$desa_id = "fulur";
+$desa_id = "bokor";
 $server_name = $_SERVER["SERVER_NAME"];
 $server_splits = explode(".", $server_name);
 if($server_splits[0].".desa.id" == $server_name){
     $desa_id = $server_splits[0];
 }
 
-$ckan_host = "http://data.prakarsadesa.id";
-#$ckan_host = "http://ckan.neon.microvac:5000";
+#$ckan_host = "http://data.prakarsadesa.id";
+$ckan_host = "http://ckan.neon.microvac:5000";
 $package_id = $desa_id."-kependudukan";
 $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $package_id);
 ?>
@@ -132,7 +132,7 @@ $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $packa
         document.getElementById("count-family").innerHTML = total;
     }
 
-    d3.csv(pekerjaan.url, function(error, data) {
+    d3.csv(ckan_host + pekerjaan.url, function(error, data) {
         summaryCount(data);
 
         var chart = nv.models.multiBarHorizontalChart()
@@ -156,7 +156,7 @@ $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $packa
     });
 
     var pendidikan = package.result.resources.filter(function(r) {return r.name === "Pendidikan Berdasarkan Jenis Kelamin"})[0];
-    d3.csv(pendidikan.url, function(error, data) {
+    d3.csv(ckan_host + pendidikan.url, function(error, data) {
         var chart = nv.models.multiBarHorizontalChart()
             .x(function(d) { return d.label })
             .y(function(d) { return d.value })
@@ -178,7 +178,7 @@ $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $packa
     });
 
     var umur = package.result.resources.filter(function(r) {return r.name === "Kelompok Umur Berdasarkan Jenis Kelamin"})[0];
-    d3.csv(umur.url, function(error, data) {
+    d3.csv(ckan_host + umur.url, function(error, data) {
         var chart = nv.models.multiBarHorizontalChart()
             .x(function(d) { return d.label })
             .y(function(d) { return d.value })
@@ -200,7 +200,7 @@ $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $packa
     });
 
     var agama = package.result.resources.filter(function(r) {return r.name === "Agama Berdasarkan Jenis Kelamin"})[0];
-    d3.csv(agama.url, function(error, data) {
+    d3.csv(ckan_host + agama.url, function(error, data) {
         var chart = nv.models.pieChart()
             .x(function(d) { return d.label })
             .y(function(d) { return d.value })
@@ -215,7 +215,7 @@ $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $packa
     });
 
     var statusKawin = package.result.resources.filter(function(r) {return r.name === "Status Kawin Berdasarkan Jenis Kelamin"})[0];
-    d3.csv(statusKawin.url, function(error, data) {
+    d3.csv(ckan_host + statusKawin.url, function(error, data) {
         var chart = nv.models.pieChart()
             .x(function(d) { return d.label })
             .y(function(d) { return d.value })
@@ -230,7 +230,7 @@ $json = file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $packa
     });
 
     var kelas = package.result.resources.filter(function(r) {return r.name === "Kelas dan Bantuan Sosial"})[0];
-    d3.csv(kelas.url, function(error, data) {
+    d3.csv(ckan_host + kelas.url, function(error, data) {
         familyCount(data);
         var chart = nv.models.multiBarChart()
                 .x(function(d) { return d.label })
