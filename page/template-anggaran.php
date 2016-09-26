@@ -7,14 +7,6 @@
     .entry-tabs a, .entry-tabs a:hover, .entry-tabs li.active a { display: block; color: #fff; padding: 10px 15px; }
     .entry-tabs .fa { float: left; padding: 10px; margin-right: 6px; background: #e64946; }
 </style>
-<ul class="entry-tabs">
-    <li class="active">
-        <a href="#">Anggaran Tahunan (APBDes 2016)</a>
-    </li>
-    <li>
-        <a href="#">Rencana Jangka Menengah (RPJMDes 2016-2020)</a>
-    </li>
-</ul>
 
 <style>
 
@@ -36,14 +28,21 @@
     }
 
 </style>
-<h3>Pendapatan Desa</h3>
-<div id="treemapi" style="height: 200px; width: 1030px; position: relative;">
+<h3>Pendapatan Desa
+    <span style="float: right; font-weight: normal; font-size: 24px;" class="required">Rp. 1.055.651.797</span>
+</h3>
+<div id="treemapi" style="height: 200px; width: 100%; position: relative;">
 </div>
-<h3>Belanja Desa</h3>
-<div id="treemaps" style="height: 700px; width: 1030px; position: relative;">
+<br />
+<h3>Belanja Desa
+    <span style="float: right; font-weight: normal; font-size: 24px;" class="required">Rp. 1.055.651.797</span>
+</h3>
+<div id="treemaps" style="height: 700px; width: 100%; position: relative;">
 </div>
 <script src="//d3js.org/d3.v4.min.js"></script>
 <script>
+
+    document.read
 
     var format = d3.format(",d");
 
@@ -57,15 +56,15 @@
         });
 
     var treemaps = d3.treemap()
-        .size([1030, 700])
+        .size([d3.select("#treemaps").node().getBoundingClientRect().width, 700])
         .padding(1)
         .round(true);
     var treemapi = d3.treemap()
-        .size([1030, 200])
+        .size([d3.select("#treemapi").node().getBoundingClientRect().width, 200])
         .padding(1)
         .round(true);
 
-    d3.tsv("/wp-content/plugins/sideka/page/apbdes.tsv", typeTreemap, function(error, data) {
+    d3.csv("/wp-content/plugins/sideka/page/apbdes-mandalamekar.csv", typeTreemap, function(error, data) {
         if (error) throw error;
 
         var income = data.filter(i => i.id.split("\.").length < 4 && i.id.startsWith('1'))
@@ -80,7 +79,7 @@
             .data(iroot.leaves())
             .enter().append("div")
             .attr("class", "node")
-            .attr("title", function(d) { return d.id + " " + d.data.name + "\n" + format(d.value); })
+            .attr("title", function(d) { return d.id + " " + d.data.name + "\n Rp." + format(d.value); })
             .style("left", function(d) { return d.x0 + "px"; })
             .style("top", function(d) { return d.y0 + "px"; })
             .style("width", function(d) { return d.x1 - d.x0 + "px"; })
@@ -93,7 +92,7 @@
             .attr("class", "node-value")
             .text(function(d) { return format(d.value); });
 
-        var spending = data.filter(i => i.id.split("\.").length < 5 && i.id.startsWith('2') && i.name != 'Belanja Barang dan Jasa' && i.name != 'Belanja Modal');
+        var spending = data.filter(i =>  i.id.startsWith('2') );
         var sroot = stratify(spending)
             .each(function(d) { d.value = d.data.value; })
             .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
@@ -105,7 +104,7 @@
             .data(sroot.leaves())
             .enter().append("div")
             .attr("class", "node")
-            .attr("title", function(d) { return d.id + " " + d.data.name + "\n" + format(d.value); })
+            .attr("title", function(d) { return d.id + " " + d.data.name + "\n Rp." + format(d.value); })
             .style("left", function(d) { return d.x0 + "px"; })
             .style("top", function(d) { return d.y0 + "px"; })
             .style("width", function(d) { return d.x1 - d.x0 + "px"; })
