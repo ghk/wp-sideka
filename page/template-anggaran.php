@@ -23,7 +23,7 @@
 
     .node-value {
         color: rgba(0,0,0,0.8);
-        font-size: 9px;
+        font-size: 12px;
         margin-top: 1px;
     }
 
@@ -79,7 +79,7 @@
             .data(iroot.leaves())
             .enter().append("div")
             .attr("class", "node")
-            .attr("title", function(d) { return d.id + " " + d.data.name + "\n Rp." + format(d.value); })
+            .attr("title", function(d) { return d.id + " " + d.data.name + "\n Rp. " + format(d.value); })
             .style("left", function(d) { return d.x0 + "px"; })
             .style("top", function(d) { return d.y0 + "px"; })
             .style("width", function(d) { return d.x1 - d.x0 + "px"; })
@@ -90,7 +90,7 @@
             .text(function(d) { return d.data.name; })
             .append("div")
             .attr("class", "node-value")
-            .text(function(d) { return format(d.value); });
+            .text(function(d) { return "Rp. "+format(d.value); });
 
         var spending = data.filter(i =>  i.id.startsWith('2') );
         var sroot = stratify(spending)
@@ -104,7 +104,7 @@
             .data(sroot.leaves())
             .enter().append("div")
             .attr("class", "node")
-            .attr("title", function(d) { return d.id + " " + d.data.name + "\n Rp." + format(d.value); })
+            .attr("title", function(d) { return d.id + " " + d.data.name + "\n Rp. " + format(d.value); })
             .style("left", function(d) { return d.x0 + "px"; })
             .style("top", function(d) { return d.y0 + "px"; })
             .style("width", function(d) { return d.x1 - d.x0 + "px"; })
@@ -115,7 +115,7 @@
             .text(function(d) { return d.data.name; })
             .append("div")
             .attr("class", "node-value")
-            .text(function(d) { return format(d.value); });
+            .text(function(d) { return "Rp. "+format(d.value); });
     });
 
     function typeTreemap(d) {
