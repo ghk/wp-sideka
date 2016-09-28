@@ -20,7 +20,7 @@ if(is_admin()) {
 //include_once( dirname(__FILE__) . '/admin/sideka-admin-nav-menu-meta-box.php');
 include_once(dirname(__FILE__) . '/page/sideka-page.php' );
 include_once(dirname(__FILE__) . '/sideka-site-init.php' );
-include_once(dirname(__FILE__) . 'sideka-email-multisite.php');
+include_once(dirname(__FILE__) . '/sideka-email-multisite.php');
 
 add_action( 'init', 'sideka_rewrites_init' );
 function sideka_rewrites_init(){
