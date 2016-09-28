@@ -190,10 +190,17 @@ function sideka_site_init_widgets($pages, $categories)
         1 => array(
             'title' => '',
         ),
+        2 => array(
+            'title' => '',
+        ),
         '_multiwidget' => 1
     ));
     update_option('widget_recent-comments', array(
         1 => array(
+            'title' => '',
+            'number' => 5,
+        ),
+        2 => array(
             'title' => '',
             'number' => 5,
         ),
@@ -202,7 +209,7 @@ function sideka_site_init_widgets($pages, $categories)
     update_option('widget_mh_magazine_lite_posts_large', array(
         1 => array(
             'category' => $categories["news"],
-            'postcount' => 2,
+            'postcount' => 4,
         ),
         '_multiwidget' => 1
     ));
@@ -225,11 +232,11 @@ function sideka_site_init_widgets($pages, $categories)
         'home-2' => array(
             'mh_magazine_lite_posts_large-1'
         ),
-        'home-3' => array(
-            'mh_magazine_lite_posts_stacked-1'
-        ),
-        'home-4' => array(
-            'mh_magazine_lite_posts_stacked-2'
+        'home-6' => array(
+            'search-2',
+            'mh_magazine_lite_posts_stacked-1',
+            'mh_magazine_lite_posts_stacked-2',
+            'recent-comments-2'
         ),
     );
     update_option('sidebars_widgets', $widgets);
