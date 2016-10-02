@@ -92,9 +92,9 @@ function sideka_site_init_pages($user_id){
 
 function sideka_site_init_categories() {
     $categories = array();
-    $categories["news"] = wp_create_category('Kabar Desa');
-    $categories["product"] = wp_create_category('Produk Desa');
-    $categories["potential"] = wp_create_category('Potensi Desa');
+    $categories['news']  =wp_insert_category(array('cat_name' => 'Kabar Desa',  'category_nicename' => 'kabar'));
+    $categories['product']  =wp_insert_category(array('cat_name' => 'Produk Desa',  'category_nicename' => 'produk'));
+    $categories['potential']  =wp_insert_category(array('cat_name' => 'Potensi Desa',  'category_nicename' => 'potensi'));
     return $categories;
 }
 
