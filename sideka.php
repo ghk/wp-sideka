@@ -41,7 +41,7 @@ add_action('admin_head', 'sideka_admin_head');
 function sideka_admin_head() {
 	if(!is_network_admin()){
 	  echo '<style>
-	li#toplevel_page_jetpack {display: none;}
+	li#toplevel_page_jetpack, li#toplevel_page_wsal-auditlog {display: none;}
 	  </style>';
 	}
 }
