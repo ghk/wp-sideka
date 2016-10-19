@@ -36,4 +36,14 @@ function sideka_query_vars( $query_vars ){
     return $query_vars;
 }
 
+add_action('admin_head', 'sideka_admin_head');
+
+function sideka_admin_head() {
+	if(!is_network_admin()){
+	  echo '<style>
+	li#toplevel_page_jetpack {display: none;}
+	  </style>';
+	}
+}
+
 ?>
