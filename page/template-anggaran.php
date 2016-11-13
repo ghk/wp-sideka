@@ -139,7 +139,7 @@ $package_exists = json_decode($json)->success;
         </div>
         <div class="mh-widget-col-1 mh-sidebar">
             <dl id="count-summary">
-                <dt class="required">Defisit</dt>
+                <dt id="title-defisit" class="required">Defisit</dt>
                 <dd id="count-defisit"></dd>
                 <dt class="required">Penerimaan Pembiayaan</dt>
                 <dd id="count-in-pembiayaan"></dd>
@@ -227,6 +227,11 @@ $package_exists = json_decode($json)->success;
             update("#count-in-pembiayaan", "3.1");
             update("#count-out-pembiayaan", "3.2");
             var defisit = apbdesSums[years[0]]["2"] - apbdesSums[years[0]]["1"];
+            if(defisit < 0){
+                jQuery("#title-defisit").html("Surplus");
+                defisit = -defisit;
+
+            }
             jQuery("#count-defisit").html(f(defisit));
         }
 
