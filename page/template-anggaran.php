@@ -121,7 +121,7 @@ $package_exists = json_decode($json)->success;
 
     <div class="clearfix">
         <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Anggaran Pendapatan dan Belanja Desa Tahun Anggaran 2016</a></span>
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Anggaran Pendapatan dan Belanja Desa Tahun Anggaran <span id="tahun-anggaran"></span></a></span>
         </h4>
         <div class="mh-widget-col-1 mh-sidebar">
             <br /><br />
@@ -214,6 +214,7 @@ $package_exists = json_decode($json)->success;
         }
 
         function setupCountSummary() {
+            jQuery("#tahun-anggaran").html(years[0]);
             var fmt = d3.format("0,000");
             var f = function(d){
                 return "Rp. "+fmt(d).replace(new RegExp(",", "g"), ".");
