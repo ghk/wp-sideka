@@ -121,7 +121,7 @@ $package_exists = json_decode($json)->success;
 
     <div class="clearfix">
         <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Anggaran Pendapatan dan Belanja Desa Tahun Anggaran <span id="tahun-anggaran"></span></a></span>
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">APBDes Tahun Anggaran <span id="tahun-anggaran"></span></a></span>
         </h4>
         <div class="mh-widget-col-1 mh-sidebar">
             <br /><br />
@@ -151,7 +151,7 @@ $package_exists = json_decode($json)->success;
     <br />
     <div class="clearfix">
         <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Pendapatan Desa</a></span>
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Sumber Pendapatan Desa</a></span>
         </h4>
         <div id="pendapatan">
             <svg style="height: 300px;"></svg>
@@ -159,7 +159,7 @@ $package_exists = json_decode($json)->success;
     </div>
     <div class="clearfix">
         <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Belanja Desa</a></span>
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Bidang Belanja Desa</a></span>
         </h4>
         <div id="belanja">
             <svg style="height: 300px;"></svg>
