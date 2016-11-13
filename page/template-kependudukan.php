@@ -411,7 +411,8 @@ $package_exists = json_decode($json)->success;
             }
             results.push(getSeries("Total Keluarga", function(r){return r.jumlah}))
             results.push(getSeries("Keluarga Penerima Raskin", function(r){return r.jumlah_raskin}))
-            results.push(getSeries("Keluarga Penerima Jamkesmas", function(r){return r.jumlah_jamkesmas}))
+            results.push(getSeries("Keluarga Penerima BPJS", function(r){return r.jumlah_bpjs}))
+            results.push(getSeries("Keluarga Penerima KIP", function(r){return r.jumlah_kip}))
             results.push(getSeries("Program Keluarga Harapan", function(r){return r.jumlah_keluarga_harapan}))
             console.log(results);
             return results;
