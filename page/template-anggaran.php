@@ -145,7 +145,23 @@ $package_exists = json_decode($json)->success;
     <br />
     <div class="clearfix">
         <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Rincian Belanja Desa <select id="year-selector">
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Pendapatan Desa</a></span>
+        </h4>
+        <div id="pendapatan">
+            <svg style="height: 300px;"></svg>
+        </div>
+    </div>
+    <div class="clearfix">
+        <h4 class="mh-widget-title">
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Belanja Desa</a></span>
+        </h4>
+        <div id="belanja">
+            <svg style="height: 300px;"></svg>
+        </div>
+    </div>
+    <div class="clearfix">
+        <h4 class="mh-widget-title">
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Rincian Belanja Desa Interaktif<select id="year-selector">
                     </select></a></span>
         </h4>
         <div id="details" style="width: 100%; height: 700px;">
@@ -163,19 +179,120 @@ $package_exists = json_decode($json)->success;
         var ckan_host = "<?= $ckan_host ?>";
         var package = <?= $json ?>;
         var years = [];
+        var apbdesData = {};
+        var apbdesSums = {};
         var apbdeses = package.result.resources
             .filter(function(r) {return r.name.startsWith("APBDes ")});
         apbdeses.forEach(function(apbdes){
                 d3.csv(ckan_host + apbdes.url, function(error, data) {
                     var year = apbdes.name.substring(7);
+                    apbdesData[year] = data;
+                    apbdesSums[year] = calculateSums(data);
                     showApbdes(year, apbdes, data);
                     years.push(year)
                     if(years.length == apbdeses.length){
-                        finalizeApbdes();
+                        onAllApbdesLoaded();
                     }
                 });
         });
-        function finalizeApbdes(){
+
+        function onAllApbdesLoaded(){
+            setupApbdesSelect();
+            var codes = ["1.1", "1.2.1", "1.2.2", "1.2.3", "1.2.4"];
+            setupHistoricalChart("#pendapatan", codes);
+            codes = ["2.1", "2.2", "2.3", "2.4"];
+            setupHistoricalChart("#belanja", codes);
+        }
+
+        function setupHistoricalChart(id, codes){
+            var chart = nv.models.multiBarChart()
+                    .x(function(d) { return d.label })
+                    .y(function(d) { return d.value })
+                    .transitionDuration(350)
+                    .stacked(true)
+                    .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+                    .groupSpacing(0.1)    //Distance between each group of bars.
+                ;
+            window.chart = chart;
+
+            //chart.bars.forceY([0]);
+            chart.yAxis
+                .tickFormat(d3.format('.2s'));
+
+            var transformed = transformDataHistorical(codes);
+            console.log(transformed);
+            d3.select(id+' svg')
+                .datum(transformed)
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            function transformDataHistorical(){
+                return codes.map(function(code){
+                    var item = apbdesData[years[0]].filter(i => i.kode_rekening == code)[0];
+                    return {
+                        key: item.uraian,
+                        values: years.slice(0).reverse().map(function(year){
+                            var value = parseInt(apbdesData[year].filter(i => i.kode_rekening == code)[0].anggaran);
+                            if(!Number.isFinite(value))
+                                value = apbdesSums[code];
+                            if(!Number.isFinite(value))
+                                value = 0;
+                            return {
+                                label: year,
+                                value: value,
+                            }
+                        })
+                    }
+                });
+            }
+        }
+
+        function calculateSums(rows){
+
+            function getValue(row, index, rows){
+                var anggaran = parseInt(row.anggaran);
+                if(Number.isFinite(anggaran)){
+                    if(row.kode_rekening){
+                        sums[row.kode_rekening] = anggaran;
+                    }
+                    return anggaran;
+                }
+                var sum = 0;
+                var dotCount = row.kode_rekening.split(".").length;
+                var i = index + 1;
+                var allowDetail = true;
+                while(i < rows.length){
+                    var nextRow  = rows[i];
+                    var nextDotCount = nextRow.kode_rekening ? nextRow.kode_rekening.split(".").length : 0;
+                    if(!nextRow.kode_rekening && allowDetail){
+                        var nextAnggaran = parseInt(nextRow.anggaran);
+                        if(Number.isFinite(nextAnggaran)){
+                            sum += nextAnggaran;
+                        }
+                    } else if(nextRow.kode_rekening && nextRow.kode_rekening.startsWith(row.kode_rekening) && (dotCount + 1 == nextDotCount)){
+                        allowDetail = false;
+                        sum += getValue(nextRow, i, rows);
+                    } else if(nextRow.kode_rekening && !nextRow.kode_rekening.startsWith(row.kode_rekening) ){
+                        break;
+                    }
+                    i++;
+                }
+                sums[row.kode_rekening] = sum;
+                return sum;
+            }
+
+            var sums = {};
+            for(var i = 0; i < rows.length; i++){
+                var row = rows[i];
+                if(row.kode_rekening && !sums[row.kode_rekening]){
+                    getValue(row, i, rows);
+                }
+            }
+            return sums;
+        }
+
+        function setupApbdesSelect(){
             var $ = window.jQuery;
             years.sort().reverse();
             $("#year-selector").change(function(){
