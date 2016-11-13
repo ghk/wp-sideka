@@ -206,7 +206,8 @@ $package_exists = json_decode($json)->success;
             var chart = nv.models.pieChart()
                 .x(function(d) { return d.label })
                 .y(function(d) { return d.value })
-                .showLabels(false);
+                .labelThreshold(.25)
+                .showLabels(true);
 
             d3.select("#agama svg")
                 .datum(transformData(data, "agama"))
@@ -221,7 +222,8 @@ $package_exists = json_decode($json)->success;
             var chart = nv.models.pieChart()
                 .x(function(d) { return d.label })
                 .y(function(d) { return d.value })
-                .showLabels(false);
+                .labelThreshold(.25)
+                .showLabels(true);
 
             d3.select("#statusKawin svg")
                 .datum(transformData(data, "status_kawin"))
