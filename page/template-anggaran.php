@@ -226,7 +226,7 @@ $package_exists = json_decode($json)->success;
             update("#count-belanja", "2");
             update("#count-in-pembiayaan", "3.1");
             update("#count-out-pembiayaan", "3.2");
-            var defisit = apbdesSums[years[0]]["2"] - apbdesSums[years[1]]["1"];
+            var defisit = apbdesSums[years[0]]["2"] - apbdesSums[years[0]]["1"];
             jQuery("#count-defisit").html(f(defisit));
         }
 
