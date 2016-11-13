@@ -187,7 +187,7 @@ $package_exists = json_decode($json)->success;
         var years = [];
         var apbdesData = {};
         var apbdesSums = {};
-        var format = d3.format(".2s");
+        var format = d3.format(".3s");
         var apbdeses = package.result.resources
             .filter(function(r) {return r.name.startsWith("APBDes ")});
         apbdeses.forEach(function(apbdes){
@@ -223,7 +223,7 @@ $package_exists = json_decode($json)->success;
 
             //chart.bars.forceY([0]);
             chart.yAxis
-                .tickFormat(d3.format('.2s'));
+                .tickFormat(d3.format('.3s'));
 
             var transformed = transformDataHistorical(codes);
             console.log(transformed);
