@@ -43,7 +43,7 @@ $package_exists = json_decode($json)->success;
 
     <style>
 
-        #detail {
+        #details {
             background: #fff;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
@@ -99,6 +99,15 @@ $package_exists = json_decode($json)->success;
             fill: #bbb;
         }
 
+        .mh-widget-title-link select {
+            border: 0 none;
+            font-weight: 600;
+            color: #e64946;
+            font-size: 16px;
+            line-height: 1.3;
+            font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        }
+
     </style>
 
     <div class="clearfix">
@@ -125,9 +134,10 @@ $package_exists = json_decode($json)->success;
     </div>
     <div class="clearfix">
         <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Detail Belanja Desa</a></span>
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Rincian Belanja Desa <select id="year-selector">
+                    </select></a></span>
         </h4>
-        <div id="detail" style="width: 100%; height: 700px;">
+        <div id="details" style="width: 100%; height: 700px;">
         </div>
     </div>
 
@@ -141,24 +151,36 @@ $package_exists = json_decode($json)->success;
         var package_id = "<?= $package_id ?>";
         var ckan_host = "<?= $ckan_host ?>";
         var package = <?= $json ?>;
-        package.result.resources
-            .filter(function(r) {return r.name.startsWith("APBDes ")})
-            .forEach(function(apbdes){
+        var years = [];
+        var apbdeses = package.result.resources
+            .filter(function(r) {return r.name.startsWith("APBDes ")});
+        apbdeses.forEach(function(apbdes){
                 d3.csv(ckan_host + apbdes.url, function(error, data) {
-                    if(apbdes.name == "APBDes 2016") {
-                        showCurrentApbdes(apbdes, data);
+                    var year = apbdes.name.substring(7);
+                    showApbdes(year, apbdes, data);
+                    years.push(year)
+                    if(years.length == apbdeses.length){
+                        finalizeApbdes();
                     }
                 });
         });
-        function showCurrentApbdes(apbdes, data){
-            console.log(data);
-            window.data = data;
-            var belanja = data.filter(function(r){return r.kode_rekening && r.kode_rekening.startsWith("2.") && !r.kode_rekening.startsWith("2.5");});
-            console.log(belanja);
-            var belanjaMap = {};
-            belanja.forEach(function(b){
-                belanjaMap[b.kode_rekening] = b;
+        function finalizeApbdes(){
+            var $ = window.jQuery;
+            years.sort().reverse();
+            $("#year-selector").change(function(){
+                var val = $(this).val();
+                $("#details > div").each(function(){$(this).hide();});
+                $("#details > div[data-year='"+val+"']").show();
             });
+            years.forEach(function(year){
+                $("#year-selector").append("<option>"+year+"</option>");
+            });
+            $("#details > div[data-year='"+years[0]+"']").show();
+        }
+
+        function showApbdes(year, apbdes, data){
+            window.data = data;
+            var belanja = data.filter(function(r){return r.kode_rekening && r.kode_rekening.startsWith("2.");});
 
             var root = { key: "2", name: "Belanja", values: [] };
             belanja.forEach(function(b){
@@ -187,7 +209,6 @@ $package_exists = json_decode($json)->success;
                     parent = found;
                 }
 
-                console.log("inserting ", b.kode_rekening);
                 var val = parseInt(b.anggaran);
                 if(!isFinite(val))
                     val = 0;
@@ -212,11 +233,11 @@ $package_exists = json_decode($json)->success;
                 delete node.name;
             }
             cleanUp(root);
-            main({}, root);
+            main({year: year}, root);
             console.log(root);
         }
 
-        var width = d3.select("#detail").node().getBoundingClientRect().width;
+        var width = d3.select("#details").node().getBoundingClientRect().width;
         var defaults = {
             margin: {top: 24, right: 0, bottom: 0, left: 0},
             rootname: "TOP",
@@ -229,6 +250,7 @@ $package_exists = json_decode($json)->success;
         //http://bl.ocks.org/ganeshv/6a8e9ada3ab7f2d88022
         function main(o, data) {
             var $ = jQuery;
+            var $div = $("<div></div>").appendTo($("#details")).attr("data-year", o.year);
             var root,
                 opts = $.extend(true, {}, defaults, o),
                 formatNumber = d3.format(opts.format),
@@ -236,7 +258,7 @@ $package_exists = json_decode($json)->success;
                 margin = opts.margin,
                 theight = 36 + 16;
 
-            $('#detail').width(opts.width).height(opts.height);
+            $div.width(opts.width).height(opts.height);
             var width = opts.width - margin.left - margin.right,
                 height = opts.height - margin.top - margin.bottom - theight,
                 transitioning;
@@ -257,7 +279,7 @@ $package_exists = json_decode($json)->success;
                 .ratio(height / width * 0.5 * (1 + Math.sqrt(5)))
                 .round(false);
 
-            var svg = d3.select("#detail").append("svg")
+            var svg = d3.select($div[0]).append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.bottom + margin.top)
                 .style("margin-left", -margin.left + "px")
@@ -280,7 +302,7 @@ $package_exists = json_decode($json)->success;
                 .attr("dy", ".75em");
 
             if (opts.title) {
-                $("#detail").prepend("<p class='title'>" + opts.title + "</p>");
+                $div.prepend("<p class='title'>" + opts.title + "</p>");
             }
             if (data instanceof Array) {
                 root = { key: rname, values: data };
@@ -290,9 +312,12 @@ $package_exists = json_decode($json)->success;
 
             initialize(root);
             accumulate(root);
+            trim(root);
             layout(root);
             console.log(root);
             display(root);
+            $div.hide();
+
 
             if (window.parent !== window) {
                 var myheight = document.documentElement.scrollHeight || document.body.scrollHeight;
@@ -314,6 +339,19 @@ $package_exists = json_decode($json)->success;
                 return (d._children = d.values)
                     ? d.value = d.values.reduce(function(p, v) { return p + accumulate(v); }, 0)
                     : d.value;
+            }
+
+            function trim(d){
+                var arr = d.values;
+                for(var i = arr.length - 1; i >= 0; i--){
+                    var c = arr[i];
+                    if(c.value == 0){
+                        arr.splice(i, 1);
+                    } else {
+                        if(c.values)
+                            trim(c);
+                    }
+                }
             }
 
             // Compute the treemap layout recursively such that each group of siblings
