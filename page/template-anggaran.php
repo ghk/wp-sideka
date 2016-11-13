@@ -36,8 +36,11 @@ $package_exists = json_decode($json)->success;
         }
         #count-summary dd {
             list-style-type: none;
-            font-size: 22px;
+            font-size: 16px;
             margin-left: 0;
+        }
+        #count-summary.larger dd {
+            font-size: 30px;
         }
     </style>
 
@@ -111,27 +114,35 @@ $package_exists = json_decode($json)->success;
     </style>
 
     <div class="clearfix">
-        <div class="mh-content" style="float: left; margin-right: 2.5%">
-            <h4 class="mh-widget-title">
-                <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Pekerjaan</a></span>
-            </h4>
-            <div id="pekerjaan">
-                <svg style="height: 250px;"></svg>
-            </div>
+        <h4 class="mh-widget-title">
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Anggaran Pendapatan dan Belanja Desa Tahun Anggaran 2016</a></span>
+        </h4>
+        <div class="mh-widget-col-1 mh-sidebar">
+            <br /><br />
+            <dl id="count-summary" class="larger">
+                <dt class="required">Pendapatan</dt>
+                <dd id="count-family">Rp. 1.143.161.861</dd>
+            </dl>
+        </div>
+        <div class="mh-widget-col-1 mh-sidebar">
+            <br /><br />
+            <dl id="count-summary" class="larger">
+            <dt class="required">Belanja</dt>
+            <dd id="count-family">Rp. 1.143.161.861</dd>
+            </dl>
         </div>
         <div class="mh-widget-col-1 mh-sidebar">
             <dl id="count-summary">
-                <dt class="required">Jumlah Keluarga</dt>
-                <dd id="count-family"></dd>
-                <dt class="required">Penduduk Perempuan</dt>
-                <dd id="count-female"></dd>
-                <dt class="required">Penduduk Laki-laki</dt>
-                <dd id="count-male"></dd>
-                <dt class="required">Tidak Diketahui</dt>
-                <dd id="count-unknown"></dd>
+                <dt class="required">Defisit</dt>
+                <dd id="count-family">Rp. 1.143.161.861</dd>
+                <dt class="required">Pembiayaan</dt>
+                <dd id="count-family">Rp. 1.143.161.861</dd>
+                <dt class="required">Pengeluaran Pembiayaan</dt>
+                <dd id="count-family">Rp. 1.143.161.861</dd>
             </dl>
         </div>
     </div>
+    <br />
     <div class="clearfix">
         <h4 class="mh-widget-title">
             <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Rincian Belanja Desa <select id="year-selector">
