@@ -187,6 +187,7 @@ $package_exists = json_decode($json)->success;
         var years = [];
         var apbdesData = {};
         var apbdesSums = {};
+        var format = d3.format(".2s");
         var apbdeses = package.result.resources
             .filter(function(r) {return r.name.startsWith("APBDes ")});
         apbdeses.forEach(function(apbdes){
@@ -256,7 +257,7 @@ $package_exists = json_decode($json)->success;
                                 // Two decimals format
                                 var height = this.getBBox().height;
                                 console.log(bar);
-                                return d.key + " " + parseFloat(bar.y).toFixed(2);
+                                return d.key + " - Rp. " + format(parseFloat(bar.y));
                             })
                             .attr('y', function(){
                                 // Center label vertically
@@ -431,7 +432,7 @@ $package_exists = json_decode($json)->success;
             var $div = $("<div></div>").appendTo($("#details")).attr("data-year", o.year);
             var root,
                 opts = $.extend(true, {}, defaults, o),
-                formatNumber = d3.format(opts.format),
+                formatNumber = format,
                 rname = opts.rootname,
                 margin = opts.margin,
                 theight = 36 + 16;
@@ -580,7 +581,7 @@ $package_exists = json_decode($json)->success;
                     .attr("class", "child")
                     .call(rect)
                     .append("title")
-                    .text(function(d) { return d.key + " (" + formatNumber(d.value) + ")"; });
+                    .text(function(d) { return d.key + " (Rp. " + formatNumber(d.value) + ")"; });
                 children.append("text")
                     .attr("class", "ctext")
                     .text(function(d) { return d.key; })
@@ -598,7 +599,7 @@ $package_exists = json_decode($json)->success;
                     .text(function(d) { return d.key; });
                 t.append("tspan")
                     .attr("dy", "1.0em")
-                    .text(function(d) { return formatNumber(d.value); });
+                    .text(function(d) { return "Rp. "+formatNumber(d.value); });
                 t.call(text);
 
                 g.selectAll("rect")
@@ -666,8 +667,8 @@ $package_exists = json_decode($json)->success;
 
             function name(d) {
                 return d.parent
-                    ? name(d.parent) + " / " + d.key + " (" + formatNumber(d.value) + ")"
-                    : d.key + " (" + formatNumber(d.value) + ")";
+                    ? name(d.parent) + " / " + d.key + " (Rp. " + formatNumber(d.value) + ")"
+                    : d.key + " (Rp. " + formatNumber(d.value) + ")";
             }
         }
     </script>
