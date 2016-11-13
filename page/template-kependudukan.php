@@ -336,8 +336,8 @@ $package_exists = json_decode($json)->success;
             for(var i = 0; i < raw.length; i++){
                 var r = raw[i];
                 var val = parseInt(r.jumlah);
-                var p = r.min_age + " - " + r.max_age;
-                age[p] = r.min_age;
+                var p = r.min_umur + " - " + r.max_umur;
+                age[p] = r.min_umur;
                 if(!all[p])
                 {
                     all[p] = 0;
