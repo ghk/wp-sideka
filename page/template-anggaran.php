@@ -127,24 +127,24 @@ $package_exists = json_decode($json)->success;
             <br /><br />
             <dl id="count-summary" class="larger">
                 <dt class="required">Pendapatan</dt>
-                <dd id="count-family">Rp. 1.143.161.861</dd>
+                <dd id="count-pendapatan"></dd>
             </dl>
         </div>
         <div class="mh-widget-col-1 mh-sidebar">
             <br /><br />
             <dl id="count-summary" class="larger">
             <dt class="required">Belanja</dt>
-            <dd id="count-family">Rp. 1.143.161.861</dd>
+            <dd id="count-belanja"></dd>
             </dl>
         </div>
         <div class="mh-widget-col-1 mh-sidebar">
             <dl id="count-summary">
                 <dt class="required">Defisit</dt>
-                <dd id="count-family">Rp. 1.143.161.861</dd>
-                <dt class="required">Pembiayaan</dt>
-                <dd id="count-family">Rp. 1.143.161.861</dd>
+                <dd id="count-defisit"></dd>
+                <dt class="required">Penerimaan Pembiayaan</dt>
+                <dd id="count-in-pembiayaan"></dd>
                 <dt class="required">Pengeluaran Pembiayaan</dt>
-                <dd id="count-family">Rp. 1.143.161.861</dd>
+                <dd id="count-out-pembiayaan"></dd>
             </dl>
         </div>
     </div>
@@ -187,7 +187,8 @@ $package_exists = json_decode($json)->success;
         var years = [];
         var apbdesData = {};
         var apbdesSums = {};
-        var format = d3.format(".3s");
+        var f = d3.format(".3s");
+        var format = function(d) { return "Rp. "+f(d);};
         var apbdeses = package.result.resources
             .filter(function(r) {return r.name.startsWith("APBDes ")});
         apbdeses.forEach(function(apbdes){
@@ -209,12 +210,31 @@ $package_exists = json_decode($json)->success;
             setupHistoricalChart("#pendapatan", codes);
             codes = ["2.1", "2.2", "2.3", "2.4"];
             setupHistoricalChart("#belanja", codes);
+            setupCountSummary();
+        }
+
+        function setupCountSummary() {
+            var fmt = d3.format("0,000");
+            var f = function(d){
+                return "Rp. "+fmt(d).replace(new RegExp(",", "g"), ".");
+            }
+            function update(selector, code){
+                var value = apbdesSums[years[0]][code];
+                jQuery(selector).html(f(value));
+            }
+            update("#count-pendapatan", "1");
+            update("#count-belanja", "2");
+            update("#count-in-pembiayaan", "3.1");
+            update("#count-out-pembiayaan", "3.2");
+            var defisit = apbdesSums[years[0]]["2"] - apbdesSums[years[1]]["1"];
+            jQuery("#count-defisit").html(f(defisit));
         }
 
         function setupHistoricalChart(id, codes){
             var chart = nv.models.multiBarChart()
                     .x(function(d) { return d.label })
                     .y(function(d) { return d.value })
+                    .margin({top: 30, right: 0, bottom: 50, left: 120})
                     //.transitionDuration(350)
                     .stacked(true)
                     .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
@@ -223,10 +243,9 @@ $package_exists = json_decode($json)->success;
 
             //chart.bars.forceY([0]);
             chart.yAxis
-                .tickFormat(d3.format('.3s'));
+                .tickFormat(format);
 
             var transformed = transformDataHistorical(codes);
-            console.log(transformed);
             d3.select(id+' svg')
                 .datum(transformed)
                 .call(chart);
@@ -256,8 +275,7 @@ $package_exists = json_decode($json)->success;
                             .text(function(d){
                                 // Two decimals format
                                 var height = this.getBBox().height;
-                                console.log(bar);
-                                return d.key + " - Rp. " + format(parseFloat(bar.y));
+                                return d.key + " - " + format(parseFloat(bar.y));
                             })
                             .attr('y', function(){
                                 // Center label vertically
@@ -413,7 +431,6 @@ $package_exists = json_decode($json)->success;
             }
             cleanUp(root);
             main({year: year}, root);
-            console.log(root);
         }
 
         var width = d3.select("#details").node().getBoundingClientRect().width;
@@ -493,7 +510,6 @@ $package_exists = json_decode($json)->success;
             accumulate(root);
             trim(root);
             layout(root);
-            console.log(root);
             display(root);
             $div.hide();
 
@@ -581,7 +597,7 @@ $package_exists = json_decode($json)->success;
                     .attr("class", "child")
                     .call(rect)
                     .append("title")
-                    .text(function(d) { return d.key + " (Rp. " + formatNumber(d.value) + ")"; });
+                    .text(function(d) { return d.key + " (" + formatNumber(d.value) + ")"; });
                 children.append("text")
                     .attr("class", "ctext")
                     .text(function(d) { return d.key; })
@@ -599,7 +615,7 @@ $package_exists = json_decode($json)->success;
                     .text(function(d) { return d.key; });
                 t.append("tspan")
                     .attr("dy", "1.0em")
-                    .text(function(d) { return "Rp. "+formatNumber(d.value); });
+                    .text(function(d) { return formatNumber(d.value); });
                 t.call(text);
 
                 g.selectAll("rect")
@@ -667,8 +683,8 @@ $package_exists = json_decode($json)->success;
 
             function name(d) {
                 return d.parent
-                    ? name(d.parent) + " / " + d.key + " (Rp. " + formatNumber(d.value) + ")"
-                    : d.key + " (Rp. " + formatNumber(d.value) + ")";
+                    ? name(d.parent) + " / " + d.key + " (" + formatNumber(d.value) + ")"
+                    : d.key + " (" + formatNumber(d.value) + ")";
             }
         }
     </script>
