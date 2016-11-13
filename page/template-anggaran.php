@@ -169,9 +169,9 @@ $package_exists = json_decode($json)->success;
     </div>
 
 
-    <link href="http://nvd3.org/assets/css/nv.d3.css" rel="stylesheet">
-    <script src="http://nvd3.org/assets/lib/d3.v3.js"></script>
-    <script src="http://nvd3.org/assets/js/nv.d3.js"></script>
+    <link href="/wp-content/plugins/sideka/nv.d3.css" rel="stylesheet">
+    <script src="/wp-content/plugins/sideka/d3.v3.js"></script>
+    <script src="/wp-content/plugins/sideka/nv.d3.js"></script>
 
     <script type="text/javascript">
         document.getElementsByClassName("entry-header")[0].remove();
@@ -208,7 +208,7 @@ $package_exists = json_decode($json)->success;
             var chart = nv.models.multiBarChart()
                     .x(function(d) { return d.label })
                     .y(function(d) { return d.value })
-                    .transitionDuration(350)
+                    //.transitionDuration(350)
                     .stacked(true)
                     .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
                     .groupSpacing(0.1)    //Distance between each group of bars.

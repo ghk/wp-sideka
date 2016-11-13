@@ -103,9 +103,9 @@ $package_exists = json_decode($json)->success;
     </div>
 
 
-    <link href="http://nvd3.org/assets/css/nv.d3.css" rel="stylesheet">
-    <script src="http://nvd3.org/assets/lib/d3.v3.js"></script>
-    <script src="http://nvd3.org/assets/js/nv.d3.js"></script>
+    <link href="/wp-content/plugins/sideka/nv.d3.css" rel="stylesheet">
+    <script src="/wp-content/plugins/sideka/d3.v3.js"></script>
+    <script src="/wp-content/plugins/sideka/nv.d3.js"></script>
 
     <script type="text/javascript">
         document.getElementsByClassName("entry-header")[0].remove();
@@ -141,8 +141,8 @@ $package_exists = json_decode($json)->success;
                 .x(function(d) { return d.label })
                 .y(function(d) { return d.value })
                 .margin({top: 30, right: 20, bottom: 50, left: 175})
-                .tooltips(true)             //Show tooltips on hover.
-                .transitionDuration(350)
+                //.tooltips(true)             //Show tooltips on hover.
+                //.transitionDuration(350)
                 .stacked(true)
                 .showControls(false);
 
@@ -163,8 +163,8 @@ $package_exists = json_decode($json)->success;
                 .x(function(d) { return d.label })
                 .y(function(d) { return d.value })
                 .margin({top: 30, right: 20, bottom: 50, left: 175})
-                .tooltips(true)             //Show tooltips on hover.
-                .transitionDuration(350)
+                //.tooltips(true)             //Show tooltips on hover.
+                //.transitionDuration(350)
                 .stacked(true)
                 .showControls(false);
 
@@ -185,8 +185,8 @@ $package_exists = json_decode($json)->success;
                 .x(function(d) { return d.label })
                 .y(function(d) { return d.value })
                 .margin({top: 30, right: 20, bottom: 50, left: 100})
-                .tooltips(true)             //Show tooltips on hover.
-                .transitionDuration(350)
+                //.tooltips(true)             //Show tooltips on hover.
+                //.transitionDuration(350)
                 .stacked(true)
                 .showControls(false);
 
@@ -211,7 +211,7 @@ $package_exists = json_decode($json)->success;
 
             d3.select("#agama svg")
                 .datum(transformData(data, "agama"))
-                .transition().duration(350)
+                //.transition().duration(350)
                 .call(chart);
 
             return chart;
@@ -227,7 +227,7 @@ $package_exists = json_decode($json)->success;
 
             d3.select("#statusKawin svg")
                 .datum(transformData(data, "status_kawin"))
-                .transition().duration(350)
+                //.transition().duration(350)
                 .call(chart);
 
             return chart;
@@ -239,7 +239,7 @@ $package_exists = json_decode($json)->success;
             var chart = nv.models.multiBarChart()
                     .x(function(d) { return d.label })
                     .y(function(d) { return d.value })
-                    .transitionDuration(350)
+                    //.transitionDuration(350)
                     .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
                     .rotateLabels(0)      //Angle to rotate x-axis labels.
                     .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
