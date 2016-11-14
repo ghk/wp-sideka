@@ -171,7 +171,7 @@ $package_exists = json_decode($json)->success;
             chart.yAxis
                 .tickFormat(d3.format('d'));
 
-            var transformed = transformDataStacked(data, "pendidikan");
+            var transformed = transformDataPendidikan(data, "pendidikan");
             d3.select('#pendidikan svg')
                 .datum(transformed)
                 .call(chart);
@@ -313,6 +313,99 @@ $package_exists = json_decode($json)->success;
                     var va = all[a];
                     var vb = all[b];
                     return vb - va;
+            });
+
+            return ["Perempuan", "Laki - laki", "Tidak Diketahui"].map(function(sex){
+                return {
+                    key: sex,
+                    values: sortedPekerjaan
+                        .map(function(p){
+                            var val = allPerSex[p][sex];
+                            if(!val)
+                                val == 0;
+                            return {"label": p, "value": val}
+                        })
+                }
+            });
+        }
+
+        var pendidikanGroups = [
+            ["Tidak Diketahui", ['Tidak Diketahui']],
+            ["Belum/Tidak Sekolah", ['Tidak Pernah Sekolah', 'Tidak dapat membaca' ,'Belum Masuk TK/PAUD']],
+            ["Sedang TK/SD", ['Sedang SD/Sederajat']],
+            ["Tamat SD", ['Tamat SD/Sederajat','Sedang SMP/Sederajat']],
+            ["Tamat SMP", ['Tamat SMP/Sederajat','Sedang SMA/Sederajat']],
+            ["Tamat SMA", ['Tamat SMA/Sederajat','Sedang D-3/Sederajat', 'Sedang S-1/Sederajat']],
+            ["Tamat PT", ['Tamat D-3/Sederajat','Tamat S-1/Sederajat', 'Sedang S-2/Sederajat', 'Tamat S-2/Sederajat', 'Sedang S-3/Sederajat', 'Tamat S-3/Sederajat',]],
+        ]
+
+        function findPendidikanGroup(label){
+            for(var i = 0; i < pendidikanGroups.length; i++){
+                for(var j = 0; j < pendidikanGroups[i][1].length; j++){
+                    if(pendidikanGroups[i][1][j] == label)
+                        return pendidikanGroups[i][0];
+                }
+            }
+            return "Tidak Diketahui";
+        }
+
+        function transformDataPendidikan(raw, label){
+            //create aggregate dict
+            var all = {};
+            var allPerSex = {}
+            var total = 0;
+            for(var i = 0; i < raw.length; i++){
+                var r = raw[i];
+                var val = parseInt(r.jumlah);
+                var p = findPendidikanGroup(r[label]);
+                if(!all[p])
+                {
+                    all[p] = 0;
+                }
+                all[p] += val;
+                if(!allPerSex[p])
+                {
+                    allPerSex[p] ={};
+                }
+                allPerSex[p][r.jenis_kelamin] = val;
+                total += val;
+            }
+
+            //remove values lesser than 2% of total
+            var min = Math.round(0.01 * total);
+            var keys = Object.keys(all);
+            var filteredKeys = [];
+            var etcS = {"Perempuan": 0, "Laki - laki": 0, "Tidak Diketahui": 0};
+            var etc = 0;
+            for(var i = 0; i < keys.length; i++) {
+                var key = keys[i];
+                if(all[key] < min){
+                    var sexes = Object.keys(etcS);
+                    for(var j = 0; j < sexes.length; j++)
+                    {
+                        var sex = sexes[j];
+                        if(allPerSex[key][sex]) {
+                            etcS[sex] += allPerSex[key][sex];
+                        }
+                    }
+                    etc += all[key];
+                } else {
+                    filteredKeys.push(key);
+                }
+            }
+            if(etc > 0) {
+                var etcN = "LAIN - LAIN";
+                all[etcN] = etc;
+                allPerSex[etcN] = etcS;
+                filteredKeys.push(etcN);
+            }
+
+            console.log(all);
+
+            var sortedPekerjaan = filteredKeys.sort(function(a, b){
+                var va = pendidikanGroups.findIndex(function(i){return i[0] == a})
+                var vb = pendidikanGroups.findIndex(function(i){return i[0] == b})
+                return va - vb;
             });
 
             return ["Perempuan", "Laki - laki", "Tidak Diketahui"].map(function(sex){
