@@ -329,6 +329,7 @@ $package_exists = json_decode($json)->success;
                                 value = yearItem.anggaran;
                                 c = yearItem.kode_rekening;
                             }
+                            console.log(yearItem);
                             if(!Number.isFinite(value)) {
                                 value = apbdesSums[year][c];
                             }

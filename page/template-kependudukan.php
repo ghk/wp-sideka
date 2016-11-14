@@ -399,7 +399,15 @@ $package_exists = json_decode($json)->success;
                 return {"label": p, "value": val}
             });
         }
+        var kelasOrders = {};
+        kelasOrders["Miskin"] = 1;
+        kelasOrders["Sedang"] = 2;
+        kelasOrders["Kaya"] = 3;
+        kelasOrders["Tidak Diketahui"] = 4;
         function transformDataKelas(raw){
+            raw.sort(function(a, b){
+                return kelasOrders[a.kelas_sosial] - kelasOrders[b.kelas_sosial]
+            });
             var results = [];
             function getSeries(name, select){
                 var r = [];
