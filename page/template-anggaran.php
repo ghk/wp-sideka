@@ -6,7 +6,7 @@
  * Time: 3:51 AM
  */
 
-$desa_id = "papayan";
+$desa_id = "mandalamekar";
 $server_name = $_SERVER["SERVER_NAME"];
 $server_splits = explode(".", $server_name);
 if($server_splits[0].".desa.id" == $server_name){
@@ -206,10 +206,19 @@ $package_exists = json_decode($json)->success;
 
         function onAllApbdesLoaded(){
             setupApbdesSelect();
-            var codes = ["1.1", "1.2.1", "1.2.2", "1.2.3", "1.2.4"];
-            setupHistoricalChart("#pendapatan", codes);
-            codes = ["2.1", "2.2", "2.3", "2.4"];
-            setupHistoricalChart("#belanja", codes);
+            var selectors = [];
+            selectors.push(function(i){return i.kode_rekening == "1.1"});
+            selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().trim().startsWith("dana desa")});
+            selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().trim().startsWith("alokasi dana desa")});
+            selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().trim().startsWith("pendapatan asli desa")});
+            selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().indexOf("pajak") != -1 && i.uraian.toLowerCase().indexOf("retribusi") != -1; });
+            setupHistoricalChart("#pendapatan", selectors);
+            var selectors = [];
+            selectors.push(function(i){return i.kode_rekening == "2.1"});
+            selectors.push(function(i){return i.kode_rekening == "2.2"});
+            selectors.push(function(i){return i.kode_rekening == "2.3"});
+            selectors.push(function(i){return i.kode_rekening == "2.4"});
+            setupHistoricalChart("#belanja", selectors);
             setupCountSummary();
         }
 
@@ -236,7 +245,7 @@ $package_exists = json_decode($json)->success;
             jQuery("#count-defisit").html(f(defisit));
         }
 
-        function setupHistoricalChart(id, codes){
+        function setupHistoricalChart(id, selectors){
             var chart = nv.models.multiBarChart()
                     .x(function(d) { return d.label })
                     .y(function(d) { return d.value })
@@ -251,7 +260,7 @@ $package_exists = json_decode($json)->success;
             chart.yAxis
                 .tickFormat(format);
 
-            var transformed = transformDataHistorical(codes);
+            var transformed = transformDataHistorical(selectors);
             d3.select(id+' svg')
                 .datum(transformed)
                 .call(chart);
@@ -302,15 +311,23 @@ $package_exists = json_decode($json)->success;
 
             nv.utils.windowResize(chart.update);
 
-            function transformDataHistorical(){
-                return codes.map(function(code){
-                    var item = apbdesData[years[0]].filter(i => i.kode_rekening == code)[0];
+            function transformDataHistorical(selectors){
+                return selectors.map(function(selector){
+                    var item = apbdesData[years[0]].filter(selector)[0];
+                    var code = item.kode_rekening;
                     return {
                         key: item.uraian,
                         values: years.slice(0).reverse().map(function(year){
-                            var value = parseInt(apbdesData[year].filter(i => i.kode_rekening == code)[0].anggaran);
-                            if(!Number.isFinite(value))
-                                value = apbdesSums[code];
+                            var value = null;
+                            var yearItem = apbdesData[year].filter(selector)[0];
+                            var c = code;
+                            if(yearItem) {
+                                value = yearItem.anggaran;
+                                c = yearItem.kode_rekening;
+                            }
+                            if(!Number.isFinite(value)) {
+                                value = apbdesSums[year][c];
+                            }
                             if(!Number.isFinite(value))
                                 value = 0;
                             return {
