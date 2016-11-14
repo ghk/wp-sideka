@@ -6,7 +6,7 @@
  * Time: 3:51 AM
  */
 
-$desa_id = "mandalamekar";
+$desa_id = "kertarahayu";
 $server_name = $_SERVER["SERVER_NAME"];
 $server_splits = explode(".", $server_name);
 if($server_splits[0].".desa.id" == $server_name){
@@ -117,6 +117,9 @@ $package_exists = json_decode($json)->success;
             stroke: none;
         }
 
+        .nv-x .nv-axis .tick text {
+            font-size: 18px;
+        }
     </style>
 
     <div class="clearfix">
@@ -208,7 +211,6 @@ $package_exists = json_decode($json)->success;
         function onAllApbdesLoaded(){
             setupApbdesSelect();
             var selectors = [];
-            selectors.push(function(i){return i.kode_rekening == "1.1"});
             selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().trim().startsWith("dana desa")});
             selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().trim().startsWith("alokasi dana desa")});
             selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().trim().startsWith("pendapatan asli desa")});
@@ -262,27 +264,28 @@ $package_exists = json_decode($json)->success;
                 .tickFormat(format);
 
             var transformed = transformDataHistorical(selectors);
+            console.log(selectors);
+            console.log(transformed);
             d3.select(id+' svg')
                 .datum(transformed)
                 .call(chart);
 
-            var oldUpdate = chart.update;
             function doUpdate() {
-                oldUpdate.apply(this, arguments);
+                //oldUpdate.apply(this, arguments);
                 var container = d3.select(id + ' svg');
                 container.selectAll('.nv-multibar .nv-group').each(function(group){
                     var g = d3.select(this);
 
                     // Remove previous labels if there is any
                     g.selectAll('text').remove();
-                    console.log(width);
+                    var width = container.node().getBoundingClientRect().width;
                     if(width < 600)
                         return;
                     g.selectAll('.nv-bar').each(function(bar){
                         var b = d3.select(this);
                         var barWidth = b.attr('width');
                         var barHeight = b.attr('height');
-                        if(bar.y < 100000000){
+                        if(barHeight < 20){
                             return;
                         }
 
@@ -294,12 +297,15 @@ $package_exists = json_decode($json)->success;
                             .text(function(d){
                                 // Two decimals format
                                 var height = this.getBBox().height;
-                                return d.key + " - " + format(parseFloat(bar.y));
+                                var key = d.key;
+                                if(key && key.startsWith("Bidang "))
+                                    key = key.replace("Bidang ", "").replace(" Desa", "");
+                                return key + " - " + format(parseFloat(bar.y));
                             })
                             .attr('y', function(){
                                 // Center label vertically
                                 var height = this.getBBox().height;
-                                return parseFloat(b.attr('y')) - 10; // 10 is the label's magin from the bar
+                                return parseFloat(b.attr('y')) + (parseFloat(barHeight) / 2) - (height / 2) + 10;
                             })
                             .attr('x', function(){
                                 // Center label horizontally
@@ -310,8 +316,9 @@ $package_exists = json_decode($json)->success;
                     });
                 });
             }
-            chart.update = doUpdate;
-            chart.update();
+            chart.dispatch.on('renderEnd', doUpdate);
+            //chart.update = doUpdate;
+            //chart.update();
 
             nv.utils.windowResize(chart.update);
 
@@ -329,7 +336,6 @@ $package_exists = json_decode($json)->success;
                                 value = yearItem.anggaran;
                                 c = yearItem.kode_rekening;
                             }
-                            console.log(yearItem);
                             if(!Number.isFinite(value)) {
                                 value = apbdesSums[year][c];
                             }
