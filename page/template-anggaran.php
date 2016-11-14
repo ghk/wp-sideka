@@ -193,7 +193,11 @@ $package_exists = json_decode($json)->success;
         var apbdesData = {};
         var apbdesSums = {};
         var f = d3.format(".3s");
-        var format = function(d) { return "Rp. "+f(d);};
+        var format = function(d) {
+            if(d === 0)
+                return "Rp. 0";
+            return "Rp. "+f(d).replace(new RegExp("\\.", "g"), ",");
+        };
         var apbdeses = package.result.resources
             .filter(function(r) {return r.name.startsWith("APBDes ")});
         apbdeses.forEach(function(apbdes){
