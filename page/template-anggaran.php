@@ -6,7 +6,7 @@
  * Time: 3:51 AM
  */
 
-$desa_id = "kertarahayu";
+$desa_id = "mandalamekar";
 $server_name = $_SERVER["SERVER_NAME"];
 $server_splits = explode(".", $server_name);
 if($server_splits[0].".desa.id" == $server_name){
@@ -60,6 +60,10 @@ $package_exists = json_decode($json)->success;
         }
         text {
             pointer-events: none;
+        }
+
+        #count-summary.larger {
+            margin-top: 40px;
         }
 
         .grandparent text {
@@ -122,19 +126,17 @@ $package_exists = json_decode($json)->success;
         }
     </style>
 
-    <div class="clearfix">
+    <div class="clearfix" style="margin-bottom: 20px;">
         <h4 class="mh-widget-title">
             <span class="mh-widget-title-inner"><a class="mh-widget-title-link">APBDes Tahun Anggaran <span id="tahun-anggaran"></span></a></span>
         </h4>
         <div class="mh-widget-col-1 mh-sidebar">
-            <br /><br />
             <dl id="count-summary" class="larger">
                 <dt class="required">Pendapatan</dt>
                 <dd id="count-pendapatan"></dd>
             </dl>
         </div>
         <div class="mh-widget-col-1 mh-sidebar">
-            <br /><br />
             <dl id="count-summary" class="larger">
             <dt class="required">Belanja</dt>
             <dd id="count-belanja"></dd>
@@ -151,7 +153,6 @@ $package_exists = json_decode($json)->success;
             </dl>
         </div>
     </div>
-    <br />
     <div class="clearfix">
         <h4 class="mh-widget-title">
             <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Sumber Pendapatan Desa</a></span>
@@ -249,10 +250,16 @@ $package_exists = json_decode($json)->success;
         }
 
         function setupHistoricalChart(id, selectors){
+            var marginTop = 30;
+            if(width < 600){
+                d3.select(id+' svg')
+                    .style("height", "400px");
+                marginTop = 130;
+            }
             var chart = nv.models.multiBarChart()
                     .x(function(d) { return d.label })
                     .y(function(d) { return d.value })
-                    .margin({top: 30, right: 0, bottom: 50, left: 120})
+                    .margin({top: marginTop, right: 0, bottom: 50, left: 100})
                     //.transitionDuration(350)
                     .stacked(true)
                     .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
@@ -279,13 +286,11 @@ $package_exists = json_decode($json)->success;
                     // Remove previous labels if there is any
                     g.selectAll('text').remove();
                     var width = container.node().getBoundingClientRect().width;
-                    if(width < 600)
-                        return;
                     g.selectAll('.nv-bar').each(function(bar){
                         var b = d3.select(this);
                         var barWidth = b.attr('width');
                         var barHeight = b.attr('height');
-                        if(barHeight < 20){
+                        if(barHeight < 14){
                             return;
                         }
 
@@ -297,6 +302,9 @@ $package_exists = json_decode($json)->success;
                             .text(function(d){
                                 // Two decimals format
                                 var height = this.getBBox().height;
+                                if(width < 600)
+                                    return format(parseFloat(bar.y));
+
                                 var key = d.key;
                                 if(key && key.startsWith("Bidang "))
                                     key = key.replace("Bidang ", "").replace(" Desa", "");
@@ -305,7 +313,7 @@ $package_exists = json_decode($json)->success;
                             .attr('y', function(){
                                 // Center label vertically
                                 var height = this.getBBox().height;
-                                return parseFloat(b.attr('y')) + (parseFloat(barHeight) / 2) - (height / 2) + 10;
+                                return parseFloat(b.attr('y')) + (parseFloat(barHeight) / 2) - (height / 2) + 12;
                             })
                             .attr('x', function(){
                                 // Center label horizontally
