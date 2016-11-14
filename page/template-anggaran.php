@@ -180,6 +180,7 @@ $package_exists = json_decode($json)->success;
     <script src="/wp-content/plugins/sideka/nv.d3.js"></script>
 
     <script type="text/javascript">
+        var width = d3.select("#details").node().getBoundingClientRect().width;
         document.getElementsByClassName("entry-header")[0].remove();
         var package_id = "<?= $package_id ?>";
         var ckan_host = "<?= $ckan_host ?>";
@@ -274,6 +275,9 @@ $package_exists = json_decode($json)->success;
 
                     // Remove previous labels if there is any
                     g.selectAll('text').remove();
+                    console.log(width);
+                    if(width < 600)
+                        return;
                     g.selectAll('.nv-bar').each(function(bar){
                         var b = d3.select(this);
                         var barWidth = b.attr('width');
@@ -456,7 +460,6 @@ $package_exists = json_decode($json)->success;
             main({year: year}, root);
         }
 
-        var width = d3.select("#details").node().getBoundingClientRect().width;
         var defaults = {
             margin: {top: 24, right: 0, bottom: 0, left: 0},
             rootname: "TOP",
