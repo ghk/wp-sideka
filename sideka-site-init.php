@@ -95,6 +95,10 @@ function sideka_site_init_categories() {
     $categories['news']  =wp_insert_category(array('cat_name' => 'Kabar Desa',  'category_nicename' => 'kabar'));
     $categories['product']  =wp_insert_category(array('cat_name' => 'Produk Desa',  'category_nicename' => 'produk'));
     $categories['potential']  =wp_insert_category(array('cat_name' => 'Potensi Desa',  'category_nicename' => 'potensi'));
+    $categories['dana-desa']  =wp_insert_category(array('cat_name' => 'Penggunaan Dana Desa',  'category_nicename' => 'dana-desa'));
+    $categories['seni-kebudayaan']  =wp_insert_category(array('cat_name' => 'Seni dan Kebudayaan',  'category_nicename' => 'seni-kebudayaan'));
+    $categories['tokoh']  = wp_insert_category(array('cat_name' => 'Tokoh Masyarakat',  'category_nicename' => 'tokoh'));
+    $categories['lingkungan']  = wp_insert_category(array('cat_name' => 'Lingkungan',  'category_nicename' => 'lingkungan'));
     return $categories;
 }
 
@@ -271,6 +275,9 @@ function sideka_site_init($blog_id, $user_id){
     sideka_site_init_menu($pages, $categories);
     sideka_site_init_theme($pages);
     sideka_site_init_widgets($pages, $categories);
+
+    update_option( 'default_category', $categories['news'] );
+    update_option( 'category_base', '/kategori');
 
     restore_current_blog();
 }

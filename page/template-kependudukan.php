@@ -9,7 +9,7 @@
 $desa_id = "bokor";
 $server_name = $_SERVER["SERVER_NAME"];
 $server_splits = explode(".", $server_name);
-if($server_splits[0].".desa.id" == $server_name){
+if($server_splits[0].".desa.id" == $server_name || $server_splits[0].".sideka.id" == $server_name){
     $desa_id = $server_splits[0];
 }
 
