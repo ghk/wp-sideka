@@ -46,4 +46,19 @@ function sideka_admin_head() {
 	}
 }
 
+function sideka_get_desa_id(){
+	$desa_id = "mandalamekar";
+	$server_name = $_SERVER["SERVER_NAME"];
+	$server_splits = explode(".", $server_name);
+	if($server_splits[0].".desa.id" == $server_name || $server_splits[0].".sideka.id" == $server_name){
+	    $desa_id = $server_splits[0];
+	}
+	return $desa_id;
+}
+
+function sideka_is_desa_dbt(){
+	global $wpdb;
+	$server_name = $_SERVER["SERVER_NAME"];
+	return $wpdb->get_var( 'select is_dbt from sd_desa where domain = "'.$server_name.'"');
+}
 ?>

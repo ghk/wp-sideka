@@ -219,7 +219,7 @@ $package_exists = json_decode($json)->success;
             selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().trim().startsWith("dana desa")});
             selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().trim().startsWith("alokasi dana desa")});
             selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().trim().startsWith("pendapatan asli desa")});
-            selectors.push(function(i){return i.kode_rekening.startsWith("1") && i.uraian && i.uraian.toLowerCase().indexOf("pajak") != -1 && i.uraian.toLowerCase().indexOf("retribusi") != -1; });
+            selectors.push(function(i){return i.kode_rekening.startsWith("1") && (i.uraian && i.uraian.toLowerCase().indexOf("pajak") != -1 || i.uraian.toLowerCase().indexOf("retribusi") != -1); });
             setupHistoricalChart("#pendapatan", selectors);
             var selectors = [];
             selectors.push(function(i){return i.kode_rekening == "2.1"});
@@ -337,6 +337,8 @@ $package_exists = json_decode($json)->success;
             function transformDataHistorical(selectors){
                 return selectors.map(function(selector){
                     var item = apbdesData[years[0]].filter(selector)[0];
+		    if(!item)
+			console.log(selector);
                     var code = item.kode_rekening;
                     return {
                         key: item.uraian,
