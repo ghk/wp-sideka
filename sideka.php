@@ -61,4 +61,10 @@ function sideka_is_desa_dbt(){
 	$server_name = $_SERVER["SERVER_NAME"];
 	return $wpdb->get_var( 'select is_dbt from sd_desa where domain = "'.$server_name.'"');
 }
+
+function sideka_get_desa_code(){
+	global $wpdb;
+	$server_name = $_SERVER["SERVER_NAME"];
+	return $wpdb->get_var( 'select kode from sd_desa where domain = "'.$server_name.'"');
+}
 ?>

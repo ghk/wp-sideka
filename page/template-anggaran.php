@@ -339,6 +339,7 @@ $package_exists = json_decode($json)->success;
                     var item = apbdesData[years[0]].filter(selector)[0];
 		    if(!item)
 			console.log(selector);
+		    if(item == undefined)item = [];
                     var code = item.kode_rekening;
                     return {
                         key: item.uraian,
