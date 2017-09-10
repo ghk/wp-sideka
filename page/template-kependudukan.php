@@ -52,8 +52,10 @@ $package_exists = json_decode($json)->success;
         </div>
         <div class="mh-widget-col-1 mh-sidebar">
             <dl id="count-summary">
+		<!--
                 <dt class="required">Jumlah Keluarga</dt>
                 <dd id="count-family"></dd>
+		-->
                 <dt class="required">Penduduk Perempuan</dt>
                 <dd id="count-female"></dd>
                 <dt class="required">Penduduk Laki-laki</dt>
