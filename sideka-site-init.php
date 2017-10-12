@@ -90,15 +90,24 @@ function sideka_site_init_pages($user_id){
     return $pages;
 }
 
+function sideka_get_category_configs(){
+    $configs = array();
+    $configs['news']  =array('cat_name' => 'Kabar Desa',  'category_nicename' => 'kabar');
+    $configs['product']  =array('cat_name' => 'Produk Desa',  'category_nicename' => 'produk');
+    $configs['potential']  =array('cat_name' => 'Potensi Desa',  'category_nicename' => 'potensi');
+    $configs['dana-desa']  =array('cat_name' => 'Penggunaan Dana Desa',  'category_nicename' => 'dana-desa');
+    $configs['seni-kebudayaan']  =array('cat_name' => 'Seni dan Kebudayaan',  'category_nicename' => 'seni-kebudayaan');
+    $configs['tokoh']  = array('cat_name' => 'Tokoh Masyarakat',  'category_nicename' => 'tokoh');
+    $configs['lingkungan']  = array('cat_name' => 'Lingkungan',  'category_nicename' => 'lingkungan');
+    return $configs;
+}
+
 function sideka_site_init_categories() {
     $categories = array();
-    $categories['news']  =wp_insert_category(array('cat_name' => 'Kabar Desa',  'category_nicename' => 'kabar'));
-    $categories['product']  =wp_insert_category(array('cat_name' => 'Produk Desa',  'category_nicename' => 'produk'));
-    $categories['potential']  =wp_insert_category(array('cat_name' => 'Potensi Desa',  'category_nicename' => 'potensi'));
-    $categories['dana-desa']  =wp_insert_category(array('cat_name' => 'Penggunaan Dana Desa',  'category_nicename' => 'dana-desa'));
-    $categories['seni-kebudayaan']  =wp_insert_category(array('cat_name' => 'Seni dan Kebudayaan',  'category_nicename' => 'seni-kebudayaan'));
-    $categories['tokoh']  = wp_insert_category(array('cat_name' => 'Tokoh Masyarakat',  'category_nicename' => 'tokoh'));
-    $categories['lingkungan']  = wp_insert_category(array('cat_name' => 'Lingkungan',  'category_nicename' => 'lingkungan'));
+    $configs = sideka_get_category_configs();
+    foreach ($configs as $key => $config){
+        $categories[$key] = wp_insert_category($config);
+    }
     return $categories;
 }
 
