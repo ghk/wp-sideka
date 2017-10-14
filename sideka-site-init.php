@@ -111,6 +111,23 @@ function sideka_site_init_categories() {
     return $categories;
 }
 
+/*
+function sideka_get_role_configs(){
+    $configs = array();
+    $configs[] = array("penduduk", "Admin Kependudukan", array('edit_penduduk'=>true));
+    $configs[] = array("keuangan", "Admin Keuangan", array('edit_keuangan'=>true));
+    $configs[] = array("pemetaan", "Admin Pemetaan", array('edit_pemetaan'=>true));
+    return $configs;
+}
+
+function sideka_site_init_roles() {
+    $configs = sideka_get_role_configs();
+    foreach ($configs as $config){
+        add_role($config[0], $config[1], $config[2]);
+    }
+}
+*/
+
 function sideka_site_init_menu($pages, $categories) {
     $menu = array();
     $menu_id = wp_create_nav_menu("Menu Utama");

@@ -90,6 +90,7 @@ new SidekaNetworkAdminMenu();
 function synchronize_site($site, $category_configs){
     switch_to_blog( $site->blog_id );
     $result = "Site ".$site->blog_id." Name: ".$site->blogname;
+
     $categories = get_categories(array('hide_empty'=>false));
     foreach ($category_configs as $key => $config){
         $found = false;
@@ -104,6 +105,17 @@ function synchronize_site($site, $category_configs){
             $result .= " ".$config["category_nicename"];
         }
     }
+
+/*
+    foreach($role_configs as $config){
+        $role = get_role($config[0]);
+        if(!$role){
+           add_role($config[0], $config[1], $config[2]);
+            $result .= " ".$config[0];
+        }
+    }
+*/
+
     restore_current_blog();
     return $result;
 }
