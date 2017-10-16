@@ -87,10 +87,11 @@ class SidekaNetworkAdminMenu
 
 new SidekaNetworkAdminMenu();
 
-function sideka_site_synchronize($site, $category_configs){
+function sideka_site_synchronize($site, $category_configs, $role_configs){
     switch_to_blog( $site->blog_id );
     $result = "Site ".$site->blog_id." Name: ".$site->blogname;
 
+    $result .= " C: ";
     $categories = get_categories(array('hide_empty'=>false));
     foreach ($category_configs as $key => $config){
         $found = false;
@@ -106,6 +107,7 @@ function sideka_site_synchronize($site, $category_configs){
         }
     }
 
+    $result .= " R: ";
     foreach($role_configs as $config){
         $role = get_role($config[0]);
         if(!$role){
@@ -127,8 +129,9 @@ function sideka_sites_synchronize()
             $output["results"] = [];
             $sites = get_sites(array( "offset" => $start, "number" => $limit));
             $category_configs = sideka_get_category_configs();
+            $role_configs = sideka_get_role_configs();
             foreach ($sites as $site) {
-                $output["results"][] = synchronize_site($site, $category_configs);
+                $output["results"][] = sideka_site_synchronize($site, $category_configs, $role_configs);
             }
             $output["next"] = count($sites) == $limit ? ($start + $limit) : 0;
             wp_send_json($output);
