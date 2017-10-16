@@ -106,6 +106,14 @@ function sideka_site_synchronize($site, $category_configs){
         }
     }
 
+    foreach($role_configs as $config){
+        $role = get_role($config[0]);
+        if(!$role){
+           add_role($config[0], $config[1], $config[2]);
+            $result .= " ".$config[0];
+        }
+    }
+
     restore_current_blog();
     return $result;
 }
