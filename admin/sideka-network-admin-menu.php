@@ -45,7 +45,7 @@ class SidekaNetworkAdminMenu
                         isSynchronizing = true;
                         jQuery("#sideka_synchronize [name='submit']").val("Stop Sinkronisasi");
                         var data = {
-                            'action': 'sideka_synchronize',
+                            'action': 'sideka_sites_synchronize',
                             'start': start
                         };
 
@@ -87,9 +87,10 @@ class SidekaNetworkAdminMenu
 
 new SidekaNetworkAdminMenu();
 
-function synchronize_site($site, $category_configs){
+function sideka_site_synchronize($site, $category_configs){
     switch_to_blog( $site->blog_id );
     $result = "Site ".$site->blog_id." Name: ".$site->blogname;
+
     $categories = get_categories(array('hide_empty'=>false));
     foreach ($category_configs as $key => $config){
         $found = false;
@@ -104,11 +105,12 @@ function synchronize_site($site, $category_configs){
             $result .= " ".$config["category_nicename"];
         }
     }
+
     restore_current_blog();
     return $result;
 }
 
-function sideka_synchronize()
+function sideka_sites_synchronize()
 {
     if(is_super_admin()){
             $start = intval($_POST["start"]);
@@ -124,4 +126,4 @@ function sideka_synchronize()
             wp_send_json($output);
     }
 }
-add_action( 'wp_ajax_sideka_synchronize', 'sideka_synchronize' );
+add_action( 'wp_ajax_sideka_sites_synchronize', 'sideka_sites_synchronize' );
