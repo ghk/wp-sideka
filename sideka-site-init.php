@@ -102,12 +102,33 @@ function sideka_get_category_configs(){
     return $configs;
 }
 
+function sideka_get_event_category_configs(){
+    $configs = array();
+    $configs[]  =array('cat_name' => 'Keagamaan',  'category_nicename' => 'keagamaan');
+    $configs[]  =array('cat_name' => 'Musyawarah Desa',  'category_nicename' => 'musyawarah-desa');
+    $configs[]  =array('cat_name' => 'Olahraga',  'category_nicename' => 'olahraga');
+    $configs[]  =array('cat_name' => 'Pendidikan',  'category_nicename' => 'pendidikan');
+    $configs[]  = array('cat_name' => 'Seni dan Kebudayaan',  'category_nicename' => 'seni-kebudayaan');
+    $configs[]  = array('cat_name' => 'Syukuran',  'category_nicename' => 'syukuran');
+    foreach ($configs as $key => $config){
+        $configs[$key]["taxonomy"] = "tribe_events_cat";
+    }
+    return $configs;
+}
+
 function sideka_site_init_categories() {
     $categories = array();
+
     $configs = sideka_get_category_configs();
     foreach ($configs as $key => $config){
         $categories[$key] = wp_insert_category($config);
     }
+
+    $event_configs = sideka_get_event_category_configs();
+    foreach ($event_configs as $event_config){
+        wp_insert_category($event_config);
+    }
+
     return $categories;
 }
 
