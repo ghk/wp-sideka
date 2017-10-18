@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
 //include_once( dirname(__FILE__) . '/admin/sideka-admin-nav-menu-meta-box.php');
 include_once(dirname(__FILE__) . '/page/sideka-page.php' );
 include_once(dirname(__FILE__) . '/sideka-site-init.php' );
+include_once(dirname(__FILE__) . '/sideka-user-init.php' );
 include_once(dirname(__FILE__) . '/sideka-email-multisite.php');
 
 if(is_admin()) {
