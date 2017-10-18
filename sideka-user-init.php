@@ -30,7 +30,7 @@ function sideka_user_init($user_id) {
     $user_meta = sideka_get_initial_user_meta();
     $results = [];
     foreach($user_meta as $meta){
-        $results[] = update_user_meta( $user_id, $meta[0], serialize($meta[1]));
+        $results[] = update_user_meta( $user_id, $meta[0], $meta[1]);
     }
 }
 

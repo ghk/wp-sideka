@@ -25,27 +25,37 @@ class SidekaNetworkAdminMenu
         ?>
         <div class="wrap">
             <h1>Sideka</h1>
-            <form id="sideka_synchronize" method="post" action="settings.php?page=sideka">
                 <table class="form-table">
                     <tr valign="top">
-                        <th scope="row">Sinkronisasi Category &amp; Role</th>
+                        <th scope="row" style="width: 300px;">Sinkronisasi Situs: Category &amp; Role</th>
                         <td>
-                            <input name="start" type="number" style="width: 80px;" value="0"/>
-                            <input name="submit" id="submit" class="button button-primary" value="Sinkronisasi" type="submit">
+                            <form id="sideka_sites_synchronize" class="sideka_synchronize_form" method="post" action="settings.php?page=sideka">
+                                <input name="start" type="number" style="width: 80px;" value="0"/>
+                                <input name="submit" id="submit" class="button button-primary" value="Sinkronisasi" type="submit">
+                            </form>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">Sinkronisasi User: Meta</th>
+                        <td>
+                            <form id="sideka_users_synchronize" class="sideka_synchronize_form" method="post" action="settings.php?page=sideka">
+                                <input name="start" type="number" style="width: 80px;" value="0"/>
+                                <input name="submit" id="submit" class="button button-primary" value="Sinkronisasi" type="submit">
+                            </form>
                         </td>
                     </tr>
                 </table>
                 <div id="sideka_command_output">
                 </div>
-            </form>
             <script type="text/javascript" >
-                    var isSynchronizing = false;
-                    function synchronize(){
-                        var start = parseInt(jQuery("#sideka_synchronize [name='start']").val());
-                        isSynchronizing = true;
-                        jQuery("#sideka_synchronize [name='submit']").val("Stop Sinkronisasi");
+                    var isSynchronizings = {};
+                    function synchronize(type){
+                        var start = parseInt(jQuery("#sideka_"+type+"_synchronize [name='start']").val());
+                        isSynchronizings[type]= true;
+                        jQuery("#sideka_"+type+"_synchronize [name='submit']").val("Stop Sinkronisasi");
+                        console.log(jQuery("#sideka_"+type+"_synchronize [name='submit']"));
                         var data = {
-                            'action': 'sideka_sites_synchronize',
+                            'action': 'sideka_'+type+'_synchronize',
                             'start': start
                         };
 
@@ -56,28 +66,31 @@ class SidekaNetworkAdminMenu
                                 jQuery("#sideka_command_output").prepend(results[i] + "<br />");
                             }
                             start = response.next;
-                            jQuery("#sideka_synchronize [name='start']").val(start);
-                            if(start && isSynchronizing)
-                                synchronize();
+                            jQuery("#sideka_"+type+"_synchronize [name='start']").val(start);
+                            if(start && isSynchronizings[type])
+                                synchronize(type);
                             else {
                                 if (!start)
                                     jQuery("#sideka_command_output").prepend("Sinkronisasi selesai!<br />");
-                                stopSynchronize();
+                                stopSynchronize(type);
                             }
                         });
                     }
-                    function stopSynchronize(){
-                        isSynchronizing = false;
-                        jQuery("#sideka_synchronize [name='submit']").val("Sinkronisasi");
+                    function stopSynchronize(type){
+                        isSynchronizings[type]= false;
+                        jQuery("#sideka_"+type+"_synchronize [name='submit']").val("Sinkronisasi");
                     }
-                    jQuery("#sideka_synchronize").submit(function($) {
-                        if(!isSynchronizing){
-                            jQuery("#sideka_command_output").html("");
-                            synchronize();
-                        } else {
-                            stopSynchronize();
-                        }
-                        return false;
+                    jQuery(".sideka_synchronize_form").each(function(){
+                        jQuery(this).submit(function() {
+                                var type = jQuery(this).attr("id") == "sideka_sites_synchronize" ? "sites" : "users";
+                                if(!isSynchronizings[type]){
+                                    jQuery("#sideka_command_output").html("");
+                                    synchronize(type);
+                                } else {
+                                    stopSynchronize(type);
+                                }
+                                return false;
+                        });
                     });
             </script>
         </div>
@@ -138,3 +151,33 @@ function sideka_sites_synchronize()
     }
 }
 add_action( 'wp_ajax_sideka_sites_synchronize', 'sideka_sites_synchronize' );
+
+function sideka_user_synchronize($user, $user_meta){
+    $result = "User ".$user->ID." Login: ".$user->user_login;
+    foreach($user_meta as $meta){
+        $success = update_user_meta( $user->ID, $meta[0], $meta[1]);
+        if($success){
+            $result .= " ".$meta[0];
+        }
+    }
+    return $result;
+}
+
+function sideka_users_synchronize()
+{
+    if(is_super_admin()){
+            global $wpdb;
+            $start = intval($_POST["start"]);
+            $limit = 5;
+            $output = array();
+            $output["results"] = [];
+            $users = $wpdb->get_results("SELECT ID, user_login, display_name, user_email FROM ".$wpdb->base_prefix."users limit ".$limit." offset ".$start);
+            $user_meta = sideka_get_initial_user_meta();
+            foreach ($users as $user) {
+                $output["results"][] = sideka_user_synchronize($user, $user_meta);
+            }
+            $output["next"] = count($users) == $limit ? ($start + $limit) : 0;
+            wp_send_json($output);
+    }
+}
+add_action( 'wp_ajax_sideka_users_synchronize', 'sideka_users_synchronize' );
