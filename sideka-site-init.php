@@ -148,6 +148,17 @@ function sideka_site_init_roles() {
     }
 }
 
+function sideka_get_nav_menu_configs(){
+    $configs = [];
+    $configs[] = array('menu-item-title' => "Kegiatan",
+        'menu-item-type' => 'post_type_archive',
+        'menu-item-object' => "tribe_events",
+        'menu-item-url' => get_post_type_archive_link("tribe_events"),
+        'menu-item-status' => "publish"
+    );
+    return $configs;
+}
+
 
 function sideka_site_init_menu($pages, $categories) {
     $menu = array();
@@ -213,6 +224,11 @@ function sideka_site_init_menu($pages, $categories) {
         'menu-item-object-id' => $pages["kependudukan"],
         'menu-item-type' => 'post_type',
         'menu-item-status' => 'publish'));
+
+    $nav_menu_configs = sideka_get_nav_menu_configs();
+    foreach($nav_menu_configs as $config){
+        wp_update_nav_menu_item($menu_id, 0, $config);
+    }
 
     /*
     wp_update_nav_menu_item($menu_id, 0, array(
