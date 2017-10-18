@@ -95,6 +95,7 @@ function sideka_get_category_configs(){
     $configs['news']  =array('cat_name' => 'Kabar Desa',  'category_nicename' => 'kabar');
     $configs['product']  =array('cat_name' => 'Produk Desa',  'category_nicename' => 'produk');
     $configs['potential']  =array('cat_name' => 'Potensi Desa',  'category_nicename' => 'potensi');
+    $configs['government']  =array('cat_name' => 'Pemerintahan',  'category_nicename' => 'pemerintahan');
     $configs['dana-desa']  =array('cat_name' => 'Penggunaan Dana Desa',  'category_nicename' => 'dana-desa');
     $configs['seni-kebudayaan']  =array('cat_name' => 'Seni dan Kebudayaan',  'category_nicename' => 'seni-kebudayaan');
     $configs['tokoh']  = array('cat_name' => 'Tokoh Masyarakat',  'category_nicename' => 'tokoh');
