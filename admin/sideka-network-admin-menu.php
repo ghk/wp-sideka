@@ -100,7 +100,7 @@ class SidekaNetworkAdminMenu
 
 new SidekaNetworkAdminMenu();
 
-function sideka_site_synchronize($site, $category_configs, $event_category_configs, $role_configs, $nav_menu_configs, $widget_configs){
+function sideka_site_synchronize($site, $category_configs, $event_category_configs, $role_configs, $nav_menu_configs, $widget_configs, $master_options){
     switch_to_blog( $site->blog_id );
     $result = "Site ".$site->blog_id." Name: ".$site->blogname;
 
@@ -172,6 +172,16 @@ function sideka_site_synchronize($site, $category_configs, $event_category_confi
         $result .= $added_widget." ";
     }
 
+    $result .= " O: ";
+    foreach($master_options as $option_name => $option_value){
+        $current_option_value = get_option($option_name);
+        if($current_option_value == $option_value){
+            continue;
+        }
+        update_option($option_name, $option_value);
+        $result .= $option_name." ";
+    }
+
     restore_current_blog();
     return $result;
 }
@@ -191,8 +201,12 @@ function sideka_sites_synchronize()
             $nav_menu_configs = sideka_get_nav_menu_configs();
             $widget_configs = sideka_get_widget_configs();
 
+            $master_options = sideka_get_sitewide_options(1);
+
             foreach ($sites as $site) {
-                $output["results"][] = sideka_site_synchronize($site, $category_configs, $event_category_configs, $role_configs, $nav_menu_configs, $widget_configs);
+                if($site->blog_id == 1)
+                    continue;
+                $output["results"][] = sideka_site_synchronize($site, $category_configs, $event_category_configs, $role_configs, $nav_menu_configs, $widget_configs, $master_options);
             }
             $output["next"] = count($sites) == $limit ? ($start + $limit) : 0;
             wp_send_json($output);

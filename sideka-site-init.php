@@ -379,6 +379,26 @@ function sideka_site_init_widgets($pages, $categories)
     wp_set_post_categories( $posts[0]->ID, array( $categories["news"], $categories["product"], $categories["potential"] ) );
 }
 
+function sideka_get_sitewide_option_names(){
+    $results = array("category_base", "date_format", "jetpack_active_modules", "rewrite_rules", "sharing-options", "sharing-services", "tag_base",
+    "time_format", "tribe_events_calendar_options");
+    return $results;
+}
+
+function sideka_get_sitewide_options($site_id){
+    switch_to_blog($site_id);
+
+    $results = array();
+    $option_names = sideka_get_sitewide_option_names();
+    foreach($option_names as $option_name){
+        $results[$option_name] = get_option($option_name);
+    }
+    restore_current_blog();
+
+    return $results;
+}
+
+
 function sideka_site_init_theme($pages) {
     $upload = wp_upload_bits( "default_bg.jpg", null, file_get_contents(dirname(__FILE__)."/default_bg.jpg") );
     set_theme_mod('background_image', $upload["url"]);
@@ -400,8 +420,12 @@ function sideka_site_init($blog_id, $user_id){
     sideka_site_init_widgets($pages, $categories);
     sideka_site_init_roles();
 
+    $master_options = sideka_get_sitewide_options(1);
+    foreach($master_options as $option_name => $option_value){
+        update_option($option_name, $option_value);
+    }
+
     update_option( 'default_category', $categories['news'] );
-    update_option( 'category_base', '/kategori');
 
     restore_current_blog();
 }
