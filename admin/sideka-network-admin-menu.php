@@ -100,7 +100,7 @@ class SidekaNetworkAdminMenu
 
 new SidekaNetworkAdminMenu();
 
-function sideka_site_synchronize($site, $category_configs, $event_category_configs, $role_configs, $nav_menu_configs){
+function sideka_site_synchronize($site, $category_configs, $event_category_configs, $role_configs, $nav_menu_configs, $widget_configs){
     switch_to_blog( $site->blog_id );
     $result = "Site ".$site->blog_id." Name: ".$site->blogname;
 
@@ -166,6 +166,12 @@ function sideka_site_synchronize($site, $category_configs, $event_category_confi
         }
     }
 
+    $result .= " W: ";
+    $added_widgets = sideka_apply_widget_configs($widget_configs);
+    foreach($added_widgets as $added_widget){
+        $result .= $added_widget." ";
+    }
+
     restore_current_blog();
     return $result;
 }
@@ -178,12 +184,15 @@ function sideka_sites_synchronize()
             $output = array();
             $output["results"] = [];
             $sites = get_sites(array( "offset" => $start, "number" => $limit));
+
             $category_configs = sideka_get_category_configs();
             $event_category_configs = sideka_get_event_category_configs();
             $role_configs = sideka_get_role_configs();
             $nav_menu_configs = sideka_get_nav_menu_configs();
+            $widget_configs = sideka_get_widget_configs();
+
             foreach ($sites as $site) {
-                $output["results"][] = sideka_site_synchronize($site, $category_configs, $event_category_configs, $role_configs, $nav_menu_configs);
+                $output["results"][] = sideka_site_synchronize($site, $category_configs, $event_category_configs, $role_configs, $nav_menu_configs, $widget_configs);
             }
             $output["next"] = count($sites) == $limit ? ($start + $limit) : 0;
             wp_send_json($output);

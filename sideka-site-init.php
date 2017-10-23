@@ -251,6 +251,63 @@ function sideka_site_init_menu($pages, $categories) {
     set_theme_mod('nav_menu_locations', $locations);
 }
 
+function sideka_get_widget_configs(){
+    $configs = [];
+    $configs[] = array(
+        'widget_tribe-events-list-widget',
+        array (
+          1 => 
+          array (
+            'title' => 'Kegiatan Mendatang',
+            'limit' => '5',
+            'no_upcoming_events' => '1',
+            'featured_events_only' => false,
+            'jsonld_enable' => 1,
+          ),
+          2 => 
+          array (
+            'title' => 'Kegiatan Mendatang',
+            'limit' => '5',
+            'no_upcoming_events' => '1',
+            'featured_events_only' => false,
+            'jsonld_enable' => 1,
+          ),
+          '_multiwidget' => 1,
+        ),
+        array(
+            "tribe-events-list-widget-1" => array('sidebar', 'unshift'),
+            "tribe-events-list-widget-2" => array('home-6', 'unshift')
+        )
+    );
+    return $configs;
+}
+
+function sideka_apply_widget_configs($configs){
+    $results = [];
+    $widgets = get_option("sidebars_widgets");
+    foreach($configs as $config){
+        update_option($config[0], $config[1]);
+        foreach($config[2] as $instance => $instance_config){
+            $place = $instance_config[0];
+            $method = $instance_config[1];
+            if(!isset($widgets[$place])){
+                $widgets[$place] = array();
+            }
+            if(in_array($instance, $widgets[$place])){
+                continue;
+            }
+            if($method == "unshift"){
+                array_unshift($widgets[$place], $instance);
+            } else {
+                array_push($widgets[$place], $instance);
+            }
+            $results[] = $instance;
+        }
+    }
+    update_option('sidebars_widgets', $widgets);
+    return $results;
+}
+
 function sideka_site_init_widgets($pages, $categories)
 {
     update_option('widget_search', array(
@@ -307,6 +364,9 @@ function sideka_site_init_widgets($pages, $categories)
         ),
     );
     update_option('sidebars_widgets', $widgets);
+
+    $widget_configs = sideka_get_widget_configs();
+    sideka_apply_widget_configs($widget_configs);
 
     //Update halo dunia! post categories
     $args = array(
