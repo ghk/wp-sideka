@@ -73,4 +73,21 @@ function sideka_get_desa_code(){
 	$server_name = $_SERVER["SERVER_NAME"];
 	return $wpdb->get_var( 'select kode from sd_desa where domain = "'.$server_name.'"');
 }
-?>
+
+function sideka_token_authenticate($user){
+    $rest_api_slug = rest_get_url_prefix();
+    $valid_api_uri = strpos($_SERVER['REQUEST_URI'], $rest_api_slug);
+    if(!$valid_api_uri){
+        return $user;
+    }
+
+    $token = $_SERVER["HTTP_X_AUTH_TOKEN"];
+    if(isset($token) && $token){
+        global $wpdb;
+        $user_id = $wpdb->get_var($wpdb->prepare("select user_id from sd_tokens where token = %s", $token));
+        if($user_id)
+            return $user_id;
+    }
+    return $user;
+}
+add_filter('determine_current_user', "sideka_token_authenticate");
