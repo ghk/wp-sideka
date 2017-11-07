@@ -58,7 +58,7 @@ $package_exists = json_decode($json)->success;
 		-->
                 <dt class="required">Penduduk Perempuan</dt>
                 <dd id="count-female"></dd>
-                <dt class="required">Penduduk Laki-laki</dt>
+                <dt class="required">Penduduk Laki-Laki</dt>
                 <dd id="count-male"></dd>
                 <dt class="required">Tidak Diketahui</dt>
                 <dd id="count-unknown"></dd>
@@ -95,14 +95,6 @@ $package_exists = json_decode($json)->success;
             </div>
         </div>
     </div>
-    <div class="clearfix">
-        <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a href="#" class="mh-widget-title-link">Kelas dan Bantuan Sosial</a></span>
-        </h4>
-        <div id="kelas">
-            <svg style="height: 250px;"></svg>
-        </div>
-    </div>
 
 
     <link href="/wp-content/plugins/sideka/nv.d3.css" rel="stylesheet">
@@ -117,14 +109,14 @@ $package_exists = json_decode($json)->success;
         var pekerjaan = package.result.resources.filter(function(r) {return r.name === "Pekerjaan Berdasarkan Jenis Kelamin"})[0];
 
         function summaryCount(data){
-            var total = {"Perempuan": 0, "Laki-laki": 0, "Tidak Diketahui": 0};
+            var total = {"Perempuan": 0, "Laki-Laki": 0, "Tidak Diketahui": 0};
             for(var i = 0; i < data.length; i++){
                 var r = data[i];
                 var val = parseInt(r.jumlah);
                 var s = r.jenis_kelamin;
                 total[s] += val;
             }
-            document.getElementById("count-male").innerHTML = total["Laki-laki"];
+            document.getElementById("count-male").innerHTML = total["Laki-Laki"];
             document.getElementById("count-female").innerHTML = total["Perempuan"];
             document.getElementById("count-unknown").innerHTML = total["Tidak Diketahui"];
         }
@@ -235,30 +227,6 @@ $package_exists = json_decode($json)->success;
             return chart;
         });
 
-        var kelas = package.result.resources.filter(function(r) {return r.name === "Kelas dan Bantuan Sosial"})[0];
-        d3.csv(ckan_host + kelas.url, function(error, data) {
-            familyCount(data);
-            var chart = nv.models.multiBarChart()
-                    .x(function(d) { return d.label })
-                    .y(function(d) { return d.value })
-                    //.transitionDuration(350)
-                    .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
-                    .rotateLabels(0)      //Angle to rotate x-axis labels.
-                    .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
-                    .groupSpacing(0.1)    //Distance between each group of bars.
-                ;
-
-            //chart.bars.forceY([0]);
-            chart.yAxis
-                .tickFormat(d3.format('d'));
-
-            var transformed = transformDataKelas(data);
-            d3.select('#kelas svg')
-                .datum(transformed)
-                .call(chart);
-
-            nv.utils.windowResize(chart.update);
-        });
 
         function transformDataStacked(raw, label){
             //create aggregate dict
@@ -286,7 +254,7 @@ $package_exists = json_decode($json)->success;
             var min = Math.round(0.01 * total);
             var keys = Object.keys(all);
             var filteredKeys = [];
-            var etcS = {"Perempuan": 0, "Laki-laki": 0, "Tidak Diketahui": 0};
+            var etcS = {"Perempuan": 0, "Laki-Laki": 0, "Tidak Diketahui": 0};
             var etc = 0;
             for(var i = 0; i < keys.length; i++) {
                 var key = keys[i];
@@ -317,7 +285,7 @@ $package_exists = json_decode($json)->success;
                     return vb - va;
             });
 
-            return ["Perempuan", "Laki-laki", "Tidak Diketahui"].map(function(sex){
+            return ["Perempuan", "Laki-Laki", "Tidak Diketahui"].map(function(sex){
                 return {
                     key: sex,
                     values: sortedPekerjaan
@@ -333,12 +301,12 @@ $package_exists = json_decode($json)->success;
 
         var pendidikanGroups = [
             ["Tidak Diketahui", ['Tidak Diketahui']],
-            ["Belum/Tidak Sekolah", ['Tidak Pernah Sekolah', 'Tidak dapat membaca' ,'Belum Masuk TK/PAUD']],
-            ["Sedang TK/SD", ['Sedang SD/Sederajat']],
-            ["Tamat SD", ['Tamat SD/Sederajat','Sedang SMP/Sederajat']],
-            ["Tamat SMP", ['Tamat SMP/Sederajat','Sedang SMA/Sederajat']],
-            ["Tamat SMA", ['Tamat SMA/Sederajat','Sedang D-3/Sederajat', 'Sedang S-1/Sederajat']],
-            ["Tamat PT", ['Tamat D-3/Sederajat','Tamat S-1/Sederajat', 'Sedang S-2/Sederajat', 'Tamat S-2/Sederajat', 'Sedang S-3/Sederajat', 'Tamat S-3/Sederajat',]],
+            ["Belum/Tidak Sekolah", ['Belum masuk TK/Kelompok Bermain', 'Tidak dapat membaca dan menulis huruf Latin/Arab' ,'Tidak pernah sekolah', 'Tidak tamat SD/sederajat ']],
+            ["Sedang TK/SD", ['Sedang SD/sederajat']],
+            ["Tamat SD", ['Tamat SD/sederajat','Sedang SLTP/sederajat']],
+            ["Tamat SLTP", ['Tamat SLTP/sederajat','Sedang SLTA/sederajat']],
+            ["Tamat SLTA", ['Tamat SLTA/sederajat','Sedang D-1/sederajat', 'Sedang D-2/sederajat', 'Sedang D-3/sederajat', 'Sedang D-4/sederajat', 'Sedang S-1/sederajat']],
+            ["Tamat PT", ['Tamat D-1/sederajat', 'Tamat D-2/sederajat', 'Tamat D-3/sederajat', 'Tamat D-4/sederajat','Tamat S-1/sederajat', 'Sedang S-2/sederajat', 'Tamat S-2/sederajat', 'Sedang S-3/sederajat', 'Tamat S-3/sederajat',]],
         ]
 
         function findPendidikanGroup(label){
@@ -377,7 +345,7 @@ $package_exists = json_decode($json)->success;
             var min = Math.round(0.01 * total);
             var keys = Object.keys(all);
             var filteredKeys = [];
-            var etcS = {"Perempuan": 0, "Laki-laki": 0, "Tidak Diketahui": 0};
+            var etcS = {"Perempuan": 0, "Laki-Laki": 0, "Tidak Diketahui": 0};
             var etc = 0;
             for(var i = 0; i < keys.length; i++) {
                 var key = keys[i];
@@ -402,6 +370,7 @@ $package_exists = json_decode($json)->success;
                 filteredKeys.push(etcN);
             }
 
+            console.log(raw);
             console.log(all);
 
             var sortedPekerjaan = filteredKeys.sort(function(a, b){
@@ -410,7 +379,7 @@ $package_exists = json_decode($json)->success;
                 return va - vb;
             });
 
-            return ["Perempuan", "Laki-laki", "Tidak Diketahui"].map(function(sex){
+            return ["Perempuan", "Laki-Laki", "Tidak Diketahui"].map(function(sex){
                 return {
                     key: sex,
                     values: sortedPekerjaan
@@ -452,7 +421,7 @@ $package_exists = json_decode($json)->success;
                 return age[b] - age[a];
             });
 
-            return ["Perempuan", "Laki-laki", "Tidak Diketahui"].map(function(sex){
+            return ["Perempuan", "Laki-Laki", "Tidak Diketahui"].map(function(sex){
                 return {
                     key: sex,
                     values: sorted
@@ -493,34 +462,6 @@ $package_exists = json_decode($json)->success;
                     val == 0;
                 return {"label": p, "value": val}
             });
-        }
-        var kelasOrders = {};
-        kelasOrders["Miskin"] = 1;
-        kelasOrders["Sedang"] = 2;
-        kelasOrders["Kaya"] = 3;
-        kelasOrders["Tidak Diketahui"] = 4;
-        function transformDataKelas(raw){
-            raw.sort(function(a, b){
-                return kelasOrders[a.kelas_sosial] - kelasOrders[b.kelas_sosial]
-            });
-            var results = [];
-            function getSeries(name, select){
-                var r = [];
-                for(var i = 0; i < raw.length; i++){
-                    r.push({"label": raw[i].kelas_sosial, "value": parseInt(select(raw[i]))});
-                }
-                return {
-                    key: name,
-                    values: r
-                }
-            }
-            results.push(getSeries("Total Keluarga", function(r){return r.jumlah}))
-            results.push(getSeries("Keluarga Raskin", function(r){return r.jumlah_raskin}))
-            results.push(getSeries("Program Keluarga Harapan", function(r){return r.jumlah_keluarga_harapan}))
-            results.push(getSeries("Keluarga BPJS", function(r){return r.jumlah_bpjs}))
-            results.push(getSeries("Keluarga KIP", function(r){return r.jumlah_kip}))
-            console.log(results);
-            return results;
         }
     </script>
 <?php } else { ?>
