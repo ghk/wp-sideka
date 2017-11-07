@@ -136,6 +136,7 @@ function sideka_site_synchronize($site, $category_configs, $event_category_confi
         }
     }
 
+    /*
     $result .= " R: ";
     foreach($role_configs as $config){
         $role = get_role($config[0]);
@@ -144,6 +145,7 @@ function sideka_site_synchronize($site, $category_configs, $event_category_confi
             $result .= " ".$config[0];
         }
     }
+    */
 
     $result .= " M: ";
     $menus = wp_get_nav_menus(array("name" => "Menu Utama"));
@@ -174,6 +176,9 @@ function sideka_site_synchronize($site, $category_configs, $event_category_confi
 
     $result .= " O: ";
     foreach($master_options as $option_name => $option_value){
+	if ($option_name == "wp_user_roles"){
+		$option_name = "wp_".$site->blog_id."_user_roles";
+	}
         $current_option_value = get_option($option_name);
         if($current_option_value == $option_value){
             continue;

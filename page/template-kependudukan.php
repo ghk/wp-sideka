@@ -117,14 +117,14 @@ $package_exists = json_decode($json)->success;
         var pekerjaan = package.result.resources.filter(function(r) {return r.name === "Pekerjaan Berdasarkan Jenis Kelamin"})[0];
 
         function summaryCount(data){
-            var total = {"Perempuan": 0, "Laki - laki": 0, "Tidak Diketahui": 0};
+            var total = {"Perempuan": 0, "Laki-laki": 0, "Tidak Diketahui": 0};
             for(var i = 0; i < data.length; i++){
                 var r = data[i];
                 var val = parseInt(r.jumlah);
                 var s = r.jenis_kelamin;
                 total[s] += val;
             }
-            document.getElementById("count-male").innerHTML = total["Laki - laki"];
+            document.getElementById("count-male").innerHTML = total["Laki-laki"];
             document.getElementById("count-female").innerHTML = total["Perempuan"];
             document.getElementById("count-unknown").innerHTML = total["Tidak Diketahui"];
         }
@@ -286,7 +286,7 @@ $package_exists = json_decode($json)->success;
             var min = Math.round(0.01 * total);
             var keys = Object.keys(all);
             var filteredKeys = [];
-            var etcS = {"Perempuan": 0, "Laki - laki": 0, "Tidak Diketahui": 0};
+            var etcS = {"Perempuan": 0, "Laki-laki": 0, "Tidak Diketahui": 0};
             var etc = 0;
             for(var i = 0; i < keys.length; i++) {
                 var key = keys[i];
@@ -317,7 +317,7 @@ $package_exists = json_decode($json)->success;
                     return vb - va;
             });
 
-            return ["Perempuan", "Laki - laki", "Tidak Diketahui"].map(function(sex){
+            return ["Perempuan", "Laki-laki", "Tidak Diketahui"].map(function(sex){
                 return {
                     key: sex,
                     values: sortedPekerjaan
@@ -377,7 +377,7 @@ $package_exists = json_decode($json)->success;
             var min = Math.round(0.01 * total);
             var keys = Object.keys(all);
             var filteredKeys = [];
-            var etcS = {"Perempuan": 0, "Laki - laki": 0, "Tidak Diketahui": 0};
+            var etcS = {"Perempuan": 0, "Laki-laki": 0, "Tidak Diketahui": 0};
             var etc = 0;
             for(var i = 0; i < keys.length; i++) {
                 var key = keys[i];
@@ -410,7 +410,7 @@ $package_exists = json_decode($json)->success;
                 return va - vb;
             });
 
-            return ["Perempuan", "Laki - laki", "Tidak Diketahui"].map(function(sex){
+            return ["Perempuan", "Laki-laki", "Tidak Diketahui"].map(function(sex){
                 return {
                     key: sex,
                     values: sortedPekerjaan
@@ -452,7 +452,7 @@ $package_exists = json_decode($json)->success;
                 return age[b] - age[a];
             });
 
-            return ["Perempuan", "Laki - laki", "Tidak Diketahui"].map(function(sex){
+            return ["Perempuan", "Laki-laki", "Tidak Diketahui"].map(function(sex){
                 return {
                     key: sex,
                     values: sorted

@@ -381,7 +381,7 @@ function sideka_site_init_widgets($pages, $categories)
 
 function sideka_get_sitewide_option_names(){
     $results = array("category_base", "date_format", "jetpack_active_modules", "rewrite_rules", "sharing-options", "sharing-services", "tag_base",
-    "time_format", "tribe_events_calendar_options");
+    "time_format", "tribe_events_calendar_options", "wp_user_roles");
     return $results;
 }
 
@@ -422,6 +422,9 @@ function sideka_site_init($blog_id, $user_id){
 
     $master_options = sideka_get_sitewide_options(1);
     foreach($master_options as $option_name => $option_value){
+	if ($option_name == "wp_user_roles"){
+		$option_name = "wp_".$blog_id."_user_roles";
+	}
         update_option($option_name, $option_value);
     }
 
