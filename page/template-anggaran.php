@@ -19,10 +19,10 @@ $package_id = $desa_id."-keuangan";
 $json = @file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $package_id);
 $package_exists = json_decode($json)->success;
 $desa_code = sideka_get_desa_code();
-$year = date("Y");
+$year = '2017';//date("Y");
 ?>
 <?php if($desa_code) { 
-$progress_recapitulations_json = @file_get_contents("http://api.keuangan.sideka.id/progress/recapitulations/year/".$year."?sort=region.name");
+$progress_recapitulations_json = @file_get_contents("http://api.keuangan.sideka.id/progress/recapitulations/year/".$year."?sort=region.name&is_lokpri=");
 $progress_recapitulations = json_decode($progress_recapitulations_json);
 $progress_recapitulation = null;
 foreach($progress_recapitulations as $cur){
@@ -33,7 +33,7 @@ foreach($progress_recapitulations as $cur){
 }
 ?>
 <?php if($progress_recapitulation) { 
-$all_spending_recapitulations_json = @file_get_contents("http://api.keuangan.sideka.id/budget/recapitulations/year/".$year."?sort=region.name");
+$all_spending_recapitulations_json = @file_get_contents("http://api.keuangan.sideka.id/budget/recapitulations/year/".$year."?sort=region.name&is_lokpri=");
 $all_spending_recapitulations = json_decode($all_spending_recapitulations_json);
 $spending_recapitulations = array();
 foreach($all_spending_recapitulations as $cur){
@@ -41,7 +41,7 @@ foreach($all_spending_recapitulations as $cur){
 	$spending_recapitulations[] = $cur;
     }
 }
-$progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/progress/timelines/region/".$desa_code."/year/".$year);
+$progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/progress/timelines/region/".$desa_code."/year/".$year."?sort=region.name&is_lokpri=");
 ?>
 <style>
         #count-summary {
