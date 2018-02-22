@@ -51,9 +51,6 @@ $desa_code = sideka_get_desa_code();
 				<div class="entry-content clearfix">
 					<div class="clearfix">
 						<div class="clearfix" style="margin-bottom: 20px;">
-							<h4 class="mh-widget-title">
-								<span class="mh-widget-title-inner"><a class="mh-widget-title-link">Peta Desa</a></span>
-							</h4>
 							<div class="mh-widget-col-1 mh-sidebar">
 								<dl id="count-summary" class="larger">
 									<dt class="required">Luas Desa</dt>
