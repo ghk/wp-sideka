@@ -173,6 +173,7 @@ $desa_code = sideka_get_desa_code();
 		
 		<script type="text/javascript">
 			var $ = jQuery;
+            document.getElementsByClassName("entry-header")[0].remove();
 			var BIG = [{
 						 "id":"network_transportation",
 						 "label":"Jaringan Transportasi",
