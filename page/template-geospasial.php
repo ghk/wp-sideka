@@ -6,10 +6,10 @@
  * Time: 3:51 AM
  */
 
-$desa_id = "bokor";
+$desa_id = "mandalamekar";
 $server_name = $_SERVER["SERVER_NAME"];
 $server_splits = explode(".", $server_name);
-if($server_splits[0].".desa.id" == $server_name || $server_splits[0].".sideka.id" == $server_name){
+if($server_splits[0].".desa.id" == $server_name || $server_splits[0].".sideka.id" == $server_name || $server_splits[0].".sideka.microvac" == $server_name){
     $desa_id = $server_splits[0];
 }
 
@@ -19,6 +19,8 @@ $package_id = $desa_id."-pemetaan";
 $json = @file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $package_id);
 $package_exists = true;//json_decode($json)->success;
 $current_url = '/wp-content/plugins/sideka/page/';
+$desa_code = sideka_get_desa_code();
+
 ?>
 <?php if($package_exists) { ?>
 	<script src="http://d3js.org/d3.v3.js"></script>
@@ -173,6 +175,7 @@ $current_url = '/wp-content/plugins/sideka/page/';
 		</div>
 		
 		<script type="text/javascript">
+			var $ = jQuery;
 			var BIG = [{
 						 "id":"network_transportation",
 						 "label":"Jaringan Transportasi",
@@ -1127,14 +1130,15 @@ $current_url = '/wp-content/plugins/sideka/page/';
 				]
 			$(document).ready(() => {
 				const SERVER = 'http://api.tatakelola.sideka.id';
-
-				$.ajax(SERVER + '/geojsons/region/32.06.19.2009', { 
+				const desa_code = "<?= $desa_code ?>";
+				
+				$.ajax(SERVER + '/geojsons/region/' + desa_code, { 
 					method: 'GET',
 					dataType: 'json',
 					success: setupMap
 				});
 				
-				$.ajax(SERVER + '/summaries/region/32.06.19.2009', { 
+				$.ajax(SERVER + '/summaries/region/' + desa_code, { 
 					method: 'GET',
 					dataType: 'json',
 					success: setupData
