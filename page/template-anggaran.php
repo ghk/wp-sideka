@@ -19,10 +19,12 @@ $package_id = $desa_id."-keuangan";
 $json = @file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $package_id);
 $package_exists = json_decode($json)->success;
 $desa_code = sideka_get_desa_code();
-$year = '2017';//date("Y");
 ?>
 <?php if($desa_code) { 
-$progress_recapitulations_json = @file_get_contents("http://api.keuangan.sideka.id/progress/recapitulations/year/".$year."?sort=region.name&is_lokpri");
+$years_json = @file_get_contents("http://api.keuangan.sideka.id/regions/".$desa_code."/years");
+$year = max(json_decode($years_json));
+
+$progress_recapitulations_json = @file_get_contents("http://api.keuangan.sideka.id/progress/recapitulations/year/".$year."?sort=region.name&is_lokpri&region_id=".$desa_code);
 $progress_recapitulations = json_decode($progress_recapitulations_json);
 $progress_recapitulation = null;
 foreach($progress_recapitulations as $cur){
@@ -33,7 +35,7 @@ foreach($progress_recapitulations as $cur){
 }
 ?>
 <?php if($progress_recapitulation) { 
-$all_spending_recapitulations_json = @file_get_contents("http://api.keuangan.sideka.id/budget/recapitulations/year/".$year."?sort=region.name&is_lokpri");
+$all_spending_recapitulations_json = @file_get_contents("http://api.keuangan.sideka.id/budget/recapitulations/year/".$year."?sort=region.name&is_lokpri&region_id=".$desa_code);
 $all_spending_recapitulations = json_decode($all_spending_recapitulations_json);
 $spending_recapitulations = array();
 foreach($all_spending_recapitulations as $cur){
@@ -146,13 +148,13 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
         </div>
         <div class="mh-widget-col-1 mh-sidebar">
             <dl id="count-summary" class="larger">
-            <dt class="required">Realisasi Pendapatan (Sep 2017)</dt>
+            <dt class="required">Realisasi Pendapatan (Sep <?php echo $year; ?>)</dt>
             <dd id="count-realisasi-pendapatan"></dd>
             </dl>
         </div>
         <div class="mh-widget-col-1 mh-sidebar">
             <dl id="count-summary" class="larger">
-            <dt class="required">Realisasi Belanja (Sep 2017)</dt>
+            <dt class="required">Realisasi Belanja (Sep <?php echo $year; ?>)</dt>
             <dd id="count-realisasi-belanja"></dd>
         </div>
     </div>
@@ -205,9 +207,9 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
         document.getElementsByClassName("entry-header")[0].remove();
         var desa_id = "<?= $desa_id ?>";
         var desa_code = "<?= $desa_code ?>";
-	var progress_recapitulation = <?= json_encode($progress_recapitulation) ?>;
-	var spending_recapitulations = <?= json_encode($spending_recapitulations) ?>;
-	var progress_timelines = <?= $progress_timelines_json ?>;
+		var progress_recapitulation = <?= json_encode($progress_recapitulation) ?>;
+		var spending_recapitulations = <?= json_encode($spending_recapitulations) ?>;
+		var progress_timelines = <?= $progress_timelines_json ?>;
         var package_id = "<?= $package_id ?>";
         var ckan_host = "<?= $ckan_host ?>";
         var package = <?= $json ?>;
@@ -243,7 +245,7 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
             setupCountSummary();
         }
         function setupCountSummary() {
-            jQuery("#tahun-anggaran").html(2017);
+            jQuery("#tahun-anggaran").html(<?php echo $year; ?>);
             var fmt = d3.format("0,000");
             var f = function(d){
                 return "Rp. "+fmt(d).replace(new RegExp(",", "g"), ".");
@@ -615,11 +617,11 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
                 }
             }
             // Compute the treemap layout recursively such that each group of siblings
-            // uses the same size (1×1) rather than the dimensions of the parent cell.
+            // uses the same size (1ï¿½1) rather than the dimensions of the parent cell.
             // This optimizes the layout for the current zoom state. Note that a wrapper
             // object is created for the parent node for each group of siblings so that
-            // the parent’s dimensions are not discarded as we recurse. Since each group
-            // of sibling was laid out in 1×1, we must rescale to fit using absolute
+            // the parentï¿½s dimensions are not discarded as we recurse. Since each group
+            // of sibling was laid out in 1ï¿½1, we must rescale to fit using absolute
             // coordinates. This lets us use a viewport to zoom.
             function layout(d) {
                 if (d._children) {
@@ -736,7 +738,7 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
 <?php } ?>
 <?php } else { ?>
 
-    <p>Kode Kemendagri desa belum diisi, silahkan hubungi Super Administrator Sideka untuk emengisi Kode Desa Anda</p>
+    <p>Kode Kemendagri desa belum diisi, silahkan hubungi Super Administrator Sideka untuk mengisi Kode Desa Anda</p>
 
 <?php } ?>
 
