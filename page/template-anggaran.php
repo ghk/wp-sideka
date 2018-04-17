@@ -148,13 +148,13 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
         </div>
         <div class="mh-widget-col-1 mh-sidebar">
             <dl id="count-summary" class="larger">
-            <dt class="required">Realisasi Pendapatan (Sep <?php echo $year; ?>)</dt>
+            <dt class="required">Realisasi Pendapatan (<!--Sep--> <?php echo $year; ?>)</dt>
             <dd id="count-realisasi-pendapatan"></dd>
             </dl>
         </div>
         <div class="mh-widget-col-1 mh-sidebar">
             <dl id="count-summary" class="larger">
-            <dt class="required">Realisasi Belanja (Sep <?php echo $year; ?>)</dt>
+            <dt class="required">Realisasi Belanja (<!--Sep--> <?php echo $year; ?>)</dt>
             <dd id="count-realisasi-belanja"></dd>
         </div>
     </div>
