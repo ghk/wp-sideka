@@ -52,6 +52,18 @@ function sideka_admin_head() {
 	}
 }
 
+function my_login_logo_one() { 
+    ?> 
+    <style type="text/css"> 
+    body.login div#login h1 a {
+    background-image: url(//sideka.id/wp-content/themes/sidekaid/res/sidekalogo.png);  
+    background-size: 48px; 
+    height: 70px;
+    } 
+    </style>
+    <?php 
+} add_action( 'login_enqueue_scripts', 'my_login_logo_one' );
+
 function sideka_get_desa_id(){
 	$desa_id = "mandalamekar";
 	$server_name = $_SERVER["SERVER_NAME"];
