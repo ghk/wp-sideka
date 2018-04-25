@@ -51,6 +51,12 @@ function sideka_admin_head() {
 	}
 }
 
+add_action('after_signup_form', 'sideka_after_signup_form');
+function sideka_after_signup_form() {
+    $new = $_GET["new"];
+    echo "<div id='signup-not-found'><div>Situs tidak ditemukan. Silahkan menghubungi administrator untuk mendaftarkan situs Anda.</div></div>";
+}
+
 add_action( 'login_enqueue_scripts', 'sideka_login_logo' );
 function sideka_login_logo() { 
     ?> 
