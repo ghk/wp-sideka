@@ -251,21 +251,29 @@ add_action( 'wp_ajax_sideka_users_synchronize', 'sideka_users_synchronize' );
 
 function sideka_get_regions()
 {
-    if(is_super_admin()){
-            global $wpdb;
-            $parent_code = $_POST["parent_code"];
-            $results = $wpdb->get_results("SELECT region_code, region_name FROM sd_all_desa where parent_code = '$parent_code' order by region_name");
-            wp_send_json($results);
-    }
+    global $wpdb;
+    $parent_code = $_POST["parent_code"];
+    $results = $wpdb->get_results("SELECT region_code, region_name FROM sd_all_desa where parent_code = '$parent_code' order by region_name");
+    wp_send_json($results);
 }
 add_action( 'wp_ajax_sideka_get_regions', 'sideka_get_regions' );
+
+function sideka_check_region_code()
+{
+    global $wpdb;
+    $region_code = $_POST["region_code"];
+    $domain = $wpdb->get_var("SELECT domain FROM sd_desa where kode = '$region_code'");
+    wp_send_json($domain);
+}
+add_action( 'wp_ajax_sideka_check_region_code', 'sideka_check_region_code' );
 
 add_action('network_site_new_form', 'sideka_network_site_new_form');
 function sideka_network_site_new_form() {
     global $wpdb;
     $previous_code = $wpdb->get_var($wpdb->prepare("select kode from sd_desa where blog_id = %d", $_GET["id"]));
     ?>
-    <div class="notice region-notice" style="display:none;"><p>Silahkan isi Propinsi sampai Desa</p></div>'
+    <div class="notice region-notice" style="display:none;"><p>Silahkan isi Propinsi sampai Desa</p></div>
+    <div class="notice region-exists-notice" style="display:none;"><p>Desa telah mempunyai web desa pada domain <a href="" target="_blank"></a></p></div>
 	<table class="form-table">
 		<tr class="form-field form-required field-region field-region0">
 			<th scope="row"><label for="region0">Propinsi</label></th>
@@ -287,6 +295,7 @@ function sideka_network_site_new_form() {
             <?php echo $_REQUEST["region3"] ?>
             <script type="text/javascript" >
                     var previousCode = "<?php echo $previous_code ?>";
+                    var regionExistsDomain = null;
                     var loadedCode = null;
                     function loadRegions(parentCode){
                         loadedCode = parentCode;
@@ -332,13 +341,32 @@ function sideka_network_site_new_form() {
                         jQuery(this).change(function(){
                                 var val = jQuery(this).val();
                                 loadRegions(val);
+                                if(jQuery(this).attr("id") == "region3"){
+                                    regionExistsDomain = "loading";
+                                    var data = {
+                                    'action': 'sideka_check_region_code',
+                                    'region_code': val
+                                    };
+
+                                        // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+                                    var xhr = jQuery.post(ajaxurl, data, function(response) {
+                                        regionExistsDomain = response;
+                                    });
+                                }
                         });
                     });
                     jQuery("#wpbody form").submit(function(){
                         jQuery(".region-notice").hide();
+                        jQuery(".region-exists-notice").hide();
                         var val = jQuery("#region3").val();
                         if(!val){
                             jQuery(".region-notice").show();
+                            return false;
+                        }
+                        if(regionExistsDomain){
+                            jQuery(".region-exists-notice a").html(regionExistsDomain);
+                            jQuery(".region-exists-notice a").attr("href", "http://"+regionExistsDomain);
+                            jQuery(".region-exists-notice").show();
                             return false;
                         }
                         return true;
