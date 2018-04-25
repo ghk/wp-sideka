@@ -411,7 +411,16 @@ function sideka_site_init_theme($pages) {
 }
 
 function sideka_site_init($blog_id, $user_id){
+    global $wpdb;
+
     switch_to_blog($blog_id);
+
+    $domain =$wpdb->get_var( "select domain from wp_blogs where blog_id = '$blog_id.'");
+    $wpdb->insert('sd_desa', array(
+        'blog_id' => $blog_id,
+        'domain' => $domain,
+        'kode' => $_REQUEST["region3"],
+    ));
 
     $pages = sideka_site_init_pages($user_id);
     $categories = sideka_site_init_categories();

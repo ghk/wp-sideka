@@ -57,20 +57,6 @@ function sideka_after_signup_form() {
     echo "<div id='signup-not-found'><div>Situs tidak ditemukan. Silahkan menghubungi administrator untuk mendaftarkan situs Anda.</div></div>";
 }
 
-add_action('network_site_new_form', 'sideka_network_site_new_form');
-function sideka_network_site_new_form() {
-    ?>
-<!--
-	<table class="form-table">
-		<tr class="form-field form-required">
-			<th scope="row"><label for="kode">Kode Kemendagri</label></th>
-			<td><input style="max-width: 25em;" name="kode" type="text" class="regular-text" id="kode" /></td>
-		</tr>
-    </table>
--->
-    <?php
-}
-
 add_action( 'login_enqueue_scripts', 'sideka_login_logo' );
 function sideka_login_logo() { 
     ?> 
