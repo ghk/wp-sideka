@@ -42,7 +42,6 @@ function sideka_query_vars( $query_vars ){
 }
 
 add_action('admin_head', 'sideka_admin_head');
-
 function sideka_admin_head() {
 	if(!is_network_admin()){
 	  echo '<style>
@@ -52,6 +51,7 @@ function sideka_admin_head() {
 	}
 }
 
+add_action( 'login_enqueue_scripts', 'sideka_login_logo' );
 function sideka_login_logo() { 
     ?> 
     <style type="text/css"> 
@@ -63,7 +63,7 @@ function sideka_login_logo() {
     } 
     </style>
     <?php 
-} add_action( 'login_enqueue_scripts', 'sideka_login_logo' );
+} 
 
 function sideka_get_desa_id(){
 	$desa_id = "mandalamekar";
