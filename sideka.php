@@ -22,9 +22,13 @@ include_once(dirname(__FILE__) . '/sideka-email-multisite.php');
 
 if(is_admin()) {
     include_once(dirname(__FILE__) . '/admin/sideka-admin-menu.php');
+    include_once(dirname(__FILE__) . '/admin/sideka-desa-menu.php');
 }
 if(is_network_admin() ||  (defined('DOING_AJAX') && DOING_AJAX)) {
     include_once(dirname(__FILE__) . '/admin/sideka-network-admin-menu.php');
+}
+if(is_admin() || is_network_admin() ||  (defined('DOING_AJAX') && DOING_AJAX)) {
+    include_once(dirname(__FILE__) . '/admin/sideka-fill-region.php');
 }
 
 add_action( 'init', 'sideka_rewrites_init' );
@@ -71,6 +75,17 @@ function sideka_login_logo() {
     <?php 
 } 
 
+add_filter( 'login_redirect', 'sideka_login_redirect', 10, 3 );
+function sideka_login_redirect( $redirect_to, $request, $user ){
+    global $wpdb;
+    $blog_id = get_current_blog_id();
+    $region_code = $wpdb->get_var($wpdb->prepare("SELECT kode FROM sd_desa where blog_id = %d", $blog_id));
+    if(!$region_code){
+        return "/wp-admin/options-general.php?page=desa";
+    }
+    return $redirect_to;
+}
+
 function sideka_get_desa_id(){
 	$desa_id = "mandalamekar";
 	$server_name = $_SERVER["SERVER_NAME"];
@@ -84,13 +99,13 @@ function sideka_get_desa_id(){
 function sideka_is_desa_dbt(){
 	global $wpdb;
 	$server_name = $_SERVER["SERVER_NAME"];
-	return $wpdb->get_var( 'select is_dbt from sd_desa where domain = "'.$server_name.'"');
+	return $wpdb->get_var($wpdb->prepare('select is_dbt from sd_desa where domain = %s', $server_name));
 }
 
 function sideka_get_desa_code(){
 	global $wpdb;
 	$server_name = $_SERVER["SERVER_NAME"];
-	return $wpdb->get_var( 'select kode from sd_desa where domain = "'.$server_name.'"');
+	return $wpdb->get_var($wpdb->prepare('select kode from sd_desa where domain = %s', $server_name));
 }
 
 function sideka_token_authenticate($user){
