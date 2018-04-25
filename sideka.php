@@ -52,17 +52,18 @@ function sideka_admin_head() {
 	}
 }
 
-function my_login_logo_one() { 
+function sideka_login_logo() { 
     ?> 
     <style type="text/css"> 
     body.login div#login h1 a {
-    background-image: url(//sideka.id/wp-content/themes/sidekaid/res/sidekalogo.png);  
-    background-size: 48px; 
+    background-image: url(https://panduan.sideka.id/_static/logo.png);  
+    background-size: 200px; 
+    width: 300px;
     height: 70px;
     } 
     </style>
     <?php 
-} add_action( 'login_enqueue_scripts', 'my_login_logo_one' );
+} add_action( 'login_enqueue_scripts', 'sideka_login_logo' );
 
 function sideka_get_desa_id(){
 	$desa_id = "mandalamekar";
