@@ -80,7 +80,7 @@ function sideka_login_redirect( $redirect_to, $request, $user ){
     global $wpdb;
     $blog_id = get_current_blog_id();
     $region_code = $wpdb->get_var($wpdb->prepare("SELECT kode FROM sd_desa where blog_id = %d", $blog_id));
-    if(!$region_code){
+    if($blog_id != 1 && !$region_code){
         return "/wp-admin/options-general.php?page=desa";
     }
     return $redirect_to;
