@@ -21,7 +21,7 @@ class SidekaDesaMenu
         global $wpdb;
         $this->blog_id = get_current_blog_id();
         $this->region_code = $wpdb->get_var($wpdb->prepare("SELECT kode FROM sd_desa where blog_id = %d", $this->blog_id));
-        if(!$this->region_code){
+        if($this->blog_id != 1 && !$this->region_code){
             add_options_page('Desa', 'Desa', 'manage_options', 'desa', array($this, 'settings_page'));
         }
     }
