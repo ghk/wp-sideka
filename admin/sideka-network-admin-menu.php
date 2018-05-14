@@ -16,6 +16,7 @@ class SidekaNetworkAdminMenu
     public function admin_menu()
     {
         add_submenu_page("settings.php", 'Sideka', 'Sideka', 'manage_options', 'sideka', array($this, 'settings_page'));
+        add_submenu_page("settings.php", 'Pengguna Supradesa', 'Pengguna Supradesa', 'manage_options', 'supradesa', array($this, 'supradesa_page'));
     }
 
 
@@ -94,6 +95,125 @@ class SidekaNetworkAdminMenu
                     });
             </script>
         </div>
+        <?php
+    }
+    public function supradesa_page()
+    {
+        wp_enqueue_script( 'user-suggest' );
+        ?>
+        <div class="wrap">
+            <h1>Tambah Akun Pengguna Supradesa ke Semua Desanya</h1>
+            <form id="sideka_supradesa_add" class="sideka_supradesa_add" method="post" action="settings.php?page=supradesa">
+                <table class="form-table">
+                    <input name="start" id="start" value="0" type="hidden">
+                    <tr class="form-field form-required field-region field-region0">
+                        <th scope="row"><label for="region0">Propinsi</label></th>
+                        <td><select style="max-width: 25em;" name="region0" id="region0" /></td>
+                    </tr>
+                    <tr class="form-field form-required field-region field-region1">
+                        <th scope="row"><label for="region1">Kabupaten</label></th>
+                        <td><select style="max-width: 25em;" name="region1" id="region1" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="newuser"><?php _e( 'Username' ); ?></label></th>
+                        <td><input type="text" class="regular-text wp-suggest-user" name="newuser" id="newuser" /></td>
+                    </tr>
+                </table>
+                <input name="submit" id="submit" class="button button-primary" value="Tambah" type="submit">
+                <div id="sideka_command_output">
+                </div>
+            </form>
+        </div>
+        <script type="text/javascript" >
+                var loadedCode = null;
+                function loadRegions(parentCode){
+                    loadedCode = parentCode;
+                    var level = parentCode === "0" ? 0 : parentCode.split(".").length;
+                    if(level >= 2){
+                        return;
+                    }
+                    for (var i = 0; i < 4 ; i++){
+                            if(i < level){
+                                jQuery(".field-region"+i).show();
+                            } else {
+                                jQuery("#region"+level).val("");
+                                jQuery(".field-region"+i).hide();
+                            }
+                    } 
+                    var data = {
+                        'action': 'sideka_get_regions',
+                        'parent_code': parentCode
+                    };
+
+                    // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+                    var xhr = jQuery.post(ajaxurl, data, function(response) {
+                                jQuery("#region"+level).html("");
+                                jQuery("#region"+level).append("<option></option>");
+                                jQuery(response).each(function(i, value){
+                                        jQuery("#region"+level).append("<option value="+value.region_code+">"+value.region_name+"</option>");
+                                });
+                                jQuery(".field-region"+level).show();
+                    });
+                }
+                loadRegions("0");
+                jQuery(".field-region select").each(function(){
+                    jQuery(this).change(function(){
+                            var val = jQuery(this).val();
+                            loadRegions(val);
+                    });
+                });
+
+                var isSynchronizing = false;
+                function synchronize(){
+                    isSynchronizing = true;
+                    var start = jQuery("#sideka_supradesa_add [name='start']").val();
+                    var region1 = jQuery("#sideka_supradesa_add [name='region1']").val();
+                    var newuser = jQuery("#sideka_supradesa_add [name='newuser']").val();
+                    jQuery("#sideka_supradesa_add [name='submit']").val("Stop Menambah");
+                    var data = {
+                        'action': 'sideka_add_supradesa_user',
+                        'start': start,
+                        'region1': region1,
+                        'newuser': newuser,
+                    };
+
+                    // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+                    var xhr = jQuery.post(ajaxurl, data, function(response) {
+                        if(response.error){
+                                jQuery("#sideka_command_output").prepend("ERROR: "+response.error);
+                                stopSynchronize();
+                                return;
+                        }
+                        var results = response.results;
+                        for(var i = 0; i < results.length; i++){
+                            jQuery("#sideka_command_output").prepend(results[i] + "<br />");
+                        }
+                        start = response.next;
+                        jQuery("#sideka_supradesa_add [name='start']").val(start);
+                        if(start && isSynchronizing)
+                            synchronize();
+                        else {
+                            if (!start)
+                                jQuery("#sideka_command_output").prepend("Penambahan selesai!<br />");
+                            stopSynchronize();
+                        }
+                    });
+                }
+                function stopSynchronize(){
+                    console.log("stop synchronizing");
+                    isSynchronizing= false;
+                    jQuery("#sideka_supradesa_add [name='submit']").val("Tambah");
+                }
+                jQuery("#wpbody form").submit(function(){
+                    if(!isSynchronizing){
+                        jQuery("#sideka_command_output").html("");
+                        synchronize();
+                    } else {
+                        stopSynchronize();
+                    }
+                    return false;
+                });
+        </script>
         <?php
     }
 }
@@ -248,3 +368,43 @@ function sideka_users_synchronize()
     }
 }
 add_action( 'wp_ajax_sideka_users_synchronize', 'sideka_users_synchronize' );
+
+
+function sideka_add_supradesa_user()
+{
+    if(is_super_admin()){
+            error_reporting(1);
+            global $wpdb;
+            $newuser = $_POST['newuser'];
+            $user = get_user_by( 'login', $newuser );
+            if ( !$user || !$user->exists() ) {
+                wp_send_json(array("error"=>"User not found: ".$newuser));
+                return;
+            }
+
+            if ( substr_count($_POST["region1"], ".") != 1) {
+                wp_send_json(array("error"=>"Invalid region: ".$_POST["region1"]));
+                return;
+            }
+
+            $prefix = $_POST["region1"].".%";
+            $start = intval($_POST["start"]);
+            $limit = 5;
+            $output = array();
+            $output["results"] = [];
+            $desas = $wpdb->get_results($wpdb->prepare("SELECT blog_id, domain, kode FROM sd_desa where kode like %s order by kode limit %d offset %d", $prefix, $limit, $start));
+            foreach ($desas as $desa) {
+                $result = $desa->kode . " " . $desa->domain . " ";
+                if ( is_user_member_of_blog( $user->ID, $desa->blog_id ) ) {
+                    $result = $result . "is already a member";
+                } else {
+                    add_user_to_blog( $desa->blog_id, $user->ID, "administrator" );
+                    $result = $result . "added";
+                }
+                $output["results"][] = $result;
+            }
+            $output["next"] = count($desas) == $limit ? ($start + $limit) : 0;
+            wp_send_json($output);
+    }
+}
+add_action( 'wp_ajax_sideka_add_supradesa_user', 'sideka_add_supradesa_user' );
