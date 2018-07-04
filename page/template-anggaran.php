@@ -24,26 +24,39 @@ $desa_code = sideka_get_desa_code();
 $years_json = @file_get_contents("http://api.keuangan.sideka.id/regions/".$desa_code."/years");
 $year = max(json_decode($years_json));
 
-$progress_recapitulations_json = @file_get_contents("http://api.keuangan.sideka.id/progress/recapitulations/year/".$year."?sort=region.name&is_lokpri&region_id=".$desa_code);
-$progress_recapitulations = json_decode($progress_recapitulations_json);
+$progress_recapitulations = array();
+$spending_recapitulations = array();
+$progress_timelines = array();
+
+foreach(json_decode($years_json)as $yr){
+    $progress_recapitulations[$yr] = null;
+    $spending_recapitulations[$yr] = null;
+    $progress_timelines[$yr] = null;
+}
+
+$progress_recapitulations_per_year_json = @file_get_contents("http://api.keuangan.sideka.id/progress/recapitulations/year/".$year."?sort=region.name&is_lokpri&region_id=".$desa_code);
+$progress_recapitulations_per_year = json_decode($progress_recapitulations_per_year_json);
 $progress_recapitulation = null;
-foreach($progress_recapitulations as $cur){
+
+foreach($progress_recapitulations_per_year as $cur){
     if($cur->fk_region_id == $desa_code){
-	$progress_recapitulation = $cur;
+	    $progress_recapitulations[$year] = $cur;
         break;
     }
 }
 ?>
-<?php if($progress_recapitulation) { 
-$all_spending_recapitulations_json = @file_get_contents("http://api.keuangan.sideka.id/budget/recapitulations/year/".$year."?sort=region.name&is_lokpri&region_id=".$desa_code);
-$all_spending_recapitulations = json_decode($all_spending_recapitulations_json);
-$spending_recapitulations = array();
-foreach($all_spending_recapitulations as $cur){
+<?php if($progress_recapitulations[$year]) { 
+$spending_recapitulations_per_year_json = @file_get_contents("http://api.keuangan.sideka.id/budget/recapitulations/year/".$year."?sort=region.name&is_lokpri&region_id=".$desa_code);
+$spending_recapitulations_per_year = json_decode($spending_recapitulations_per_year_json);
+$spending_recapitulations[$year] = array();
+
+foreach($spending_recapitulations_per_year as $cur){
     if($cur->fk_region_id == $desa_code){
-	$spending_recapitulations[] = $cur;
+        $spending_recapitulations[$year][] = $cur;
     }
 }
-$progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/progress/timelines/region/".$desa_code."/year/".$year."?sort=region.name&is_lokpri");
+$progress_timelines_per_year = @file_get_contents("http://api.keuangan.sideka.id/progress/timelines/region/".$desa_code."/year/".$year."?sort=region.name&is_lokpri");
+$progress_timelines[$year] = json_decode($progress_timelines_per_year);
 ?>
 <style>
         #count-summary {
@@ -138,7 +151,7 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
 
     <div class="clearfix" style="margin-bottom: 20px;">
         <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">APBDes Tahun Anggaran <span id="tahun-anggaran"></span></a></span>
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">APBDes Tahun Anggaran &nbsp;<select id="tahun-anggaran">  </select></span></a></span>
         </h4>
         <div class="mh-widget-col-1 mh-sidebar">
             <dl id="count-summary" class="larger">
@@ -167,31 +180,30 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
 		    <svg style="height: 300px;"></svg>
 		</div>
         </div>
-        <div class="mh-content">
-		<div id="pendapatan-timeline">
-		    <svg style="height: 300px;"></svg>
-		</div>
+        <div class="mh-content" id="pendapatan-timelines">
+            <div id="pendapatan-timeline<?php echo '-'.$year;?>">
+                <svg style="height: 300px;"></svg>
+            </div>
         </div>
     </div>
     <div class="clearfix">
         <h4 class="mh-widget-title">
             <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Belanja Desa</a></span>
         </h4>
-        <div class="mh-widget-col-1 mh-sidebar">
-		<div id="belanja-pie">
-		    <svg style="height: 300px;"></svg>
-		</div>
+        <div class="mh-widget-col-1 mh-sidebar" id="belanja-pies">
+            <div id="belanja-pie<?php echo '-'.$year;?>">
+                <svg style="height: 300px;"></svg>
+            </div>
         </div>
-        <div class="mh-content">
-		<div id="belanja-timeline">
-		    <svg style="height: 300px;"></svg>
-		</div>
+        <div class="mh-content" id="belanja-timelines">
+            <div id="belanja-timeline<?php echo '-'.$year;?>">
+                <svg style="height: 300px;"></svg>
+            </div>
         </div>
     </div>
     <div class="clearfix">
         <h4 class="mh-widget-title">
-            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Rincian Belanja Desa Interaktif<select id="year-selector">
-                    </select></a></span>
+            <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Rincian Belanja Desa Interaktif &nbsp; <select id="year-selector">  </select></a></span>
         </h4>
         <div id="details" style="width: 100%; height: 700px;">
         </div>
@@ -207,15 +219,16 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
         document.getElementsByClassName("entry-header")[0].remove();
         var desa_id = "<?= $desa_id ?>";
         var desa_code = "<?= $desa_code ?>";
-		var progress_recapitulation = <?= json_encode($progress_recapitulation) ?>;
+		var progress_recapitulations = <?= json_encode($progress_recapitulations) ?>; 
 		var spending_recapitulations = <?= json_encode($spending_recapitulations) ?>;
-		var progress_timelines = <?= $progress_timelines_json ?>;
+		var progress_timelines = <?= json_encode($progress_timelines) ?>;
         var package_id = "<?= $package_id ?>";
         var ckan_host = "<?= $ckan_host ?>";
         var package = <?= $json ?>;
         var years = [];
         var apbdesData = {};
         var apbdesSums = {};
+        var yearsFromApi = <?= $years_json ?>;
         var f = d3.format(".3s");
         var format = function(d) {
             if(d === 0)
@@ -239,13 +252,32 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
         });
         function onAllApbdesLoaded(){
             //setupPieChart("#pendapatan-pie", "revenue");
-	    setupTimelineChart("#pendapatan-timeline", {'transferred_bhpr': 'Bagi Hasil Pajak', 'transferred_add': 'ADD', 'transferred_dd': ' Dana Desa'});
-            setupSpendingPieChart("#belanja-pie");
-	    setupTimelineChart("#belanja-timeline", {'realized_spending': 'Realisasi Belanja'});
+            var currentYear =  <?php echo $year; ?>;
+            setupSpendingPieChart("#belanja-pie-"+currentYear, currentYear);
+            setupTimelineChart("#pendapatan-timeline-"+currentYear, {'transferred_bhpr': 'Bagi Hasil Pajak', 'transferred_add': 'ADD', 'transferred_dd': ' Dana Desa'},currentYear);
+            setupTimelineChart("#belanja-timeline-"+currentYear, {'realized_spending': 'Realisasi Belanja'},currentYear);
             setupCountSummary();
         }
         function setupCountSummary() {
-            jQuery("#tahun-anggaran").html(<?php echo $year; ?>);
+            //jQuery("#tahun-anggaran").html(<?php echo $year; ?>);  
+            
+            yearsFromApi.sort().reverse();          
+            yearsFromApi.forEach(function(year){
+                jQuery("#tahun-anggaran").append("<option>"+year+"</option>");
+            });
+            jQuery("#tahun-anggaran").val(<?php echo $year; ?>);  
+
+            
+
+            jQuery("#tahun-anggaran").change(function(){
+                var val = jQuery(this).val();
+                onChangeProgressRecapitulations(val);
+            });
+
+            updateProgressRecapitulations(<?php echo $year; ?>);
+           
+        }
+        function updateProgressRecapitulations(year){
             var fmt = d3.format("0,000");
             var f = function(d){
                 return "Rp. "+fmt(d).replace(new RegExp(",", "g"), ".");
@@ -253,22 +285,100 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
             function update(selector, value){
                 jQuery(selector).html(f(value));
             }
-            update("#count-pendapatan", progress_recapitulation['budgeted_revenue']);
-            update("#count-realisasi-pendapatan", progress_recapitulation['transferred_revenue']);
-            update("#count-realisasi-belanja", progress_recapitulation['realized_spending']);
+            update("#count-pendapatan", progress_recapitulations[year]['budgeted_revenue']);
+            update("#count-realisasi-pendapatan", progress_recapitulations[year]['transferred_revenue']);
+            update("#count-realisasi-belanja", progress_recapitulations[year]['realized_spending']);
         }
-	function setupSpendingPieChart(selector){
+        
+
+        async function onChangeProgressRecapitulations(year){
+            //check data
+            if(!progress_recapitulations[year]){
+                var progress_recapitulation_per_year = await jQuery.ajax({
+                    url: "https://api.keuangan.sideka.id/progress/recapitulations/year/"+year+"?sort=region.name&is_lokpri&region_id="+desa_code,
+                    type: 'GET'
+                });
+
+                if(Array.isArray(progress_recapitulation_per_year)){
+                    for(var i = 0; i < progress_recapitulation_per_year.length; i++){                    
+                        if(progress_recapitulation_per_year[i]['fk_region_id'] == desa_code){
+                            progress_recapitulations[year] = progress_recapitulation_per_year[i];
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(!progress_timelines[year]){
+                var progress_timelines_per_year = await jQuery.ajax({
+                    url: "https://api.keuangan.sideka.id/progress/timelines/region/"+desa_code+"/year/"+year+"?sort=region.name&is_lokpri",
+                    type: 'GET'
+                });
+                if(Array.isArray(progress_recapitulation_per_year)){
+                    progress_timelines[year] = progress_timelines_per_year;
+                }
+            }
+
+            if(!spending_recapitulations[year]){
+                var spending_recapitulation_per_year = await jQuery.ajax({
+                    url: "https://api.keuangan.sideka.id/budget/recapitulations/year/"+year+"?sort=region.name&is_lokpri&region_id="+desa_code,
+                    type: 'GET'
+                });
+                spending_recapitulations[year] = [];
+                for(var i = 0; i < spending_recapitulation_per_year.length; i++){                    
+                    if(spending_recapitulation_per_year[i]['fk_region_id'] == desa_code){
+                        spending_recapitulations[year].push(spending_recapitulation_per_year[i]);
+                    }
+                } 
+            }
+
+            if(progress_recapitulations[year]){
+                updateProgressRecapitulations(year);
+            }
+
+            var selectorPendapatan = "pendapatan-timeline-"+year;
+            var selectorBelanjaPie = "belanja-pie-"+year;
+            var selectorBelanjaTimeline = "belanja-timeline-"+year;
+
+            if(jQuery("#"+selectorPendapatan).length == 0){                
+                var divElement = '<div id="'+selectorPendapatan+'"><svg style="height: 300px;"></svg></div>';
+                jQuery(divElement).appendTo("#pendapatan-timelines");
+                
+                setupTimelineChart("#"+selectorPendapatan, {'transferred_bhpr': 'Bagi Hasil Pajak', 'transferred_add': 'ADD', 'transferred_dd': ' Dana Desa'},year);
+                
+            }
+            if(jQuery("#"+selectorBelanjaTimeline).length == 0){ 
+                var divElement = '<div id="'+selectorBelanjaTimeline+'"><svg style="height: 300px;"></svg></div>';
+                jQuery(divElement).appendTo("#belanja-timelines");  
+
+                setupTimelineChart("#"+selectorBelanjaTimeline, {'realized_spending': 'Realisasi Belanja'}, year);
+            }
+
+            if(jQuery("#"+selectorBelanjaPie).length == 0){                
+                var divElement = '<div id="'+selectorBelanjaPie+'"><svg style="height: 300px;"></svg></div>';
+                jQuery(divElement).appendTo("#belanja-pies");  
+
+                setupSpendingPieChart("#"+selectorBelanjaPie, year);
+            }
+
+            jQuery('#pendapatan-timelines > :not(#'+selectorPendapatan+')').hide();
+            jQuery('#belanja-timelines > :not(#'+selectorBelanjaTimeline+')').hide();
+            jQuery('#belanja-pies > :not(#'+selectorBelanjaPie+')').hide();
+            jQuery('#'+selectorPendapatan+', #'+selectorBelanjaTimeline+', #'+selectorBelanjaPie).show();
+        }
+        
+	function setupSpendingPieChart(selector, year){
             var chart = nv.models.pieChart()
                 .x(function(d) { return d.type.name })
                 .y(function(d) { return d.budgeted })
                 .labelThreshold(.25)
                 .showLabels(true);
             d3.select(selector+" svg")
-                .datum(spending_recapitulations)
+                .datum(spending_recapitulations[year])
                 .call(chart);
             return chart;
 	}
-	function setupTimelineChart(selector, properties){
+	function setupTimelineChart(selector, properties, year){
 		var marginTop = 30;
 		if(width < 600){
 			d3.select(selector+' svg')
@@ -276,7 +386,7 @@ $progress_timelines_json = @file_get_contents("http://api.keuangan.sideka.id/pro
 			marginTop = 130;
 		}
 		var months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-		var data = progress_timelines;
+		var data = progress_timelines[year];
 		data.sort(function(a,b){return a.month-b.month;});
 		var groupedData = Object.keys(properties).map(function(key){
 			return {
