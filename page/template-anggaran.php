@@ -254,7 +254,7 @@ $progress_timelines[$year] = json_decode($progress_timelines_per_year);
             //setupPieChart("#pendapatan-pie", "revenue");
             var currentYear =  <?php echo $year; ?>;
             setupSpendingPieChart("#belanja-pie-"+currentYear, currentYear);
-            setupTimelineChart("#pendapatan-timeline-"+currentYear, {'transferred_bhpr': 'Bagi Hasil Pajak', 'transferred_add': 'ADD', 'transferred_dd': ' Dana Desa'},currentYear);
+            setupTimelineChart("#pendapatan-timeline-"+currentYear, {'transferred_pbh': 'Bagi Hasil Pajak', 'transferred_add': 'ADD', 'transferred_dds': ' Dana Desa'},currentYear);
             setupTimelineChart("#belanja-timeline-"+currentYear, {'realized_spending': 'Realisasi Belanja'},currentYear);
             setupCountSummary();
         }
@@ -344,7 +344,7 @@ $progress_timelines[$year] = json_decode($progress_timelines_per_year);
                 var divElement = '<div id="'+selectorPendapatan+'"><svg style="height: 300px;"></svg></div>';
                 jQuery(divElement).appendTo("#pendapatan-timelines");
                 
-                setupTimelineChart("#"+selectorPendapatan, {'transferred_bhpr': 'Bagi Hasil Pajak', 'transferred_add': 'ADD', 'transferred_dd': ' Dana Desa'},year);
+                setupTimelineChart("#"+selectorPendapatan, {'transferred_pbh': 'Bagi Hasil Pajak', 'transferred_add': 'ADD', 'transferred_dds': ' Dana Desa'},year);
                 
             }
             if(jQuery("#"+selectorBelanjaTimeline).length == 0){ 
@@ -374,7 +374,7 @@ $progress_timelines[$year] = json_decode($progress_timelines_per_year);
                 .labelThreshold(.25)
                 .showLabels(true);
             d3.select(selector+" svg")
-                .datum(spending_recapitulations[year])
+                .datum(spending_recapitulations[year].filter(function (c){return !c.type.is_revenue}))
                 .call(chart);
             return chart;
 	}
