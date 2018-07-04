@@ -175,8 +175,8 @@ $progress_timelines[$year] = json_decode($progress_timelines_per_year);
         <h4 class="mh-widget-title">
             <span class="mh-widget-title-inner"><a class="mh-widget-title-link">Pendapatan Desa</a></span>
         </h4>
-        <div class="mh-widget-col-1 mh-sidebar">
-		<div id="pendapatan-pie">
+        <div class="mh-widget-col-1 mh-sidebar" id="pendapatan-pies">
+		<div id="pendapatan-pie<?php echo '-'.$year;?>">
 		    <svg style="height: 300px;"></svg>
 		</div>
         </div>
@@ -251,9 +251,9 @@ $progress_timelines[$year] = json_decode($progress_timelines_per_year);
                 });
         });
         function onAllApbdesLoaded(){
-            //setupPieChart("#pendapatan-pie", "revenue");
             var currentYear =  <?php echo $year; ?>;
-            setupSpendingPieChart("#belanja-pie-"+currentYear, currentYear);
+            setupPieChart("#pendapatan-pie-"+currentYear, true, currentYear);
+            setupPieChart("#belanja-pie-"+currentYear,false,  currentYear);
             setupTimelineChart("#pendapatan-timeline-"+currentYear, {'transferred_pbh': 'Bagi Hasil Pajak', 'transferred_add': 'ADD', 'transferred_dds': ' Dana Desa'},currentYear);
             setupTimelineChart("#belanja-timeline-"+currentYear, {'realized_spending': 'Realisasi Belanja'},currentYear);
             setupCountSummary();
@@ -265,9 +265,7 @@ $progress_timelines[$year] = json_decode($progress_timelines_per_year);
             yearsFromApi.forEach(function(year){
                 jQuery("#tahun-anggaran").append("<option>"+year+"</option>");
             });
-            jQuery("#tahun-anggaran").val(<?php echo $year; ?>);  
-
-            
+            jQuery("#tahun-anggaran").val(<?php echo $year; ?>); 
 
             jQuery("#tahun-anggaran").change(function(){
                 var val = jQuery(this).val();
@@ -335,10 +333,11 @@ $progress_timelines[$year] = json_decode($progress_timelines_per_year);
             if(progress_recapitulations[year]){
                 updateProgressRecapitulations(year);
             }
-
+            var selectorPendapatanPie = "pendapatan-pie-"+year;
             var selectorPendapatan = "pendapatan-timeline-"+year;
             var selectorBelanjaPie = "belanja-pie-"+year;
             var selectorBelanjaTimeline = "belanja-timeline-"+year;
+            
 
             if(jQuery("#"+selectorPendapatan).length == 0){                
                 var divElement = '<div id="'+selectorPendapatan+'"><svg style="height: 300px;"></svg></div>';
@@ -358,26 +357,35 @@ $progress_timelines[$year] = json_decode($progress_timelines_per_year);
                 var divElement = '<div id="'+selectorBelanjaPie+'"><svg style="height: 300px;"></svg></div>';
                 jQuery(divElement).appendTo("#belanja-pies");  
 
-                setupSpendingPieChart("#"+selectorBelanjaPie, year);
+                setupPieChart("#"+selectorBelanjaPie,false,  year);
+            }
+
+            if(jQuery("#"+selectorPendapatanPie).length == 0){                
+                var divElement = '<div id="'+selectorPendapatanPie+'"><svg style="height: 300px;"></svg></div>';
+                jQuery(divElement).appendTo("#pendapatan-pies");  
+
+                setupPieChart("#"+selectorPendapatanPie,true, year);
             }
 
             jQuery('#pendapatan-timelines > :not(#'+selectorPendapatan+')').hide();
             jQuery('#belanja-timelines > :not(#'+selectorBelanjaTimeline+')').hide();
-            jQuery('#belanja-pies > :not(#'+selectorBelanjaPie+')').hide();
-            jQuery('#'+selectorPendapatan+', #'+selectorBelanjaTimeline+', #'+selectorBelanjaPie).show();
+            jQuery('#belanja-pies > :not(#'+selectorPendapatanPie+')').hide();
+            jQuery('#pendapatan-pies > :not(#'+selectorPendapatanPie+')').hide();
+            jQuery('#'+selectorPendapatan+', #'+selectorBelanjaTimeline+', #'+selectorBelanjaPie+', #'+selectorPendapatanPie).show();
         }
         
-	function setupSpendingPieChart(selector, year){
+	function setupPieChart(selector,isRevenue, year){
             var chart = nv.models.pieChart()
                 .x(function(d) { return d.type.name })
                 .y(function(d) { return d.budgeted })
                 .labelThreshold(.25)
                 .showLabels(true);
             d3.select(selector+" svg")
-                .datum(spending_recapitulations[year].filter(function (c){return !c.type.is_revenue}))
+                .datum(spending_recapitulations[year].filter(function (c){return c.type.is_revenue === isRevenue }))
                 .call(chart);
             return chart;
 	}
+
 	function setupTimelineChart(selector, properties, year){
 		var marginTop = 30;
 		if(width < 600){
