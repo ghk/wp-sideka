@@ -215,8 +215,10 @@ $progress_timelines[$year] = json_decode($progress_timelines_per_year);
     <script src="/wp-content/plugins/sideka/nv.d3.js"></script>
 
     <script type="text/javascript">
+        var header = document.getElementsByClassName("entry-header")[0];
+        header && header.remove();
+
         var width = d3.select("#details").node().getBoundingClientRect().width;
-        document.getElementsByClassName("entry-header")[0].remove();
         var desa_id = "<?= $desa_id ?>";
         var desa_code = "<?= $desa_code ?>";
 		var progress_recapitulations = <?= json_encode($progress_recapitulations) ?>; 

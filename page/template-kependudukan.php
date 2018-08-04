@@ -102,7 +102,8 @@ $package_exists = json_decode($json)->success;
     <script src="/wp-content/plugins/sideka/nv.d3.js"></script>
 
     <script type="text/javascript">
-        document.getElementsByClassName("entry-header")[0].remove();
+        var header = document.getElementsByClassName("entry-header")[0];
+        header && header.remove();
         var package_id = "<?= $package_id ?>";
         var ckan_host = "<?= $ckan_host ?>";
         var package = <?= $json ?>;
