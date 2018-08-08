@@ -35,14 +35,15 @@ add_filter( 'enable_edit_any_user_configuration', '__return_true');
  */
 function mc_edit_permission_check() {
     global $current_user, $profileuser;
- 
+
     $screen = get_current_screen();
  
     get_currentuserinfo();
- 
     if( ! is_super_admin( $current_user->ID ) && in_array( $screen->base, array( 'user-edit', 'user-edit-network' ) ) ) { // editing a user profile
         if ( is_super_admin( $profileuser->ID ) ) { // trying to edit a superadmin while less than a superadmin
-            wp_die( __( 'You do not have permission to edit this user.' ) );
+            wp_die( __( 'You do not have permission to edit this user super admin.' ) );
+        } elseif (count(get_blogs_of_user($profileuser->ID)) > 1){
+            wp_die( __( 'You do not have permission to edit this user with multiple site.' ) );
         } elseif ( ! ( is_user_member_of_blog( $profileuser->ID, get_current_blog_id() ) && is_user_member_of_blog( $current_user->ID, get_current_blog_id() ) )) { // editing user and edited user aren't members of the same blog
             wp_die( __( 'You do not have permission to edit this user.' ) );
         }

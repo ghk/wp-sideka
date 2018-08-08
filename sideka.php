@@ -19,6 +19,7 @@ include_once(dirname(__FILE__) . '/page/sideka-page.php' );
 include_once(dirname(__FILE__) . '/sideka-site-init.php' );
 include_once(dirname(__FILE__) . '/sideka-user-init.php' );
 include_once(dirname(__FILE__) . '/sideka-email-multisite.php');
+include_once(dirname(__FILE__) . '/site-admin-edit-user.php');
 
 if(is_admin()) {
     include_once(dirname(__FILE__) . '/admin/sideka-admin-menu.php');
