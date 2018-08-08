@@ -13,7 +13,7 @@ if($server_splits[0].".desa.id" == $server_name || $server_splits[0].".sideka.id
     $desa_id = $server_splits[0];
 }
 
-$ckan_host = "http://data.prakarsadesa.id";
+$ckan_host = "http://data.sideka.id";
 #$ckan_host = "http://ckan.neon.microvac:5000";
 $package_id = $desa_id."-kependudukan";
 $json = @file_get_contents($ckan_host . '/api/3/action/package_show?id=' . $package_id);
@@ -102,7 +102,8 @@ $package_exists = json_decode($json)->success;
     <script src="/wp-content/plugins/sideka/nv.d3.js"></script>
 
     <script type="text/javascript">
-        document.getElementsByClassName("entry-header")[0].remove();
+        var header = document.getElementsByClassName("entry-header")[0];
+        header && header.remove();
         var package_id = "<?= $package_id ?>";
         var ckan_host = "<?= $ckan_host ?>";
         var package = <?= $json ?>;
