@@ -17,6 +17,7 @@ class SidekaNetworkAdminMenu
     {
         add_submenu_page("settings.php", 'Sideka', 'Sideka', 'manage_options', 'sideka', array($this, 'settings_page'));
         add_submenu_page("settings.php", 'Pengguna Supradesa', 'Pengguna Supradesa', 'manage_options', 'supradesa', array($this, 'supradesa_page'));
+        add_submenu_page("settings.php", 'Jetpack Batch Connect', 'Jetpack Batch Connect', 'manage_options', 'jetpack_batch', array($this, 'jetpack_batch_page'));
     }
 
 
@@ -97,6 +98,7 @@ class SidekaNetworkAdminMenu
         </div>
         <?php
     }
+
     public function supradesa_page()
     {
         wp_enqueue_script( 'user-suggest' );
@@ -203,6 +205,75 @@ class SidekaNetworkAdminMenu
                     console.log("stop synchronizing");
                     isSynchronizing= false;
                     jQuery("#sideka_supradesa_add [name='submit']").val("Tambah");
+                }
+                jQuery("#wpbody form").submit(function(){
+                    if(!isSynchronizing){
+                        jQuery("#sideka_command_output").html("");
+                        synchronize();
+                    } else {
+                        stopSynchronize();
+                    }
+                    return false;
+                });
+        </script>
+        <?php
+    }
+
+    public function jetpack_batch_page()
+    {
+        ?>
+        <div class="wrap">
+            <h1>Connect Jetpack</h1>
+            <form id="sideka_jetpack_batch" class="sideka_jetpack_batch" method="post" action="settings.php?page=jetpack_batch">
+                <table class="form-table">
+                    <tr class="form-field form-required field-start">
+                        <th scope="row"><label for="start">Start</label></th>
+                        <td><input name="start" id="start" value="0" type="number"></td>
+                    </tr>
+                </table>
+                <input name="submit" id="submit" class="button button-primary" value="Batch Connect" type="submit">
+                <div id="sideka_command_output">
+                </div>
+            </form>
+        </div>
+        <script type="text/javascript" >
+
+                var isSynchronizing = false;
+                function synchronize(){
+                    isSynchronizing = true;
+                    var start = jQuery("#sideka_jetpack_batch [name='start']").val();
+                    jQuery("#sideka_jetpack_batch [name='submit']").val("Stop Batch Connect");
+                    var data = {
+                        'action': 'sideka_jetpack_batch',
+                        'start': start
+                    };
+
+                    // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+                    var xhr = jQuery.post(ajaxurl, data, function(response) {
+                        if(response.error){
+                                jQuery("#sideka_command_output").prepend("ERROR: "+response.error);
+                                stopSynchronize();
+                                return;
+                        }
+                        var results = response.results;
+                        for(var i = 0; i < results.length; i++){
+                            jQuery("#sideka_command_output").prepend(results[i] + "<br />");
+                        }
+                        start = response.next;
+                        jQuery("#sideka_jetpack_batch [name='start']").val(start);
+                        if(start && isSynchronizing)
+                            synchronize();
+                        else {
+                            if (!start)
+                                jQuery("#sideka_command_output").prepend("Penghubungan selesai!<br />");
+                            stopSynchronize();
+                        }
+                    });
+                }
+                function stopSynchronize(){
+                    console.log("stop synchronizing");
+                    isSynchronizing= false;
+                    jQuery("#sideka_jetpack_batch [name='submit']").val("Batch Connect");
                 }
                 jQuery("#wpbody form").submit(function(){
                     if(!isSynchronizing){
@@ -326,7 +397,7 @@ function sideka_sites_synchronize()
             $nav_menu_configs = sideka_get_nav_menu_configs();
             $widget_configs = sideka_get_widget_configs();
 
-            $master_options = sideka_get_sitewide_options(1);
+            $master_options = sideka_get_sitewide_options(1, false);
 
             foreach ($sites as $site) {
                 if($site->blog_id == 1)
@@ -408,3 +479,42 @@ function sideka_add_supradesa_user()
     }
 }
 add_action( 'wp_ajax_sideka_add_supradesa_user', 'sideka_add_supradesa_user' );
+
+function sideka_jetpack_batch()
+{
+    if(is_super_admin()){
+           error_reporting(1);
+	   $jp = Jetpack::init();
+	   $jpms = Jetpack_Network::init();
+
+
+            global $wpdb;
+            $start = intval($_POST["start"]);
+            $limit = 5;
+            $output = array();
+            $output["results"] = [];
+            $desas = $wpdb->get_results($wpdb->prepare("SELECT blog_id, domain, kode FROM sd_desa order by blog_id limit %d offset %d", $limit, $start));
+            foreach ($desas as $desa) {
+                $result = $desa->kode . " " . $desa->domain . " ";
+
+                switch_to_blog( $desa->blog_id );
+		$is_active =  $jp->is_active();
+		restore_current_blog();
+
+                if ($is_active){
+                    $result = $result . "is already connected";
+                } else {
+                    $error = $jpms->do_subsiteregister($desa->blog_id);
+		    if ( is_wp_error( $error ) ) {
+                     $result = $result . " error on connecting";
+		    } else {
+                     $result = $result . "connected";
+		    }
+                }
+                $output["results"][] = $result;
+            }
+            $output["next"] = count($desas) == $limit ? ($start + $limit) : 0;
+            wp_send_json($output);
+    }
+}
+add_action( 'wp_ajax_sideka_jetpack_batch', 'sideka_jetpack_batch' );

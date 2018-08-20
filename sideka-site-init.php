@@ -381,15 +381,23 @@ function sideka_site_init_widgets($pages, $categories)
 
 function sideka_get_sitewide_option_names(){
     $results = array("category_base", "date_format", "jetpack_active_modules", "rewrite_rules", "sharing-options", "sharing-services", "tag_base",
-    "time_format", "tribe_events_calendar_options", "wp_user_roles");
+    "time_format", "tribe_events_calendar_options", "wp_user_roles", "akismet_comment_form_privacy_notice");
     return $results;
 }
 
-function sideka_get_sitewide_options($site_id){
+function sideka_get_initial_option_names(){
+    $results = array("rewrite_rules");
+    return $results;
+}
+
+function sideka_get_sitewide_options($site_id, $initial_options = false){
     switch_to_blog($site_id);
 
     $results = array();
     $option_names = sideka_get_sitewide_option_names();
+    if($initial_options){
+    	$option_names = array_merge($option_names, sideka_get_sitewide_option_names());
+    }
     foreach($option_names as $option_name){
         $results[$option_name] = get_option($option_name);
     }
@@ -428,6 +436,14 @@ function sideka_site_init($blog_id, $user_id){
     sideka_site_init_theme($pages);
     sideka_site_init_widgets($pages, $categories);
     sideka_site_init_roles();
+
+    $master_options = sideka_get_sitewide_options(1, true);
+    foreach($master_options as $option_name => $option_value){
+	if ($option_name == "wp_user_roles"){
+		$option_name = "wp_".$blog_id."_user_roles";
+	}
+        update_option($option_name, $option_value);
+    }
 
     $master_options = sideka_get_sitewide_options(1);
     foreach($master_options as $option_name => $option_value){
