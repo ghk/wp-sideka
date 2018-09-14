@@ -1246,7 +1246,7 @@
 		}
 		
 		function setupData(response) {
-			let data = summaryData[0];
+			let data = summaryData;
 			jQuery('#boundary-area')[0].innerText = Math.ceil(data.pemetaan_desa_boundary / 10000) + ' ha';
 			jQuery('#road-length')[0].innerText = Math.ceil((data.pemetaan_highway_asphalt_length + data.pemetaan_highway_concrete_length + data.pemetaan_highway_other_length + data.pemetaan_bridge_length)  / 1000) + ' km';
 			
