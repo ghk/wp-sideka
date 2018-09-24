@@ -581,8 +581,13 @@ $package_exists = json_decode($json)->success;
         let statusKawin = package.result.resources.filter(function(r) {return r.name === "Status Kawin Berdasarkan Jenis Kelamin"})[0];
         d3.csv(ckan_host + statusKawin.url, function(error, csv) {
             let statusData = transformLabeledData(csv, 'status_kawin', false);
-            //let statusLabels = Object.keys(statusData['status_kawin']);
-            let statusLabels = ['BELUM KAWIN', 'KAWIN', 'DUDA', 'JANDA', 'CERAI HIDUP', 'CERAI MATI', 'TIDAK DIKETAHUI'];
+
+            if (!('BELUM KAWIN' in statusData['status_kawin'])) { statusData['agstatus_kawinama']['BELUM KAWIN'] = { 'total': 0 }; }
+            if (!('KAWIN' in statusData['status_kawin'])) { statusData['status_kawin']['KAWIN'] = { 'total': 0 }; }
+            if (!('JANDA/DUDA' in statusData['status_kawin'])) { statusData['status_kawin']['JANDA/DUDA'] = { 'total': 0 }; }
+            if (!('TIDAK DIKETAHUI' in statusData['status_kawin'])) { statusData['status_kawin']['TIDAK DIKETAHUI'] = { 'total': 0 }; }
+
+            let statusLabels = ['BELUM KAWIN', 'KAWIN', 'JANDA/DUDA', 'TIDAK DIKETAHUI'];
             let statusDatas = statusLabels.map(function(key) { return statusData['status_kawin'][key]['total']; })              
             
             document.getElementsByClassName('pdd__stat-status-married-percentage')[0].innerHTML = 
@@ -590,17 +595,13 @@ $package_exists = json_decode($json)->success;
             document.getElementsByClassName('pdd__stat-status-single-percentage')[0].innerHTML =             
                 Math.round((statusData['status_kawin']['BELUM KAWIN']['total'] / statusData['total'] * 100)) + '%';
             document.getElementsByClassName('pdd__stat-status-widowed-percentage')[0].innerHTML = 
-                Math.round((statusData['status_kawin']['CERAI HIDUP']['total'] / statusData['total'] * 100)) + 
-                Math.round((statusData['status_kawin']['CERAI MATI']['total'] / statusData['total'] * 100)) +
-                Math.round((statusData['status_kawin']['DUDA']['total'] / statusData['total'] * 100)) +
-                Math.round((statusData['status_kawin']['JANDA']['total'] / statusData['total'] * 100)) +
-                '%';
+                Math.round((statusData['status_kawin']['JANDA/DUDA']['total'] / statusData['total'] * 100)) + '%';
 
             var statusChartData = {   
                 labels: statusLabels,                 
                 datasets: [{     
                     data: statusDatas,
-                    backgroundColor: ['rgb(245, 98, 133)', 'rgb(245, 162, 70)', 'rgb(246, 209, 89)', 'rgb(96, 190, 190)', 'rgb(91, 155, 234)', 'grey']
+                    backgroundColor: ['rgb(246, 217, 161)', 'rgb(139, 181, 229)', 'rgb(212, 186, 218)', 'rgb(96, 190, 190)', 'rgb(91, 155, 234)', 'grey']
                 }]
             };		
 
@@ -609,7 +610,8 @@ $package_exists = json_decode($json)->success;
                 type: 'doughnut',
                 data: statusChartData,
                 options: {
-                    title: { display: false, text: 'Chart Agama' },
+                    title: { display: false, text: 'Chart Status' },
+                    legend: { display: false },
                     tooltips: { mode: 'index', intersect: false },                        
                     plugins: {
                         datalabels: {
@@ -663,6 +665,7 @@ $package_exists = json_decode($json)->success;
                 data: religionChartData,
                 options: {
                     title: { display: false, text: 'Chart Agama' },
+                    legend: { display: false },
                     tooltips: { mode: 'index', intersect: false },                        
                     plugins: {
                         datalabels: {
