@@ -271,42 +271,42 @@ $package_exists = json_decode($json)->success;
             </div>
             <div class="pdd__stat-religion-table">
                 <table class="pdd__table">
-                    <tr>
+                    <tr class="pdd__stat-religion-islam">
                         <td><img class="pdd__image--75" src="/wp-content/plugins/sideka/page/images/kependudukan/islam.png"></td>
                         <td>
                             <span class="pdd__stat-religion-islam-percentage"></span>
                             <span><strong>Islam</strong></span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="pdd__stat-religion-kristen">
                         <td><img class="pdd__image--75" src="/wp-content/plugins/sideka/page/images/kependudukan/protestan.png"></td>
                         <td>
                             <span class="pdd__stat-religion-kristen-percentage"></span>
                             <span><strong>Kristen</strong></span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="pdd__stat-religion-katolik">
                         <td><img class="pdd__image--75" src="/wp-content/plugins/sideka/page/images/kependudukan/catholic.png"></td>
                         <td>
                             <span class="pdd__stat-religion-katolik-percentage"></span>
                             <span><strong>Katolik</strong></span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="pdd__stat-religion-hindu">
                         <td><img class="pdd__image--75" src="/wp-content/plugins/sideka/page/images/kependudukan/hindu.png"></td>
                         <td>
                             <span class="pdd__stat-religion-hindu-percentage"></span>
                             <span><strong>Hindu</strong></span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="pdd__stat-religion-buddha">
                         <td><img class="pdd__image--75" src="/wp-content/plugins/sideka/page/images/kependudukan/buddha.png"></td>
                         <td>
                             <span class="pdd__stat-religion-buddha-percentage"></span>
                             <span><strong>Buddha</strong></span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="pdd__stat-religion-konghucu">
                         <td><img class="pdd__image--75" src="/wp-content/plugins/sideka/page/images/kependudukan/buddha.png"></td>
                         <td>
                             <span class="pdd__stat-religion-konghucu-percentage"></span>
@@ -638,16 +638,32 @@ $package_exists = json_decode($json)->success;
             let religionLabels = ['ISLAM', 'KRISTEN', 'KATHOLIK', 'HINDU', 'BUDHA', 'KONGHUCU', 'TIDAK DIKETAHUI']
             let religionDatas = religionLabels.map(function(key) { return religionData['agama'][key]['total']; })
 
-            document.getElementsByClassName('pdd__stat-religion-islam-percentage')[0].innerHTML = 
-                Math.round((religionData['agama']['ISLAM']['total'] / religionData['total'] * 100)) + '%';
+            let islamPercentage = Math.round((religionData['agama']['ISLAM']['total'] / religionData['total'] * 100));            
+            islamPercentage === 0 ? document.getElementsByClassName('pdd__stat-religion-islam')[0].style.display = 'none' :
+            document.getElementsByClassName('pdd__stat-religion-islam-percentage')[0].innerHTML = islamPercentage + '%';
+
+            let kristenPercentage = Math.round((religionData['agama']['KRISTEN']['total'] / religionData['total'] * 100));   
+            kristenPercentage === 0 ? document.getElementsByClassName('pdd__stat-religion-kristen')[0].style.display = 'none' :
             document.getElementsByClassName('pdd__stat-religion-kristen-percentage')[0].innerHTML =             
                 Math.round((religionData['agama']['KRISTEN']['total'] / religionData['total'] * 100)) + '%';
+
+            let katolikPercentage = Math.round((religionData['agama']['KATHOLIK']['total'] / religionData['total'] * 100));  
+            katolikPercentage === 0 ? document.getElementsByClassName('pdd__stat-religion-katolik')[0].style.display = 'none' :          
             document.getElementsByClassName('pdd__stat-religion-katolik-percentage')[0].innerHTML = 
                 Math.round((religionData['agama']['KATHOLIK']['total'] / religionData['total'] * 100)) + '%';
+
+            let hinduPercentage = Math.round((religionData['agama']['HINDU']['total'] / religionData['total'] * 100));   
+            hinduPercentage === 0 ? document.getElementsByClassName('pdd__stat-religion-hindu')[0].style.display = 'none' :         
             document.getElementsByClassName('pdd__stat-religion-hindu-percentage')[0].innerHTML = 
                 Math.round((religionData['agama']['HINDU']['total'] / religionData['total'] * 100)) + '%';
+
+            let buddhaPercentage = Math.round((religionData['agama']['BUDHA']['total'] / religionData['total'] * 100));   
+            buddhaPercentage === 0 ? document.getElementsByClassName('pdd__stat-religion-buddha')[0].style.display = 'none' :         
             document.getElementsByClassName('pdd__stat-religion-buddha-percentage')[0].innerHTML = 
                 Math.round((religionData['agama']['BUDHA']['total'] / religionData['total'] * 100)) + '%';
+
+            let konghucuPercentage = Math.round((religionData['agama']['KONGHUCU']['total'] / religionData['total'] * 100)); 
+            konghucuPercentage === 0 ? document.getElementsByClassName('pdd__stat-religion-konghucu')[0].style.display = 'none' :           
             document.getElementsByClassName('pdd__stat-religion-konghucu-percentage')[0].innerHTML = 
                 Math.round((religionData['agama']['KONGHUCU']['total'] / religionData['total'] * 100)) + '%';
 
