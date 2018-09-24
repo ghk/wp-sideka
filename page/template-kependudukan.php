@@ -34,11 +34,11 @@ $package_exists = json_decode($json)->success;
         }
 
         .pdd--row {
-            flex-flow: row nowrap;
+            flex-flow: row wrap;
         }
 
         .pdd--column {
-            flex-flow: column nowrap;
+            flex-flow: column wrap;
         }
 
         .pdd--align-center {
@@ -56,6 +56,10 @@ $package_exists = json_decode($json)->success;
             align-items: center;
         }
 
+        .pdd__info-total {
+            margin-bottom: 1.25em;
+        }
+
         .pdd__info-total-circle {
             background-color: #fe8b6e;
             border-radius: 50%;
@@ -63,26 +67,28 @@ $package_exists = json_decode($json)->success;
             height: 120px;
             color: #fff;
         }
+        
+        @media screen and (min-width: 769px) {
+            .pdd__age-graph {
+                width: 50%;
+                margin-right: 25px;
+            }
 
-        .pdd__age-graph {
-            width: 50%;
-            margin-right: 25px;
-        }
+            .pdd__job-graph {
+                width: 60%;
+                margin-right: 25px;
+            }
 
-        .pdd__job-graph {
-            width: 75%;
-            margin-right: 25px;
-        }
+            .pdd__edu-graph {
+                width: 60%;
+                margin-right: 25px;
+            }
 
-        .pdd__edu-graph {
-            width: 75%;
-            margin-right: 25px;
-        }
-
-        .pdd__stat-graph {
-            width: 60%;
-            margin-left: 12px;
-            margin-right: 12px;
+            .pdd__stat-graph {
+                width: 55%;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
         }
 
         .pdd__image--50 {
@@ -217,7 +223,7 @@ $package_exists = json_decode($json)->success;
         <div class="pdd__edu-title">
             <h1>PENDIDIKAN</h1>
         </div>        
-        <div class="pdd__edu-content">
+        <div class="pdd__edu-content pdd--row">
             <div class="pdd__edu-graph">
                 <canvas id="pdd__edu-graph"></canvas>
             </div>
