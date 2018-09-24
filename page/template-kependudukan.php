@@ -775,7 +775,7 @@ $package_exists = json_decode($json)->success;
                     let content = Object.keys(all[label][l]);
                     let other = label === 'pekerjaan' ? 'LAIN-LAIN' : 'TIDAK DIKETAHUI';
 
-                    if (!(other in all[label])) { all[label][other] = { 'Laki-Laki': 0, 'Perempuan': 0, 'total': 0 }; }
+                    if (!(other in all[label])) { all[label][other] = { 'Laki-laki': 0, 'Perempuan': 0, 'total': 0 }; }
 
                     for(let j = 0; j < content.length; j++) {
                         all[label][other][content[j]] += all[label][l][content[j]];                    
