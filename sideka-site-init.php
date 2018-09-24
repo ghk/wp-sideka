@@ -138,6 +138,7 @@ function sideka_get_role_configs(){
     $configs[] = array("penduduk", "Admin Kependudukan", array('edit_penduduk'=>true));
     $configs[] = array("keuangan", "Admin Keuangan", array('edit_keuangan'=>true));
     $configs[] = array("pemetaan", "Admin Pemetaan", array('edit_pemetaan'=>true));
+    $configs[] = array("posyandu", "Admin Posyandu", array('edit_posyandu'=>true));
     return $configs;
 }
 
@@ -380,7 +381,7 @@ function sideka_site_init_widgets($pages, $categories)
 }
 
 function sideka_get_sitewide_option_names(){
-    $results = array("category_base", "date_format", "jetpack_active_modules", "rewrite_rules", "sharing-options", "sharing-services", "tag_base",
+    $results = array("category_base", "date_format", "jetpack_active_modules", "sharing-options", "sharing-services", "tag_base",
     "time_format", "tribe_events_calendar_options", "wp_user_roles", "akismet_comment_form_privacy_notice");
     return $results;
 }
